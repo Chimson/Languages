@@ -314,11 +314,14 @@ ERROR HANDLING
 # other options for the parameter are: Continue, Ignore, Inquire, SilentlyContinue, Stop 
 > get-childitem foo, .. -ErrorAction stop
 # -----------
+# throws an error when the location cannot be reached
+> Set-Location $dir -ErrorAction Stop  
+# -----------
 # can set $ErrorActionPreference to change the behavior globally
 # overriden by any individual -ErrorAction used in a cmdlet
 # this is the better option, will always stop force termination of non-terminating errors
 > $ErrorActionPreference = 'stop'
-> get-childitem foo, ..     # now it is non-terminating for all cmdlets   
+> get-childitem foo, ..     # now it is non-terminating for all cmdlets    
 # -----------
 # simple try-catch, with a finally block
 # exception is thrown in try block, execution transfers immediately to catch block
