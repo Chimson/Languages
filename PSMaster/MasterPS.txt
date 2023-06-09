@@ -1,0 +1,364 @@
+# PowerShell on Windows and PowerShell Core on Linux and macOS
+# Run as Admin: right-click, and open as Admin
+# I did install chocolatey, a package manager
+> choco install nano
+# TAB presses will autocomplete a command, SHIFT-TAB is backwards
+
+# QUICK REFERENCE
+# the - option values are left out
+get-childitem -name -recurse
+get-childitem | select-object name, Mode  
+get-content -path
+remove-item -confirm -path
+remove-item file1.txt, file2.txt
+new-item -name -itemtype -path
+get-help -examples
+add-content -path -value
+"add this" | add-content -path file.txt
+copy-item
+move-item
+select-object    # can be shortened to select
+rename-item -path -newitem
+write-output   # like echo or println
+
+# OTHER CMDLETS
+get-command     
+get-location     # pwd
+set-location     # cd
+read-host      # user input
+write-host     # write to console
+get-variable
+get-member
+get-service
+start-service
+select-string
+
+# DOS
+# Can use old Command Prompt Commands cmd.exe (DOS):
+> Get-Alias	# shows PS and cmd.exe mapping of commands
+> cd 	# change dirs
+> dir	# show contents
+> cls	# clears screen
+
+GET-COMMAND	
+# commands have a name = verb-noun pattern
+# most built-in PS commands are cmdlets, written in another language
+> Get-Command		# shows a list of all commands PS is aware of, 
+> get-command -name set-content	w	# -name shows info on the specfic command
+> get-command -verb set		# -verb filters commands to those that begin with set
+> get-command -noun content		# -noun filters to commands with content as noun like set-content, get-content, etc.
+> get-command -commandtype function	  # displays currently loaded functions
+
+GET-HELP
+# get-help displays info on cmdlets, also has examples
+> update-help		# updates the help documentation
+> get-help add-content
+> get-help add-content [-examples|-full|-detailed]
+> get-help about_core_commands		# there are about snippets on topics
+> get-help -name about*  # shows all the about topics, wildcard * means zero or more characters
+
+VARIABLES 
+# user-defined and automatic
+> Set-StrictMode -Version Latest		# tells PS to throw errors to help write better code
+> $age = 37
+> $age		# displays 37
+> $maximumhistorycount		#  automatic variable that counts the maximum number of commands saved in log
+> get-variable		# shows all defined variables
+> get-variable -name color
+> $n = $null;		# variable is set to null, not initialized
+> $t = $true	# boolean 
+# -------
+# display the exit code of the last program executed
+$LastExitCode
+> ping.exe -n 1 google.com
+> $lastexitcode		# 0, since it was a success
+# -------
+# shows variables that control default behavior of various output streams
+> get-variable -name *preference
+
+TYPES: [Int32], [Int64], [Float], [Double]
+> $num = 34
+> $num.gettype()	# returns info on type, Int32 or Int64, PS will automatically change the type if necessary
+> $num = 3.14		# double
+> $num = [Int32]$num		# cast as an int (rounds it), $num is 3
+
+STRINGS
+> $color = 'blue'		# simple string, same as set-variable -name color -value 'blue'
+> $color[0]			# b
+> $first = 'Ben'
+> $last = 'Harki'
+> $sentence = "Hi $first $last!"		# needs " " for variable expansion
+> $sentence
+Hi Ben Harki!
+> write-host 'message to user ... '		
+> "$first"		# variable expansion to its value with " "
+Ben
+>'$first'		# no variable expansion with ' '
+$first
+# ----------
+# do not need to use variable expansion to retrieve a string for a cmdlet   
+> $dir = 'Languages'
+> set-location $dir
+> set-location "$dir"    # same thing with variable expansion, but its not necessary
+# -----------
+# Split() on a string return an array
+# Trim trims the beginning and end of the string (default is whitespace)
+$array = $str.Split("-")
+$str.Trim()   
+# -----------
+
+
+OBJECTS
+> $color = 'blue'
+> Select-Object -InputObject $color -property *		# displays all properties (attributes) of $color, like length of the string
+> $color.length		# 4
+> get-member -inputobject $color		# displays all methods (called members) for the $color object
+> $color.getType()		# calls string method
+
+
+ARRAYS, ARRAYLISTS
+> $nums = @(0,1,2,3,4,5)		# defines an array
+> $nums[0]		# picks 1st element
+> $nums[-1]		# returns 	last element	
+> 1..3		# range operator, return 1 2 3 indivdually
+> $nums[1..3]		# returns vals individually at each index						
+> $nums[2] = 10		# assign into the 3rd element
+> $nums = $nums + 50	#  + operator on an array adds another array element of 50 at the end, can also add arrays
+> $nums += $nums + 50		# same as above, + destroys old array and creates a new one
+> $nums2 = [System.Collections.ArrayList]@(12, 13, 14)		# creates an ArrayList by cast, adds elements dynamically for better performance
+> $null = $nums2.Add(15) 	# Add also returns the newly added index, $null stops that from being displayed, good for performance
+> $nums2 = Remove(15)
+
+# HASHTABLES
+> $HT = @{ben = 1; mags = 2}	# key/value pair, keys must be unique
+> $HT['ben']		# 1
+> $HT.ben			# 1
+> $HT.keys
+> $HT.values
+> Select-Object -InputObject $HT -Property *		# shows all atrs (properties)
+> $HT['finn'] = 3    # adds a pair
+> $HT.add('adam', 4)		# adds a pair
+> get-member -inputobject $HT		# shows member methods
+ 
+# CUSTOM OBJECTS
+> $obj = [pscustomobject] @{x = 1; y = 2}			# as a cast on a hastable
+> $obj.x 
+
+# PIPELINE
+> $servicename = 'wuauserv'			
+> get-service -name $servicename		# displays whether the service is running, using a variable
+> Start-Service -Name $serviceName  # starts the windows update service (below is the same)
+# --------
+# using pipe |
+> get-service -name 'wuauserv' | start-service     # matches -name parameter sends it into the 2nd
+> 'wuauserv' | get-service | start-service		# same thing
+# --------
+# rust component list, but only selects those with "installed" in the name
+> rustup component list | select-string installed
+# -------
+# display contents of file, reads line by line into an array, and returns the array
+> get-content -path C:\Users\Benso\FromOther\Personal\Personal\PowerShell\services.txt
+# unwraps array and sends each service in services.txt one by one into get-service
+> get-content -path C:\Users\Benso\FromOther\Personal\Personal\PowerShell\services.txt | get-service
+/ --------
+# shows full info, including what times of pipeline input a command takes
+> get-help -name get-service -full		# info on get-service
+# -------
+#	sends the object, its paramaters are matched an sent to get-service
+> $serviceObject = [PSCustomObject]@{Name = 'wuauserv'; ComputerName = 'SERV1'}		
+> $serviceObject | Get-Service
+# -------
+
+# CREATE FILE, PIPE OUTPUT, DELETE FILE, FILE DATA
+# do not need -path or ./ for files in current directory
+> new-item -path ./tmp.txt		# create a txt file
+> java Test.java | add-content -path ./tmp.txt   # pipeline output from Java program into tmp.txt
+# ------
+# add text to the file
+> add-content file.txt -v "add this" 
+# ------
+# display file contents and then delete it
+> get-content -path ./tmp.txt			# display contents of the file
+> remove-item -path ./tmp.txt     # delete file
+> remove-item "thisfile.txt"   # deletes thisfile.txt in current directory
+# -------
+# create a directory
+> new-item -path . -name "NewDir" -itemtype "directory" 
+> new-item -n "newDir4" -i "d"      # shorthand to create a subdirectory, in current dir
+# -------
+# get-childitem, same as dir
+# displays files in all subfolders, only their name
+> get-childitem -r -name . 		
+# ------
+# delete all java class files
+> remove-item *.class -confirm		# ask to confirm each one
+# ------
+# recursively deletes .class files in folder and subfolders, via pipeline
+> Get-ChildItem *.class -Recurse | Remove-Item -confirm   # get-childitem is the same as the dir command
+# ------
+# using where, to select objects based on a property
+# prints files that have been written to after a date
+> $date = "07/01/22"
+> get-childitem -r . | where{$_.LastWriteTime -ge [DateTime]$date}  # $_ is an object from get-childitem
+# ------
+# save the contentes of the folder, but only those that end in .zip
+$files = Get-ChildItem -Name -Include *.zip
+# ------
+# grab the python files in child folders that have "pagemaker" in the name, save them in an array
+# $files = Get-ChildItem ./Grading/ -Recurse -Name -Include *.py | Select-String "pagemaker"
+# ------
+# unzip $f file and places contents in DestinationPath
+ Expand-Archive $f -DestinationPath "./$name"
+
+
+SCRIPTS
+# determine if you can run scripts and change the policy so you can
+# remotesigned, unrestricted
+> get-executionpolicy		
+> set-executionpolicy remotesigned		# changes to allow user-scripts and downloaded scripts, if signed by a trusted party, run in admin
+> .\script.ps1			# runs script.ps1 (. is current directory)
+> C:\Users\Benso\FromOther\Personal\Personal\PowerShell\script.ps1		# also runs it
+> ./script     # also runs it
+> .\script also  # also runs it
+> unblock-file script.ps1		# supresses the warning for user-build commands in restricted mode
+> write-host 'hello'		# writes to the console
+
+COMPARISON
+# -eq, -ne, -gt, -ge, -lt, -le, -contains, -not
+> 1 -eq 1		# True
+> $arr -contains 2
+# ------
+# if, elseif, else
+$i = 1
+if($i -eq 1) {
+	write-host 'in the if!'
+}
+elseif ($i -eq 2) {
+	write-host 'in the else-if '
+}
+else {
+	write-host 'skip if'
+}
+# -------
+# switch
+switch($i) {
+	0 {
+		write-host 'Ben'
+		break
+	}
+	1 {
+		write-host 'Harki'
+		break
+	}
+	default {write-host 'Mags'}
+}
+
+LOOPS
+# foreach
+# write-host will print the value of the variable
+$arr = @(0,1,2,3,4,5)
+foreach($num in $arr) {  # can also be an object
+	write-host $num				# copys each value into $num and prints it
+}
+# -------
+# for-each object, with $_ and scriptblock, only counts how many in an arr
+$arr = @('blue', 'red', 'green') 
+foreach-object -inputobject $arr -Process {
+	write-host $_.length		# $_ is $arr
+}
+# -------
+# prints the size for each object in object array
+$color1 = 'blue'
+$color2 = 'red'
+$color3 = 'green'
+$arr = @($color1, $color2, $color3) 
+$arr.foreach({write-host $_.length})		$_ is for each object in array
+# --------
+# for loop
+for($i = 0; $i -lt 10; $i++) {
+	write-host $i
+}
+# --------
+# while loop
+# also includes break
+$count = 0
+while($count -lt 10) {
+	write-host $count
+	$count++
+}
+# ---------
+# do-while 
+$count = 0
+do {
+	write-host $count
+	$count++
+} 
+while($count -lt 10)
+# ----------
+# do-until and prompt user
+do {
+	$choice = read-host -prompt 'What is the correct number?'
+} 
+until($choice -eq 10)
+write-host 'Correct!'
+
+ERROR HANDLING
+# non-terminating error
+# message on not finding foo, but does list the contents of ..
+> get-childitem foo, ..
+# ----------
+# terminating error, does not set-location ..
+> set-location foo, ..
+# -----------
+# give an ErrorAction flag to make a non-terminating error terminate
+# other options for the parameter are: Continue, Ignore, Inquire, SilentlyContinue, Stop 
+> get-childitem foo, .. -ErrorAction stop
+# -----------
+# can set $ErrorActionPreference to change the behavior globally
+# overriden by any individual -ErrorAction used in a cmdlet
+# this is the better option, will always stop force termination of non-terminating errors
+> $ErrorActionPreference = 'stop'
+> get-childitem foo, ..     # now it is non-terminating for all cmdlets   
+# -----------
+# simple try-catch, with a finally block
+# exception is thrown in try block, execution transfers immediately to catch block
+# finally is optional and will always run, regardless of execution redirection, more for cleanup tasks like closing files etc.
+# current error object is stored in $_ variable
+# try-catch only works for terminating errors and not for non-terminating
+try {
+  set-location foo
+}
+catch {
+  write-host $_.Exception.Message
+}
+finally {
+  write-host 'this is optional'
+}
+# ----------
+$Error is a variable that stores an array of all the errors returned in the 
+#  current PowerShell session ordered by when they appear
+> $Error    # displays all the errors (cutoff with ...)
+> $Error[0]   # most recent error
+# ----------
+# throw an exception
+> throw "This is an error"
+
+FUNCTION
+# functions are written in PS, cmdlets in another language
+# if inside a .ps1 file, it is only local to the file
+# it can be manually typed in the repr and called repeatedly from the current terminal load
+# -----------
+# simple no args function
+function Print-Hi {
+	Write-Host 'Hi'
+}
+Print-Hi
+# -----------
+# Function with a parameter, called like a cmdlet
+function Print-Message {
+	[CmdletBinding()] 
+	param([string] $message)
+	Write-Host "$message"
+}
+Print-Message 'Hi All!'
+# STOPPED AT CREATING A SIMPLE PARAMETER

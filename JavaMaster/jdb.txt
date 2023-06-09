@@ -1,0 +1,25 @@
+# NOT IN A PACKAGE
+> javac Test.java -g  // -g to compile with debug info
+> jdb Test
+$ stop at Test:11		// stop at a line
+$ stop in Test.main
+$ run Test			// begins debugger, may noly need to call run
+$ run -ea Test   // runs with -ea enable assertions flag (from $ java -ea Test) 
+$ locals		// prints local variables
+$ list			// shows where you are in code
+$ list 7		// shows -4 and +4 lines arount line 7
+$ step			// step to next line
+$ stepi
+$ step up
+$ next
+$ cont			// continue until next breakpoint
+$ clear    // shows breakpoints
+$ print obj		// displays obj value, this is a reference
+$ dump obj		// displays obj info
+$ eval expr		
+$ where		// dumps a thread's stack
+
+# IN A PACKAGE
+> jdb benspackage.PackageClass
+$ stop at benspackage.PackageClass.main		// need .'s
+> run

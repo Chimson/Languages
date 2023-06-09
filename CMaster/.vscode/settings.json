@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "stdio.h": "c",
+    "wchar.h": "c",
+    "ben_functions.h": "c",
+    "system_error": "c"
+  }
+}

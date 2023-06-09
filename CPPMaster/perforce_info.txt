@@ -1,0 +1,19 @@
+In General
+check in(submit)/check out from depot
+workspace is really only to add files
+do not check out or delete items in common folder
+
+files that are not checked out are Read Only (RA)
+checkout a folder on the depot   - sets the workspace version to Write (attribute A)
+files are set in the pending tab
+open the file in VS or other editor and edit, then save
+compile/build
+Run CleanMe batch file to remove objs
+revert unchanged files  - accepts only changes to edited file, removes unchanged from pending 
+submit // can see in the depot main.cpp 2/2, version 2 of 2 
+check out file history to select version, graph, time-lapse view, diff files against prev versions
+any created files will be found in workspace first, not depot, once added its on depot
+to delete you may need to delete on depot too and submit
+can undelete by show deleted files, show file history, grab previous and get this revision, back to workspace and add it 
+for a complete re-copying of files (from accidental delete)  - get revision, and force operation 
+reconcile offline work in depot (right click on a folder/file) will reconcile files that were not checked out/submtited

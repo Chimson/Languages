@@ -1,0 +1,358 @@
+<!-- 
+  Book: Head First HTML and CSS
+  STOPPED AT Chp 13: Getting Tabular
+-->
+
+<!-- 
+NOTES:
+  Elements are either block or inline
+  Block elements have a line-break (/r/n) 
+    <h1>, ...
+    <p>
+    <blockquote>
+    <ol>, <ul>, <dl>
+    <code>
+  Inline elements do not have a line-break
+    <li>
+    <img>
+  Total Width (horizontal):
+    margin-left + border-right  + padding-left  + width + padding-right + border-right + margin-right  
+    ML->BR->PL->W->PR->BR->MR
+  Total Height 
+    margin-top + border-top + padding-top + height + padding-bottom + border-bottom + margin-bottom
+  CSS: Cascading Style Sheets
+    styles from multple style sheets can "cascade" down to one page
+    a style is overridden at the most specific level
+  Browser renders the page block to block, in a normal "flow", but you can change the flow
+    width property can shrink an araea snd all elements are displayed, still in the regular flow schedule 
+    resizing the broser preserves the flow order
+  Placing blocks horizontal preserves the margins
+  Placing blocks vertically it collapses their shared margins together to the higher margin
+  Liquid Layout: content expands or shrinks to screen space of the browser
+  Frozen Layout: content is fixed
+    use <div id="allcontent"> to wrap the entire content of <body> and set the width
+  Jello Layout: add to #allcontent margin-left: auto, margin-right: auto
+    fixes the width of content but auto-adjusts the margin size, so content is in the center
+  <div> elements below could be replaced by html5 elements (may not be supported by old browsers):
+    <header> </header>  (could replace <div id="header> </div>)   
+      for top of the page, could be a title or image
+      see example below
+      can be in a section or in an article
+    <section> </section>
+      could be for a main section  or subsection of text of an article
+      contain <article>  </article> elements
+    <article> </article
+      for self-contained  
+    <aside>  </aside>
+      for a floating sidebar of info, peripheral content
+    <footer>   </footer>
+      for bottom info in a page
+    <time>
+      for date and time 
+    <nav>
+      adds a navigation bar for an unordered list of links
+    <video>
+      adds an embedded video
+    other elements:
+      <mark>, <audio>, <progress>, <meter>, <canvas>, <figure>
+    (don't forget to rework the CSS if they are actually replacing <divs>)
+    
+
+-->
+
+<!doctype html>   <!-- denote that it is html5 (at the time of writing?) -->
+<html>
+  
+  <!-- head tag tells the browser about your page-->
+  <head>  
+    
+    <title> My Page Title </title>    
+    
+    <!--adds in css
+    margins, drawn border, padding between content and border, different font, etc/
+    type is an attribute
+    each tag can be adjusted specifically to add rules
+    can add rules to tags seperated by commas
+    changes in tag in outer scope (like <body>), will affect children (like <p>, <h1>)
+      can be overrided in child tag's specific block
+    can place style in its own CSS file and link it
+    -->
+    <style type="text/css">    
+      /* CSS comment*/
+      /* @font-face {} allows you to point to a font on the internet to use, pg 365 */
+      body {                          
+        background-color: #add7dd;
+        margin-left: 2%;         /* margin adjusts the position of the box it lives in (see it using a border), can be negative */
+        margin-right: 2%;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        border: 2px dotted black;   /* border-width, border-style, border-color, also border-top-color for partial*/
+                                      /* border-right, border-left, border-top, border-bottom */
+        /* border-radius rounds off the corners*/
+        padding: 10px 10px 10px 10px;   /* padding-left padding-right etc.*/  /*padding adjust the space inside the "border" box */   
+        font-family: sans-serif;
+        /* changes the spacing between each "line" on page (1.5* font size), inherited by all children of body*/
+        line-height: 1.5em;  
+        /* add background image: pg. 380 (can be added to other elements than body) */
+        width: 2000px     /* restricts the width of the content only (see diagram in NOTES), theres also height*/   
+            /* 2cm, is like */
+      }
+      h2, h4 {
+        background-color: aqua;
+        color: maroon;
+        border: 5px solid black;
+      }
+      h3, h5 {
+        display: inline;
+        border-bottom: 5px solid black; 
+      }
+      h5 {
+        font-size: 30px;   /* also % or 1.2em scaling or small for example */
+        color: blueviolet;
+        font-weight: lighter;
+      }
+      /* can add more classes, tags with commas*/
+      p.MyClass {     /* .MyClass for all tags with the class*/
+        color: green;
+        text-decoration: underline;
+      }
+      p.MyClass2 {
+        border: 5px solid black;
+        padding-left: 20px;   /* add space padding left of the content in the CSS box */
+        margin-left: 40px;    /* adds space outside the CSS box */
+      }
+      #footer {   /* for all id="footer" */
+        color:purple;
+        clear: right;  /* stops the overlap from the float obj on the right (does not aapply to abs obj)*/
+      }
+      p#footer {  /* for all <p> id="footer" */
+        text-decoration: underline;
+      }
+      #Ben {    /* a <div> */
+        /* aligns all inline content inside of a block , in this case a <div>*/
+        /* can only be applied to a block */
+        /* this <div> is made up of other blocks, and these blocks inherit the text-align */
+        text-align: center;   
+      }
+      /* <div> id="Headings" specifies the child elem <h2> to apply formatting to */
+      /* can have a list of child elems to apply to, they can also be id's or classes too */
+      #Headings h2 {  
+        text-align: center;
+      }
+      .name {
+        color: violet;
+      }
+      #ForFloat {         /*  can also float images */
+        width : 100px;   /* floats must have a width */
+        float: right; 
+      }
+      /* 
+      example of absolute positioning 
+      need top|bottom and left|right 
+      for multiple abs objs, z-index detmines which is on top 
+      position fixed:
+        doesn't move if you scroll, fixed to the browser window (viewport) not the page
+      */
+      #abs {  
+        position: absolute;  /* static is default, also see fixed and relative*/
+        top: 1000px;
+        right: 200px;
+        width: 200px;
+      }
+      /* CSS Table view*/
+      div.MyTable {
+        display: table;
+      }
+      div.Row {
+        display: table-row;
+      }
+      div.ColCell {
+        display: table-cell;
+        border: 2px solid black;   /* each cell has a border, some of the borders are doubled */
+        width: 200px;
+        text-align: center;       
+      }
+      header {   /* HTML5 element, no #*/
+        text-align: center;
+      }
+      section#start {
+        text-decoration: overline;
+      }
+
+    </style>
+  
+  </head>
+  
+  <body>
+    
+    <!-- -HTML 5 elements example -->
+    <header>
+      This is at the top of the page!
+    </header>
+    <section id="start">    <!-- can also use a class -->
+      This is the start section, with an overline.
+    </section>
+
+    <!-- HEADING AND PARAGRAPH-->
+    <h1> Heading H1  </h1>    
+    <h2> SubHeading of H1 </h2>  <!--h2 has a smaller size-->
+    <h2 style="text-align:center"> This is in the center  </h2>
+    <h3> Heading has no line break: </h3> 
+    <h3> This is next to it </h3>
+    <h4> Heading 4</h4>
+    <h5> Heading 5</h5>
+    
+    <p> This is a paragraph with <q> quotes </q> <em> italicized </em>  <br>
+        <strong> BOLD </strong> <br>
+        <!-- prints <html> on the page, like escape chars-->
+        &lt;html&gt;   <br>
+    </p>
+
+    
+
+    <!--horizontal line -->
+    <hr color="black">   
+
+    <!-- IMAGE AND LINKS -->
+    <img src = "link.png">
+    <!-- other.html is in the same folder this file, can path to it-->
+    <!-- you can change the link colors based on their visted state pseudo-classes see pg. 493 -->
+    <p> Here is a link: <a href = "other.html"> OTHER HTML </a> </p>
+    
+    <!-- BLOCKQUOTES -->
+    <blockquote> This is an indented block, can be used for quotes (no ""). 
+      <blockquote> nested indent </blockquote>
+     </blockquote>
+    
+    <!-- NEXT LINE, CARRIAGE RETURN -->
+    <p> 
+      Here are multiple lines: <br>   
+      line 1 <br>
+      line 2 <br>
+    </p>
+
+    <!-- CLASS -->
+    <!-- An element can have multiple classes -->
+    <!-- can have more than one element on the page with the same class -->
+    <p class="MyClass">
+      This is a class element, with specific CSS properties
+    </p>
+    <p class="MyClass MyClass2">
+      Has two class's properties attached
+    </p>
+
+    <!-- LIST -->
+    <!-- 
+      ol and li are block elements, so theres a /n 
+      ol is ordered list (numbered), ul is an unordered list (bullets), li is a list item
+    -->
+    <ol>
+      <li> first </li>
+      <li> second </li>
+        <ul>
+          <li> unordered and nested </li>
+          <li> unordered </li>
+        </ul>     
+      <li> third </li>
+    </ol>
+
+    <!-- DEFINITION LIST-->
+    <!-- each entry has a term <dt> and definiton <dd> (<dd> are indented) -->
+    <dl> 
+      <dt> instantiate: </dt>
+      <dd> a made up thing </dd>
+    </dl>
+    
+    <!-- ADD CODE AND PRE -->
+    <!-- code will inline everything, pre is needed to display as is, to show the actual placement, indents, etc -->
+    <pre>
+      <code>
+public static void recursive(int n) { 
+  if (n <= 0) {
+    return;
+  }
+  Console.WriteLine($"n");
+  recursive(n-1);
+}
+      </code>
+    </pre>
+
+    <!-- SPAN -->
+    <!-- <span> allows you to seperate inline elements -->
+    <ol>
+      <li> <span class="name"> Finn Harki</span> </li>    <!-- this one is violet -->
+      <li> Mags Harki 
+    </ol>
+
+
+    <!-- DIV -->
+    <!-- divide up ypur sheet into logical pieces at the block level -->
+    <!-- can nest div structures-->
+    <div id="Ben"> 
+      <h1> Ben Harki </h1>
+      <p> - Has a son Finn and a wife Mags </p> 
+    </div>
+
+    <!-- see CSS style above, for selecting only some child elements to apply to -->
+    <div id="Headings">
+      <h1> Heading1 </h1>
+      <h2> Heading2 </h2> 
+    </div>
+
+    <!-- CSS TABLE VIEW --> 
+    <!-- see CSS style above -->
+    <!-- structure, then cells --> 
+    <div id="MyTable"> 
+      <div class="Row">
+        <div class="ColCell">
+          <p> Cell (0,0) </p>
+        </div>
+        <div class="ColCell">
+          <p> Cell (0,1) </p>
+        </div>
+      </div>
+      <div class="Row">
+        <div class="ColCell">
+          <p> Cell (1,0) </p>
+        </div>
+        <div class="ColCell">
+          <p> Cell (1,1) </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLOW -->
+    <!--inline obj (from inside a block) flows beside the float obj --> 
+    <!-- float object can sit on top or hide blocks themselves -->
+    <!-- expand the margin of the block that the float sits on
+      fix the width of the content of the block
+      to give the illusion of two seperate columns -->
+    <p id="ForFloat"> 
+      This has a float right property that adjusts the regular flow. Clear in the footer 
+      can avoid overlap from this floating object and the footer 
+    </p>
+    <p style="width: 100px">    <!-- placed to the left of the above float -->
+      This is a paragraph to help show flow   
+    </p>
+
+    <!-- ABSOLUTE POSITIONING -->
+    <!-- this is removed from the flow order -->
+    <!-- all other flow elements ignore it and do not wrap around -->
+    <p id="abs"> 
+      This text has absolute formatting in the CSS style section <br>
+      From the top right corner of the page to top-right of this block: <br>
+      1000 px down from the top <br>
+      200 px from the right <br>
+      200 px width
+    </p>
+
+    <!-- ID -->
+    <!-- like a class, however only one id per element -->
+    <h1 id="footer"> This is the heading for the footer </h1> 
+    <p id="footer"> This is a footer. </p>
+
+
+
+  </body>
+
+</html>
