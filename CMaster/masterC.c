@@ -878,9 +878,9 @@ POINTERS
 // need initialized to addr on heap or stack) use
 #include <stdio.h>
 int main(void){
-  int *bad;    // addr is a garbage value, needs set by malloc or by a stack var like below
+  int* bad;    // addr is a garbage value, needs set by malloc or by a stack var like below
   int num = 10;
-  int *nptr = &num; // holds location of num on stack, changing num changes value at the addr nptr points to
+  int* nptr = &num; // holds location of num on stack, changing num changes value at the addr nptr points to
   printf("%i at %p\n", *nptr, nptr);   // *nptr dereference to read the value at addr nptr holds
   return 0;
 }
@@ -916,8 +916,8 @@ int main(void){
 // fields are pointer
 #include <stdio.h>
 struct person {
-  int *age;
-  int *weight;
+  int* age;
+  int* weight;
 };
 int main(void){
   struct person ben;
@@ -952,44 +952,68 @@ int main(void) {
   }
 }
 // **********
-STOPPED HERE
 // const and pointers
-int num = 10;
-int *const numptr = &num;   // pointer value is const (addr it holds is const)
-const int *numptr = &num;    // value at addr held by pointer is const
-const int *const *numptr = &num;  // both
+#include <stdio.h>
+int main(void) {
+  int num = 10;
+  int num2 = 0xF;
+  // *****
+  // const pointer:  pointer value is const (addr it holds is const)
+  int* const cptr = &num;   
+  // cptr = &num2;   // cannot change the addr the pointer holds
+  *cptr = 0xFF;     // can change the value at the addr the pointer holds
+  // *****
+  // const value: value at addr held by pointer is const
+  const int* cvptr = &num;    
+  cvptr = &num2;  // can change the addr the ptr holds
+  // *cvptr = 0xFF;  // cannot change the value the pointer points to
+  // *****
+  // both
+  const int* const cvcptr = &num;  
+  // cvcptr = &num2;   // pointer value (addr it holds) cannot change 
+  // *cvcptr = 0xFF;   // the value it points to cannot change
+  return 0;
+}
 // **********
 // functions accepting pointers
-// any change to the local pointer inside the function does not affect the pointer in main
+// swaps the values the pointers point to, but not the addr they point to
+// pointers are copied into local function variable as const pointers 
 #include <stdio.h>
-void swap(int *const x, int *const y) {   // operates on copies of pointers, but not values
-  int t = *y;
-  *y = *x;
+void swap(int* const x, int* const y) {   // copies the addrs to local pointers
+  int t = *y;  // copies the val at the addr held by y into t
+  *y = *x;   // y = x would make y hold the addr x holds, won't compile bc they are const 
   *x = t;
 }
 int main(void) {
   int x = 10, y = 20; // on stack
   int *xp = &x, *yp = &y;
   swap(xp,yp);
-  printf("%i, %i\n", x, y);
+  printf("%i, %i\n", x, y);   // 20, 10
   swap(&x, &y);
-  printf("%i, %i\n", x, y);
+  printf("%i, %i\n", x, y);   // 10, 20
   return 0;
 }
 // **********
 // function that returns a pointer
+// the pointer from main passes through the function
+// should not return a pointer intiialized in a function
+//    the location would be dealloc'd on function return
+// params that accept pointers, can be called on & addrs
 #include <stdio.h>
-int *add(int *x, int *y, int *s) {
-  *s = *x + *y;
-  return s;
+int* add(int* x, int* y, int* s) {
+  *s = *x + *y;  // access values by derefs
+  return s;    // return out the pointer
 }
 int main(void) {
   int x = 10, y = 15, s = 0;  // s is will be filled with sum
-  int *sp = &s;
-  sp = add(&x, &y, sp);
+  int* sp = &s;
+  sp = add(&x, &y, sp);  // addr held by sp does not change, it passes though the function
   printf("%i\n", *sp);
   return 0;
 }
+
+STOPPED HERE ON REVIEW
+
 // ***********
 // pointers and arrays
 #include <stdio.h>
