@@ -178,6 +178,9 @@ NOTES:
       section#start {
         text-decoration: overline;
       }
+      p.Indent {
+        text-indent: 2em;
+      }
 
     </style>
   
@@ -206,6 +209,10 @@ NOTES:
         <strong> BOLD </strong> <br>
         <!-- prints <html> on the page, like escape chars-->
         &lt;html&gt;   <br>
+    </p>
+    <p class="Indent">
+      This paragraph has an indent on the first line and then it looks like a normal
+      paragraph. Check out the CSS style section with p.Indent
     </p>
 
     
@@ -350,8 +357,7 @@ public static void recursive(int n) {
     <!-- like a class, however only one id per element -->
     <h1 id="footer"> This is the heading for the footer </h1> 
     <p id="footer"> This is a footer. </p>
-
-
+    
 
   </body>
 
