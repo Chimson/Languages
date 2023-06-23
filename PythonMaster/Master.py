@@ -102,7 +102,13 @@ dir()
 import MySum
 dir(MySum)    #  __builtins__, __name__ 
 dir(__builtins__)   #  lists the names of builtin functions and variables
-
+# -----
+# see module_and_script.py to use __name__ so that a module can be both a script and module
+# will run a script in the body of the if condition, when its run as a module
+# if file is imported then any script in the body will be skipped 
+if __name__=='__main__':
+  # insert a script to run
+    
 PACKAGES
 # namespace package (no __init__.py file, see regular package)
 # if there are the same names in two different samespaces they should not collide
@@ -131,7 +137,7 @@ subpackageFunc()
 # -----
 # relative branch import, using . and ..
 # in module1.py: 
-from . import module2  # import a model in same package
+from . import module2  # import a module in same package
 from .. import PackageFile  # imports a module in parent package
 # -----
 # install 3rd party modules using pip
@@ -1254,3 +1260,18 @@ a = (i for i in range(10))   # this is a saved generator
 print(a)  # generator reference
 for ai in a:
   print(ai)
+  
+UNIT TESTING
+# example of a test class for BillsBudget
+# inherits unittest class
+# each test method needs a test_ prefix
+# -v makes it more verbose
+# run: > python -m unittest -v BillsBudgetTest.py
+import BillsBudget
+import unittest
+class BillsBudgetTest(unittest.TestCase):
+  def test_bad_string_Bill_constructor(self):
+    with self.assertRaises(Exception):
+      bad = BillsBudget.Bill(3.14, 20.00, 15)
+if __name__ == "main":
+  unittest.main()
