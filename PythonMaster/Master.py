@@ -28,6 +28,7 @@ INHERITANCE
 OPERATOR OVERLOADING 
 EXCEPTION
 ITERATOR, GENERATORS, AND GENERATOR EXPRESSIONS
+UNITTEST
 
 RUN INTERPRETER, FILE
 # start interpreter in command prompt
@@ -40,6 +41,7 @@ $ quit()
 # ------
 # use pdb
 # starts debugging at the first executable line of the file
+# -m runs the module's script code (like its main function)
 > python -m pdb test.py
 
 
@@ -1273,5 +1275,8 @@ class BillsBudgetTest(unittest.TestCase):
   def test_bad_string_Bill_constructor(self):
     with self.assertRaises(Exception):
       bad = BillsBudget.Bill(3.14, 20.00, 15)
-if __name__ == "main":
-  unittest.main()
+# with this you can now can run the unittests with command:
+# > python -m BillsBudgetTest
+# can replace unittest.main() call with some prints for some spot checking
+if __name__ == "main":   
+  unittest.main()   
