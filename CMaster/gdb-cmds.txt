@@ -1,0 +1,21 @@
+// compile with -g debug symbols 
+> gdb test
+(gdb) b main  // set a breakpoint to main
+(gdb) r
+// -----
+// commands in (gdb):
+// ctrl-p is previous command
+// see vector example
+(gdb) l (list code), b, r, c, n, s, i (info), f (frame), d (del), p (print), x (examine)   // debugging commands
+// print and examine formatting:
+(gdb) p/x v, (gdb) p/c v, (gdb) x/s &v, (gdb) x/d &v  // print/examine contents as hex, char, string, decimal
+(gdb) tui e   // enablses the source-code inspector
+(gdb) p var   // prints value of var  
+(gdb) p &var  // prints where var is stored in memory (location of the ref variable itself)
+(gdb) x &var  // examine memory at &var's location (ref's value), show's pointer that holds another loc
+// -----
+// memory is displayed in little endian, using x, gdb gives:
+// location: c0 9b 5a 55 55 55 00 00 
+// this is the value 0x00005555555a9bc0, which could be an address to somewhere else
+(gdb) x/24bx &var // shows 24 bytes of values in memory location held by the ref in hex 
+(gdb) x/24b &var   // by default its in hex
