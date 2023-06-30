@@ -1,17 +1,17 @@
-﻿using System.Diagnostics;
+﻿// start a process using .NET
+// assumes that the process will terminate on its own
+// using block ensures the object is disposed after the block, even if an exception is thrown in the block
+// can add more objects in using arg, like using(obj1, obj2)
+using System.Diagnostics;
 class Program {
   static void Main(string[] args) { 
     try {
       using (Process myProcess = new Process()) {
-        myProcess.StartInfo.UseShellExecute = false;
-        // You can start any process, HelloWorld is a do-nothing example.
-        myProcess.StartInfo.FileName = "/home/bharki/Repos/Languages/CSharpMaster/Test/trythis.py";
+        myProcess.StartInfo.UseShellExecute = false;  // starts without a window
         myProcess.StartInfo.CreateNoWindow = true;
+        myProcess.StartInfo.FileName = "python";   // starts python REPL
+        myProcess.StartInfo.Arguments = "trythis.py";
         myProcess.Start();
-        // This code assumes the process you are starting will terminate itself.
-        // Given that it is started without a window so you cannot terminate it
-        // on the desktop, it must terminate itself or you can do it programmatically
-        // from this application using the Kill method.
       }
     }
     catch (Exception e) {
