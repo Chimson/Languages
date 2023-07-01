@@ -84,21 +84,22 @@ namespace Basics {     // custom namespace
 }
 
 USING, NAMESPACE, MULTIPLE FILES
+// "using" brings a namespace into scope
+// this means you do not need to have namespace prefixes on code from other libs
+// System is a namespace
+using System;   // System could be automatically in scope by default
+class Program {
+  static void Main(string[] args) { 
+    Console.WriteLine("hi");
+  }
+}
+// -----
 // Console is a class and can be used statically (without a object) by using static
 using static System.Console;
 class Program {
   static void Main(string[] args) { 
     System.Console.WriteLine("hello");   // System is a namespace, Console a class in the namespace
     WriteLine("hi");
-  }
-}
-// -----
-// bring a namespace into scope, does not need static
-// System is a namespace
-using System;   // System could be automatically in scope by default
-class Program {
-  static void Main(string[] args) { 
-    Console.WriteLine("hi");
   }
 }
 // -----
