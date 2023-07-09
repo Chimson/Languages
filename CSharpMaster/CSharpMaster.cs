@@ -258,7 +258,7 @@ class Program {
       Console.WriteLine($"{sarray[i]}");
     }
     string[] arr_ref;    // reference only
-    arr_ref = new string[5];   // allocates space for 10 elems, all " "
+    arr_ref = new string[5];   // allocates space for 5 elems, all " "
     for (int i = 0; i < arr_ref.Length; ++i) {
       Console.WriteLine($"{arr_ref[i]}");  
     }
@@ -278,9 +278,9 @@ class Program {
 }
 // -----
 // references can be nullable or non-nullable
-// can enable always nullable or never nulable in program options file
+// can enable always nullable or never nullable in program options file
 // ?. returns null, when calling a method on a null ref
-// ?? forces the return of a nother value other than null
+// ?? forces the return of another value other than null
 class Program {
   static void Main(string[] args) { 
     string? s = null;   // needs ? to possibly hold null
@@ -665,6 +665,7 @@ class Program {
   }
 }
 // -----
+// see CONST, READONLY, IN for immutable "in" parameters
 // see params keyword to make a function accept a list of param as a list
 
 
@@ -892,10 +893,10 @@ class Program {
   } 
 }
 // -----
-// init accessor on public propeties I and J, that are attahed to pricate fields
+// init accessor on public propeties I and J, that are attached to private fields
 // can be used to construct an object on the fly, and keep it immutable, since no set
 // property I inits the private _i field
-// value is used to represent the value that will be set in the construction
+// "value" is used to represent the value that will be set in the construction
 // also an example with lambda notation, for user-implemented get and init
 // user-implemented accessors can contain any complicated block of code
 // also an example of auto-implemented init and get
@@ -959,7 +960,7 @@ INDEXER
 // indexer is a property that allows you to use index notation
 // uses lambda notation for properties 
 // Length is also a readonly property
-// now can use MyIntArray[] notation
+// now can use [] indexing notation
 class MyIntArray {
   private int[] arr;
   public int Length {get; private set;}
