@@ -860,6 +860,8 @@ class Program {
 	public partial class Person{ 
 		// other stuff
 	}
+// -----
+// see "using" block in OS, to automatically dispose of objects, when the block completes
 
 
 PROPERTY
@@ -1234,7 +1236,7 @@ class Program {
 // can explicity set the internal value of the enum value
 // enums used to flip bits that relate to flags
 // can use bytes or other integral types instead of ints
-[System.Flags]  // attribute that allows the printing of the flags in a comma seperate list
+[System.Flags]  // attribute that allows the printing of the flags in a comma seperated list
 enum Status : byte {   
   OFF = 0b_0000,    
   ON = 0b_0001,   
@@ -1313,7 +1315,7 @@ class Program {
 // generic method 
 // the class that contains the method does not need to declare a generic type, only in the method
 // generic type T implements a specific interface, IEquatable<T>
-// IEquatable<I> contains the method Equals()
+// IEquatable<T> contains the method Equals()
 class Program {
   static bool MyEqual<T>(T obj1, T obj2) where T : IEquatable<T> {
     return obj1.Equals(obj2); 
@@ -1428,7 +1430,7 @@ class Program {
   }
 }
 // -----
-// abstract vannot be used on fields, but they can be used with classes, methods, properties, indexers, and events
+// abstract cannot be used on fields, but they can be used with classes, methods, properties, indexers, and events
 // can have concrete data and constructor, that can be used in the inheriting class
 // cannot have abstract class objects, abstract methods must be implemented by concrete inheriting classes
 // abstract methods are implicitly virtual methods, cannot have abstract methods in concrete classes
@@ -1571,7 +1573,7 @@ System.Convert   // see CASTING AND CONVERSION
 System.Console
 System.Math
 System.Object
-System.Exception   // see EXECEPTIONS
+System.Exception   // see EXCEPTIONS
 System.Diagnostics.Debug.Assert
 System.DateTime  // struct for the date and time
 System.Collections.Generic  // see GENERICS
@@ -1654,7 +1656,7 @@ TUPLE
 EVENTHANDLER
 // in System namespace
 // EventHandler is a special delegate
-// Program poles Ben, once he is listening, ben call's Program's Shout
+// Program pokes Ben, once he is listening, ben call's Program's Shout
 class Person {
   public string Name {get;}
   public EventHandler? Shout;  // delegate, default to null on construction
@@ -1711,7 +1713,7 @@ class Program {
     ben.Shout += Program_Shout;    // now it is listening to Program
     ben.Poke();  // Ben shouts
     ben.Poke();  
-    ben.Shout += Program_Angry;  // now bouth Program_Shout and Angry are called 
+    ben.Shout += Program_Angry;  // now both Program_Shout and Angry are called 
     ben.Poke();  // SHOUTS! and SAYS I AM ANGRY!
     ben.Poke();  
   }
