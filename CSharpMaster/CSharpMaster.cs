@@ -14,6 +14,7 @@ SKIPPED: Chp 6 > managing memory types > releasing unmanaged resources
 STOPPED AT: Chp 7
 
 COMPILE AND RUN
+UNIT TESTING
 C# REPL
 COMMENTS
 FIRST PROGRAM
@@ -58,6 +59,9 @@ COMPILE AND RUN
 > dotnet new console      // creates /bin, /obj, Program.cs, .csproj file, ..., etc
 > dotnet run 
 > dotnet run -- cmdarg1 cndarg2   // passing args to current application 
+// -----
+// with preexisting code and in directory containing .csproj
+> dotnet build   // compiles binary from code
 
 UNIT TESTING
 // unit testing library in NUnit.Framework
