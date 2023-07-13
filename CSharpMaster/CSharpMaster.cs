@@ -57,6 +57,28 @@ COMPILE AND RUN
 // create a console app and run it
 > dotnet new console      // creates /bin, /obj, Program.cs, .csproj file, ..., etc
 > dotnet run 
+> dotnet run -- cmdarg1 cndarg2   // passing args to current application 
+
+UNIT TESTING
+// unit testing library in NUnit.Framework
+// using NUnit and console
+/*
+Overall Structure, as two seperate projects, only some files shown
+	/Project
+		/Main    
+			Program.cs   // contains Main()
+			Project.csproj
+			/ProjLib     // ProjLib namespace where code is located, but is not a dotnet classlib proj
+		/Test    (contains unit test classes and methods)
+			UnitTest1.cs
+*/
+/Project/Test> dotnet new nunit
+/Project/Test> dotnet add reference ../Main/Project.csproj   // allows Test proj to see src proj 
+/Project/Test> dotnet test   // run unit tests
+// add to /Test/UnitTest1.cdd to see the code lib:
+using ProjLib; 
+// -----
+// There are other ways to do this with a dotnet classlib and dotnet sln, see MS documentation
 
 C# REPL
 // C# has script files .csx, that can be run in CSI, C# Interactive
