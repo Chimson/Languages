@@ -293,11 +293,17 @@ public static void recursive(int n) {
 
 
     <!-- DIV -->
-    <!-- divide up ypur sheet into logical pieces at the block level -->
+    <!-- divide up your sheet into logical pieces at the block level -->
     <!-- can nest div structures-->
     <div id="Ben"> 
       <h1> Ben Harki </h1>
       <p> - Has a son Finn and a wife Mags </p> 
+    </div>
+    <!-- force a pdf page break, set the next pages margin-->
+    <div style="page-break-before: always; margin-top: 1em">
+      <p> This block should not</p>
+      <p> be split on a pdf page break. </p>
+      <p> It will force a page break before</p>
     </div>
 
     <!-- see CSS style above, for selecting only some child elements to apply to -->
@@ -357,6 +363,7 @@ public static void recursive(int n) {
     <!-- like a class, however only one id per element -->
     <h1 id="footer"> This is the heading for the footer </h1> 
     <p id="footer"> This is a footer. </p>
+    
     
 
   </body>
