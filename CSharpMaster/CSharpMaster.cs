@@ -1,6 +1,6 @@
-// FINISH FROM MY INDEP STUDY: commandline args
+// ADD EXAMPLE USING YIELD
 
-From C# 8.0 and .NET Core 3.0 4th Edition
+From C# 8.0 and .NET Core 3.0 4th Edition:
 SKIPPED: Chp 2 > Exploring Console Applications Further
 SKIPPED: Chp 3 > Casting and Converting Between Types > Converting From a Binary Obj to a String
 							 > Parsing from strings to numbers or dates and times
@@ -33,7 +33,7 @@ CONTROL
 LOOPS
 EXCEPTION
 FUNCTIONS, METHODS
-CLASS
+CLASS AND RECORD
 PROPERTY
 INDEXER
 MEMORY
@@ -46,6 +46,7 @@ OPERATOR OVERLOADING
 INTERFACES
 INHERITANCE
 ATTRIBUTE
+ASYNCHRONOUS PROGRAMMING
 .NET PLATFORM
 SYSTEM
 CONSOLE
@@ -55,6 +56,7 @@ ASSERT
 LIST
 TUPLE
 OS
+IO
 
 COMPILE AND RUN
 // create a console app and run it
@@ -109,6 +111,17 @@ namespace Basics {     // custom namespace
 			Console.WriteLine("Hello World!");  
 		} 
 	}
+}
+// -----
+// access command line args
+// args[0] is the first arg
+class Program {
+  static void Main(string[] args) { 
+    Console.WriteLine($"number of command line args: {args.Length}");
+    foreach (string entry in args) {
+      Console.WriteLine($"{entry}");
+    }
+  }
 }
 
 USING, NAMESPACE, MULTIPLE FILES
@@ -273,12 +286,9 @@ string s = $"{i}, {p}";
 string v = @"i\n";   
 // -----
 // grab a substring, replace, insert
-// TODO: check these in a program
 string str = "Ben Harki";
-string str2 = str.Substring(0, 5);
-string str3 = str.Replace("X", "replaces X");  // "X" is replaced with "replaces X"  
-string str4 = str.Insert(3, "jamin ");  // 3 is the char index
-int ind = str.IndexOf("B");   // returns the int index
+str.Substring(0, 5), str.Replace("X", "replaces X"), str.Insert(3, "jamin ");  
+str.IndexOf("B");   
 
 ARRAY
 // with explicit initialization
@@ -704,7 +714,7 @@ class Program {
 // see params keyword to make a function accept a list of param as a list
 
 
-CLASS
+CLASS AND RECORD
 // classes are reference types in that their data is on the heap, with a reference to it on the stack
 // reference variable on the stack and holds an addr to the data on the heap
 // all types inherit System.Object
@@ -896,6 +906,31 @@ class Program {
 		// other stuff
 	}
 // -----
+// records have built-in functionalty, intended for immutable types
+// readonly record struct has readonly properties, like public int X {init; get;}
+// record class has readonly class fields
+// record struct is for value types, record class is for reference types
+// can also have mutable "record struct" types
+// can add Properties, fields or methods  
+readonly record struct MyIntA(int X);  // using positional syntax, where property is an param
+record class MyIntB(int X);     // can be made public, private, etc
+record class MyIntC {       // not as a positional record
+  public int X {init; get;}   
+  public string my_format => $"MyIntC: {this.X}";
+}
+class Program {
+  static void Main(string[] args) { 
+    MyIntA i = new MyIntA {X = 0};  // struct
+    // i.X = 1;  // readonly 
+    Console.WriteLine($"{i.X}");
+    MyIntB j = new MyIntB(0);   // class
+    // j.X = 1;
+    Console.WriteLine($"{j.X}");
+    MyIntC k = new MyIntC {X = 1};
+    Console.WriteLine($"{k.my_format}");
+  }
+}
+// -----
 // see "using" block in OS, to automatically dispose of objects, when the block completes
 
 
@@ -931,7 +966,7 @@ class Program {
 }
 // -----
 // init accessor on public propeties I and J, that are attached to private fields
-// can be used to construct an object on the fly, and keep it immutable, since no set
+// can be used to construct an object on the fly (object initializer), and keep it immutable, since no set
 // property I inits the private _i field
 // "value" is used to represent the value that will be set in the construction
 // also an example with lambda notation, for user-implemented get and init
@@ -992,6 +1027,7 @@ class Program {
 }
 // -----
 // see another example of expression bodied property in FUNCTIONAL PROGRAMMING AND DELEGATES
+
 
 INDEXER
 // indexer is a property that allows you to use index notation
@@ -1136,6 +1172,34 @@ class Program {
     print_num(i => 2*i, 64);  // a different lambda
     OpLambda add = new OpLambda((i,j) => i + j);
     Console.WriteLine(add.operate(5,6));
+  }
+}
+// -----
+// Predicate can refer to a function/lambda when it returns a bool
+// needs to refer to a method that has a T ob as parameter
+// lambda and method version
+// Predicates are built in to Array<T> and List<T> methods
+class My2DInt {
+  public int I {init; get;}
+  public int J {init; get;}
+}
+class Program {
+  static bool compare_lt(My2DInt i) {
+    return i.I < i.J;
+  }
+  static string result_msg(My2DInt i, Predicate<My2DInt> pred) {
+    if (pred(i)) {
+      return $"true";
+    }
+    else {
+      return $"false";
+    }
+  }
+  static void Main(string[] args) { 
+    My2DInt less = new My2DInt {I = 0, J = 1};
+    Predicate<My2DInt> methlt = compare_lt;
+    Console.WriteLine($"{result_msg(less, methlt)}");   // with named predicate
+    Console.WriteLine($"{result_msg(less, twod => twod.I > twod.J)}");   // with anoynm lambda
   }
 }
 
@@ -1588,6 +1652,7 @@ class Program {
 }
 // ----- 
 // TODO: use "sealed" to prevent your class from being inherited by subclass
+// TODO: use "required" in C# 11, in a base class, forces child class to initialize base members by object initializer 
 // see extension methods in CLASS for adding methods to a class without inheritance
 
 
@@ -1595,6 +1660,9 @@ ATTRIBUTE
 // see ENUM for an example of using a pre-defined attribute
 // to create custom attributes by inheriting System.Attribute:
 // 		see Chp 8 > working with types and attributes > creating custom attributes
+
+ASYNCHRONOUS PROGRAMMING
+// add example of await, async, yield
 
 .NET PLATFORM
 // C# runs on variants of .NET, is not a standalone language
