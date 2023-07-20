@@ -1,3 +1,5 @@
+// FINISH FROM MY INDEP STUDY: commandline args
+
 From C# 8.0 and .NET Core 3.0 4th Edition
 SKIPPED: Chp 2 > Exploring Console Applications Further
 SKIPPED: Chp 3 > Casting and Converting Between Types > Converting From a Binary Obj to a String
@@ -269,7 +271,14 @@ STRING
 int i = 3; double p = 3.14;
 string s = $"{i}, {p}"; 
 string v = @"i\n";   
-
+// -----
+// grab a substring, replace, insert
+// TODO: check these in a program
+string str = "Ben Harki";
+string str2 = str.Substring(0, 5);
+string str3 = str.Replace("X", "replaces X");  // "X" is replaced with "replaces X"  
+string str4 = str.Insert(3, "jamin ");  // 3 is the char index
+int ind = str.IndexOf("B");   // returns the int index
 
 ARRAY
 // with explicit initialization
@@ -1610,6 +1619,7 @@ System.IDisposable   // release memory
 System.Exception   // inherit to make custom exception classes
 System.Attribute   // class you can inherit to create your own attributes
 System.EventHandler  // see EVENTHANDLER
+System.IO  // File, reading and writing files
 
 CONSOLE
 // In System namespace
@@ -1671,6 +1681,15 @@ class Program {
     foreach (int i in lst) {
       Console.WriteLine(i);
     }
+  }
+}
+// -----
+// add and remove from index
+class Program {
+  static void Main(string[] args) { 
+    List<string> lst = new List<string>();
+    lst.Add($"item1");
+    lst.RemoveAt(0);   // 0th entry
   }
 }
 // -----
@@ -1779,6 +1798,10 @@ class Program {
     }
   } 
 }
+
+IO
+// in System.IO, contains File static class
+File.WriteAllText(), File.ReadAllText()
 
 
 
