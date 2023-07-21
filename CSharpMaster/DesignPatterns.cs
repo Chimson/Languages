@@ -1,7 +1,5 @@
 // Inspired by reading Design Patterns .NET 6 3rd Edition
 /* 
-  LSP: Liskov Substitution
-    something that takes a Child type or Parent type, should take both without error 
   ISP: Interface Segregation
     for example: an IPrinter interface that contains, print(), fax(), scan()
     really should split the methods into their own interfaces
@@ -109,7 +107,52 @@ class Program {
     }
   }
 }
-
-
+// -----
+// LSP: Liskov Substitution
+// something that takes a Child type or Parent type, should take both without error 
+// uncommenting the code would cause ChangeID to not work properly:
+//   a "new" Property in a subclass usually will hide the superclass version
+//   however here there are two ID's and Change only changes Student's, so MajorStudents is left unchanged
+enum Major {CS, PSYCH, MATH};
+class Student {
+  public int ID {get; set;}
+  public string Name {get; set;}
+  public Student(int id, string name) {
+    this.ID = id;
+    this.Name = name;
+  }
+  public override string ToString() {
+    return $"ID:{this.ID}, Name:{this.Name}";
+  }
+}
+class MajorStudent : Student {
+  private Major Major;
+  // public new int ID {get; set;}
+  public MajorStudent(Student student, Major major) 
+    : base(student.ID, new String(student.Name.ToCharArray())) { 
+      // this.ID = student.ID;
+      this.Major = major;
+  }
+  public override string ToString() {
+    return $"ID:{this.ID}, Name:{this.Name}, Major:{this.Major}";
+  }
+}
+class ChangeID {
+  public static void Change(Student stu, int id) {
+    stu.ID = id;
+  }
+}
+class Program {
+  static void Main(string[] args) { 
+    Student ben = new Student(1, "Ben");
+    MajorStudent mags = new MajorStudent(new Student(2, "Mags"), Major.PSYCH); 
+    Console.WriteLine(ben);
+    ChangeID.Change(ben, 3);
+    Console.WriteLine(ben);
+    Console.WriteLine(mags);
+    ChangeID.Change(mags, 4);
+    Console.WriteLine(mags);
+  }
+}
 // TODO: FINISH EXAMPLES FOR SOLID PRINCIPLES
 // STOPPED AT PAGE 20 PARAMETER OBJECT

@@ -1588,6 +1588,7 @@ INHERITANCE
 // all types implicity inherit System.Object
 // calling the superclass constructor in subclass constructor 
 // new hides the subclass method (non-polymorphic inheritance), when a superclass ref holds a subclass obj addr
+// TODO: use "new" to declare a Property in a subclass, that hides the superclass's version
 // virtual in superclass allows a subclass to override it, subclass uses override (polymorphic inheritance)
 // base keyword is used to allow a subclass access members of it superclass
 // superclass ref can hold a subclass ref
