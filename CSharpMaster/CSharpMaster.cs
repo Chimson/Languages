@@ -1448,6 +1448,8 @@ class Program {
     Console.WriteLine(MyEqual<string>("yes", "yes"));   // true
   }
 }
+// ----
+// TODO: use a gneric type in an interface 
 
 OPERATOR OVERLOADING
 // an overloaded operator needs to be public and static
