@@ -1,5 +1,3 @@
-// ADD EXAMPLE USING YIELD
-
 From C# 8.0 and .NET Core 3.0 4th Edition:
 SKIPPED: Chp 2 > Exploring Console Applications Further
 SKIPPED: Chp 3 > Casting and Converting Between Types > Converting From a Binary Obj to a String
@@ -31,6 +29,7 @@ ARRAY
 NULLABLE
 CONTROL
 LOOPS
+ITERATOR
 EXCEPTION
 FUNCTIONS, METHODS
 CLASS AND RECORD
@@ -493,6 +492,30 @@ class Program {
     }
   }
 }
+
+ITERATOR
+// yield return allows you to create a simple iterator used in foreach 
+// TODO: add an example with yield break, to stop iterator
+// you can also write the loop as a foreach on another iterator
+class MyIntArray {
+  int[] arr;
+  public MyIntArray(int[] arr) {
+    this.arr = arr;
+  }
+  public IEnumerable<int> Enumerator() {
+    for (int i = 0; i < this.arr.Length; ++i) {
+      yield return this.arr[i];
+    }
+  } 
+}
+class Program {
+  static void Main(string[] args) { 
+    MyIntArray mya = new MyIntArray(new int[] {0,1,2,3,4});
+    foreach (int i in mya.Enumerator()) {
+      Console.WriteLine(i);
+    }
+  }
+}
 // -----
 // example of creating an iterator, making the type usable in the foreach loop
 // needs GetEnumerator(), Current, and MoveNext() implemented properly
@@ -734,7 +757,7 @@ class Program {
 // internal protected: internal or protected 
 // private protected: internal and protected
 // -----
-// construct on the fly, with public fields
+// construct on the fly, with public fields (using object initializer)
 // static field is one field value that is shared across all objects of the class 
 class Person {
   public int age;
@@ -783,6 +806,7 @@ class Person {
 }
 class Program {
   static void Main(string[] args) {   
+    Person DefPerson = new();   // you can drop the class name
     Console.WriteLine(new Person());
     Console.WriteLine(new Person(38, "Ben Harki"));
     Person ben = new Person(38,"Ben Harki");
