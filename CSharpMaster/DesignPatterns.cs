@@ -1,10 +1,4 @@
 // Inspired by reading Design Patterns .NET 6 3rd Edition
-/* 
-  ISP: Interface Segregation
-    for example: an IPrinter interface that contains, print(), fax(), scan()
-    really should split the methods into their own interfaces
-    then you can have a class that picks which interfaces it wants
-*/
 
 SOLID DESIGN PRINCIPLES
 // SRP: Single Responsibility Principle
@@ -154,5 +148,57 @@ class Program {
     Console.WriteLine(mags);
   }
 }
+// -----
+// ISP: Interface Segregation
+// better to split the actions of similar classes into their own interfaces
+//   rather than have one class, with one interface that has many methods 
+// then you can have a class that picks which interfaces it wants, and impl them how they want
+// also keeps classes from holding a method it doesn't need: like a CapsMSG() in a LowerMessage class 
+// here with composition (owning other objs) and delegation (calling their methods) 
+interface IRawMessage {
+  public string RawMessage(); 
+}
+class Message : IRawMessage {
+  public string Msg {get; init;} = "Default Message";
+  public string RawMessage() => this.Msg;
+}
+interface ICaps {
+  public string CapsMsg();
+}
+class CapsMessage : IRawMessage, ICaps {
+  public IRawMessage RMsg = new Message {};   // composition
+  public string RawMessage() => this.RMsg.RawMessage(); 
+  public string CapsMsg() => $"{this.RMsg.RawMessage().ToUpper()}";
+}
+interface ILower {
+  public string LowerMsg();
+}
+interface IAllMessage : IRawMessage, ICaps, ILower {}   // interfaces can inherit other interfaces
+class AllMessage : IRawMessage, ILower, ICaps {
+  public IRawMessage RMsg = new Message {};   // composition
+  public string RawMessage() => this.RMsg.RawMessage();  // delegation: choosing to use another class's method
+  public string LowerMsg() => $"{this.RMsg.RawMessage().ToLower()}";  // or can implement their own version
+  public string CapsMsg() => $"{this.RMsg.RawMessage().ToUpper()}";
+}
+class Program {
+  static void Main(string[] args) { 
+    Message d = new Message {};
+    Console.WriteLine(d.RawMessage());
+    Message ben = new Message {Msg = "Hello from Ben!"};
+    Console.WriteLine(ben.RawMessage());
+    CapsMessage bencaps = new CapsMessage {
+        RMsg = new Message {
+          Msg = "Hello again from caps!"}};
+    Console.WriteLine(bencaps.RawMessage());
+    Console.WriteLine(bencaps.CapsMsg());
+    AllMessage benall = new AllMessage {
+      RMsg = new Message {
+        Msg = "Hello again from All!"}};
+    Console.WriteLine(benall.RawMessage());
+    Console.WriteLine(benall.LowerMsg());
+    Console.WriteLine(benall.CapsMsg());
+  }
+}
+
 // TODO: FINISH EXAMPLES FOR SOLID PRINCIPLES
 // STOPPED AT PAGE 20 PARAMETER OBJECT

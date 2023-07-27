@@ -968,7 +968,7 @@ class MyInts {
   public int i {get; set;}   // basically pointless bc i can be read and modified already
   public int j {get; private set;}  // makes j readonly (by outside classes only)
   public int k {get;}   // purely readonly, can only set k by constructor
-  public int l {get; set;} = 100;  // initialized here, not in constructor
+  public int l {get; set;} = 100;  // initialized/defaulted here, not in constructor
 	public MyInts(int i, int j, int k) {
     this.i = i;   // properties are accessible in the constructor
     this.j = j;
@@ -1583,6 +1583,8 @@ class Program {
     Console.WriteLine($"{m.Get(1)}");
   }
 }
+// -----
+// see an interface that inherits other interfaces in DesignPatterns.cs > Solid Principles > ISP
 
 INHERITANCE
 // all types implicity inherit System.Object
