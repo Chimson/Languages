@@ -1,5 +1,37 @@
 // Inspired by reading Design Patterns .NET 6 3rd Edition
 
+PARAMETER OBJECT
+// you can make an parameter class to handle only the parameters
+// also this example is like an interface, without actually using "interface"
+// here the "interfaced" method is represented a field, that is a named lambda
+// example of applying SOLID principles with individual classes and not abstract structures
+class BinOperateParams  {
+  public float a;
+  public float b;
+  public Func<float, float, float> Operate;
+  public BinOperateParams(Func<float, float, float> operate, 
+      float a = 1.0f, float b = 2.0f) {
+    this.Operate = operate;
+    this.a = a;
+    this.b = b;
+  }
+}
+class BinOperate {
+  public static float Operate(BinOperateParams bin_params) {
+    return bin_params.Operate(bin_params.a, bin_params.b); 
+  }
+}
+class Program {
+  static void Main(string[] args) { 
+    BinOperateParams[] calcs = {
+      new BinOperateParams((a,b) => a * b, 50.5f, 15.3f),
+      new BinOperateParams((a,b) => a + b, 25f, 32.33f)};
+    foreach(BinOperateParams calc in calcs) {
+      Console.WriteLine(BinOperate.Operate(calc));
+    }
+  }
+}
+
 SOLID DESIGN PRINCIPLES
 // SRP: Single Responsibility Principle
 // class has one responsibility, therefore only one reason to change
@@ -155,6 +187,7 @@ class Program {
 // then you can have a class that picks which interfaces it wants, and impl them how they want
 // also keeps classes from holding a method it doesn't need: like a CapsMSG() in a LowerMessage class 
 // here with composition (owning other objs) and delegation (calling their methods) 
+// principle does not have to apply to strictly 
 interface IRawMessage {
   public string RawMessage(); 
 }
@@ -200,5 +233,4 @@ class Program {
   }
 }
 
-// TODO: FINISH EXAMPLES FOR SOLID PRINCIPLES
-// STOPPED AT PAGE 20 PARAMETER OBJECT
+// STOPPED AT DEPENDENCE INVERSION PRINCIPLE

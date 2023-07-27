@@ -556,6 +556,22 @@ MyArray iter = my_array.GetEnumerator();
 while (iter.MoveNext()) {
   Console.WriteLine($"{iter.Current}");
 }
+// -----
+// initialize list using object initializer block
+// Where returns an IEnumerable<T> enumerator and accepts 
+// accepts a predicate that returns a boolean, applied to each member of the enumerator
+class Program {
+  static void Main(string[] args) { 
+    List<string> names = new List<string> {"Ben", 
+      "Mags", "Finn", "Willie"};   
+    foreach (string n in 
+      names.Where(name => 
+        name.StartsWith("B") || name.StartsWith("W"))) 
+    {
+      Console.WriteLine(n);  
+    }
+  }
+}
 
 EXCEPTION
 // basic try catch any exception
@@ -1791,6 +1807,7 @@ class Program {
 }
 // -----
 // see example in GENERIC
+// see List with an object initializer in Iterator
 
 TUPLE
 // see Chp 5 > writing and calling methods > combining multiple return values using tuples
