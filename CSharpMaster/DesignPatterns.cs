@@ -232,5 +232,54 @@ class Program {
     Console.WriteLine(benall.CapsMsg());
   }
 }
+// ----
+// Dependency Inversion Principle
+// code should depend on abstract sturctures, not concrete ones
+// having a dependency on concrete structures can force rewriting of the code
+//   if the memory design or any other design of the concrete structure changes
+// Main is coded to the "interface objs"
+// I could change out the concrete types to other types, that implement the same interfaces
+//    the for loop code would be unharmed
+interface INumber {
+  public float Get();
+}
+class MyInt : INumber {
+  public int I {init; get;}
+  public float Get() {
+    return this.I;
+  }
+  public override string ToString() {
+    return $"{this.I}";
+  }
+}
+class MyFloat : INumber {
+  public float F {init; get;}
+  public float Get() {
+    return this.F;
+  }
+  public override string ToString() {
+    return $"{this.F}";
+  }
+}
+interface IAdd {
+  INumber AddNums(INumber num1, INumber num2);
+}
+class MyAdd : IAdd {
+  public INumber AddNums(INumber first, INumber second) {
+    return new MyFloat {F = first.Get() + second.Get()};
+  }
+}
+class Program {
+  static void Main(string[] args) {   
+    INumber i = new MyInt {I = 100};
+    INumber f = new MyFloat {F = 3.14f};
+    INumber delta = new MyInt {I = 2};
+    INumber[] nums = {i, f};
+    IAdd adder = new MyAdd();
+    foreach (INumber num in nums) {
+      Console.WriteLine(adder.AddNums(num, delta)); 
+    }
+  }
+}
 
-// STOPPED AT DEPENDENCE INVERSION PRINCIPLE
+// STOPPED AT CHAPTER 2
