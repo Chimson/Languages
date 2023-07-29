@@ -1465,7 +1465,8 @@ class Program {
   }
 }
 // ----
-// TODO: use a generic type in an interface 
+// see INTERFACE for use of a generic type in an interface 
+// TODO: implement an interface and use a where clause for a Type Parameter
 
 OPERATOR OVERLOADING
 // an overloaded operator needs to be public and static
@@ -1502,6 +1503,7 @@ INTERFACES
 // any class that implements an interface needs to write the implementation of the interface method
 // interface reference can hold any object that implements it
 // array of Interface refs
+// any class can implement any number of interfaces
 public interface IPrintable {   // public to make it visible in other code
   public void PrintNums(int i);   // public is not necessary here, the methods are implicitly public
 }
@@ -1600,7 +1602,27 @@ class Program {
   }
 }
 // -----
+// generic interface
+// if an interface declares a generic type:
+//   it needs to be used somewhere in its method signature
+interface IAdd<T> {
+  public T Add(MyInt i); 
+}
+class MyInt : IAdd<float> {
+  public int I {init; get;}
+  public float Add(MyInt other) {
+    return this.I + other.I;
+  }
+}
+class Program {
+  static void Main(string[] args) {   
+    Console.WriteLine((new MyInt {I = 2}).Add(new MyInt {I = 1}));
+  }
+}
+// -----
 // see an interface that inherits other interfaces in DesignPatterns.cs > Solid Principles > ISP
+// TODO: structs can inherit interfaces, but not other classes, write a struct with an interface
+// TODO: interfaces can have static members, but they need an implementation, write one
 
 INHERITANCE
 // all types implicity inherit System.Object
