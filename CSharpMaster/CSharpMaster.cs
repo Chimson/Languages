@@ -1729,7 +1729,70 @@ ATTRIBUTE
 // 		see Chp 8 > working with types and attributes > creating custom attributes
 
 ASYNCHRONOUS PROGRAMMING
-// add example of await, async, yield
+// asynchronous programming is like the "making breakfst analogy"
+// you would start cooking the bacon, while its cooking work on something else ..., in the same thread
+// different than parallel programing where you would have multiple 
+//   "cooks" or "threads" that are blocked to their current list of tasks
+// await keyword provides a non-blocking way to start a task
+// any async method needs to contain await calls and return a Task, including Main()
+// Task in System.Threading.Tasks
+class Bacon {}
+class Egg {}
+class Program {
+  private static async Task<Bacon> FryBaconAsync(int slices) {
+    Console.WriteLine($"putting {slices} slices of bacon in the pan ...");
+    await Task.Delay(500);
+    Console.WriteLine("cooking first side of bacon ...");
+    await Task.Delay(3000);
+    for (int slice = 0; slice < slices; slice++) {
+      Console.WriteLine("flipping a slice of bacon ...");
+      await Task.Delay(750);
+    }
+    Console.WriteLine("cooking the second side of bacon ...");
+    await Task.Delay(3000);
+    Console.WriteLine("Put bacon on plate ...");
+    await Task.Delay(500);
+    Console.WriteLine("Bacon is done!");
+    return new Bacon();
+  }
+  private static async Task<Egg> FryEggsAsync(int howMany) {
+    Console.WriteLine("Warming the egg pan ...");
+    await Task.Delay(1000);
+    Console.WriteLine($"cracking {howMany} eggs ...");
+    await Task.Delay(500);
+    Console.WriteLine("cooking the eggs ...");
+    await Task.Delay(5000);
+    Console.WriteLine("Put eggs on plate ...");
+    await Task.Delay(500);
+    Console.WriteLine("Eggs are done!");
+    return new Egg();
+  }
+  static async Task Main(string[] args) {
+    Task<Egg> eggsTask = FryEggsAsync(3);
+    Task<Bacon> baconTask = FryBaconAsync(5);
+    Bacon bacon = await baconTask;
+    Egg eggs = await eggsTask;
+    Console.WriteLine("Breakfast is ready!");
+  }
+}
+/* 
+Warming the egg pan ...
+putting 5 slices of bacon in the pan ...
+cooking first side of bacon...
+cracking 3 eggs ...
+cooking the eggs ...
+flipping a slice of bacon ...
+flipping a slice of bacon ...
+flipping a slice of bacon ...
+flipping a slice of bacon ...
+Put eggs on plate ...
+flipping a slice of bacon ...
+Eggs are done!
+cooking the second side of bacon ...
+Put bacon on plate ...
+Bacon is done!
+Breakfast is ready!
+*/
 
 .NET PLATFORM
 // C# runs on variants of .NET, is not a standalone language
