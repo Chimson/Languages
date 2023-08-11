@@ -191,6 +191,9 @@ False		# 0
 i = -1
 while((i := i + 1) < 10):  # adds 1 first, then compares with <
   print(i)
+# -----
+# bitwise operators
+>>, <<, ^, ~, |, &
 
 
 LIST
@@ -240,7 +243,7 @@ l = [num for vec in vect for num in vec];  # [1,2,3,4,5,6,7,8,9]
 # -----
 # nested list comprehension
 l = [ [-x for x in [0, 1, 2, 3]] for i in range(3) ]  
-print(l)  #[[0,-1,-2,-3],[0,-1,-2,-3],[0,-1,-2,-3] 
+print(l)  #[[0,-1,-2,-3],[0,-1,-2,-3],[0,-1,-2,-3]]
 # -----
 # enumerate() allows to print each value and its index in a sequence
 l = ['a', 'b', 'c', 'd']
@@ -319,7 +322,7 @@ STRING
 # namespace str, string values are immutable
 # [] index
 name = "Ben Harki"
-name2 = ("Ben" " Harki")   # automatic concat
+name2 = "Ben" " Harki"   # automatic concat
 print(name[2])   # n
 print(name[-1])  # i, from right back
 empty = ""
@@ -410,14 +413,14 @@ print(hex(id(list1)))
 IO
 # io functions 
 print(), input(), open(), eval()
-with open() as file:    # auto closes  
+with open() as file:    # auto closes files
 
 CONTROL
 # commands inside functions or loops
 return  # terminates function 
 break   # terminates innermost loop
 continue    # termininates current iteration, skips to next iteration
-pass    # does nothing
+pass    # does nothing in the body of a function or loop
 # -----
 # if(non-zero) is true annd if(0) is false like C
 # if will accept 1 for True, 0 for false
