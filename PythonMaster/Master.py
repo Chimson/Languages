@@ -527,7 +527,7 @@ for l in list1:
   l = 0
 print(list1)   #  [0,1,2,3,4]
 # -----
-# lists are mutable, so you can use indices and change the element
+# lists are mutable, so you can use indices and change the elements
 list2 = [0, 1, 2, 3, 4]
 for i in range(len(list2)):
   list2[i] = 0
@@ -642,8 +642,6 @@ noSwap(c, d)
 print(c, d)   # 0 1
 swap(c, d)
 print(c, d)   # 1 0
-swap(a, b)
-print(a, b)
 # -----
 # annotations help show the typing of return val and params of a function
 # annotations are totally optional, saved in __annotations__ as a dictionary
@@ -713,17 +711,19 @@ printName("This cannot be called with keyword", name2 = "Harki", name1 = "Ben")
 # bring in any custom arguments on call and print information on args and their value
 # *arguments scoops up any remaining number of arguments to bring into the function
 # *arguments is normally set as last in arg list (unlike this one), however any arg after is automatically a keyword-only argument
+# **keywords also allows a variable number of args, but each supplied with a keyword
 def printName(name, *arguments, **keywords):
   print(name)
   for arg in arguments:
     print(arg)
-  for kw in keywords:
-    print(kw, ":", keywords)
+  for key, val in keywords.items():  # grab from the dictionary version of keywords
+    print(key, ":", val)
 # MAIN
-printName("Ben Harki", "And Mags", "And Finn")  # call does not work with name = "Ben Harki", keyword argument
+printName("Ben Harki", "And Mags", "And Finn", 
+  newboy = 'Will', bro = "Adam") 
 # -----
-# unpacking args from lists, tuples, or dictionaries
-# dictioary needs keys that are the same names as the args
+# unpacking into args from lists, tuples, or dictionaries
+# dictionary needs keys that are the same names as the args
 def printName(name1, name2, name3, name4):
   print(name1, name2, name3, name4)
 # MAIN
@@ -732,7 +732,7 @@ print(list(range(*args1)))
 args2 = [0, 11, 2]
 print(list(range(*args2)))
 args3 = {"name1":"Ben", "name2":"Mags", "name3":"Finn", "name4":"Adam"}
-printName(**args3)
+printName(**args3)   # ** for keyword args
 # -----
 # function three accepts a function as a parameter
 def print_num(num):
@@ -817,6 +817,17 @@ print(p.x) # 1
 print(p.y) # 2
 print(Point.__doc__)  # prints the class's doc string
 print(p.__class__)    # prints info on p's class
+# -----
+# simple example of calling a method two ways
+# as a normal method and like a static method, with obj as an arg
+class MyInt:
+  def __init__(self, i):
+    self.i = i
+  def func(self):
+    print(self.i)
+m = MyInt(10)
+MyInt.func(m)
+m.func()
 # -----
 # with field annotation, that does not do any allocation of x or strict typing, basically does nothing
 # can name "self" anything, like "this" from C++
@@ -906,7 +917,7 @@ print(vars(p))  # vars(p) is a dictionary of each of the obj's atr and their val
 # -----
 # class with a variable shared by the all objects of a class
 # can change it with a class method or an external function
-# fileds defined in __init__ are automatically per obj
+# fields defined in __init__ are automatically per obj
 # None also allocates space, but the value is None
 class Name:
   n = "Ben Harki"  # like a static class field
@@ -917,7 +928,7 @@ class Name:
     return this.n 
   def changeN(this, name):   # changes static field via any object 
     Name.n = name
-  def staticChangeN(name):   # changes static field via a static method
+  def staticChangeN(name):   # changes static field via a static method (no this/self arg)
     Name.n = name  
   def __str__(this):
     return f"{this.n}, {this.perObj}"
@@ -961,7 +972,7 @@ def add(i1:int, i2:int):
 # MAIN
 print(add(3, 4))
 # -----
-# private field and private method via name mangling
+# private field and private method via name mangling with double underscore
 # __i attribute is renamed _A__i in the class attribute list, similar for private method
 class A:
   def __init__(this, i):
@@ -1003,7 +1014,7 @@ class OneDim:
   def add(this, rhs):   # distinct method
     this.x += float(rhs)  
 class TwoDim(OneDim):   # if OneDim is in a different module, say Mod, then use "class TwoDim(Mod.OneDim):"
-  y :float
+  y : float
   def __init__(this, _x, _y):   # overrides OneDim's constructor, but also calls it and extends it
     OneDim.__init__(this, _x)
     # super().__init__(_x)              # same as above line using super()
@@ -1125,7 +1136,7 @@ ab = AB(0)
 print(ab)    #120  
 # -----
 # multiple inheritance diamond problem, middle classes B and C have the same named method pong, so which is called from D?
-# MRO: method resolution Order, can be seen calling __mro__ field form a class
+# MRO: method resolution Order, can be seen calling __mro__ field from a class
 # the order of method search is through MRO by default
 class A:
   def __init__(this, i):
@@ -1200,6 +1211,10 @@ try:
   aneg = 1/0
 except Exception as e:
   print(e)
+# -----
+# TODO: add an example with finally
+#   finally clause executes at the end of a try block, before the try completes
+#   runs whether or not a try produces an exception
 
 ITERATOR, GENERATORS, AND GENERATOR EXPRESSIONS
 # built-in types with an iterator
@@ -1256,7 +1271,7 @@ for elem in mylist.gen():
 # -----
 # generator expression
 # like a list comprehension but with ()
-# designed for situations where the generator is used right way
+# designed for situations where the generator is used right away
 s = sum(i for i in range(10))
 print(s)
 l = list(i*i for i in range(10))
