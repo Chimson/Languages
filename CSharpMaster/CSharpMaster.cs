@@ -65,6 +65,9 @@ COMPILE AND RUN
 // -----
 // with preexisting code and in directory containing .csproj
 > dotnet build   // compiles binary from code
+// -----
+// run project contained in the Main folder
+> dotnet run --project Main
 
 UNIT TESTING
 // unit testing library in NUnit.Framework
@@ -86,6 +89,9 @@ Overall Structure, as two seperate projects, only some files shown
 using ProjLib; 
 // -----
 // There are other ways to do this with a dotnet classlib and dotnet sln, see MS documentation
+// -----
+// run unit tests in the Test folder, that contains the csproj
+> dotnet test Test   
 
 C# REPL
 // C# has script files .csx, that can be run in CSI, C# Interactive
