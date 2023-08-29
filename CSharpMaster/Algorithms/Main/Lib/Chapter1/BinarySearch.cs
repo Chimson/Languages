@@ -2,9 +2,9 @@ namespace Lib.Chapter1;
 
 public class BinarySearch {
   
-  public static int Rank(int key, int[] a) {
-    // assumes array is sorted
-    // iterates by replacing either the hi or lo index, by an index near mid
+  public static int Rank(in int key, in int[] a) {
+    // assumes array is sorted increasing (not decreasing)
+    // iterates by replacing either the hi or lo index, by an index near mid on next step
     // returns the index of the found key or -1
 
     int lo = 0;
@@ -22,5 +22,5 @@ public class BinarySearch {
       }
     }
     return -1;
-  } 
+  }
 }

@@ -57,6 +57,33 @@ public class Chapter1Tests {
     Results.Print($"rank({key}, [2,4,7,9,10,15]) == {expected}");
   }
 
-  // ADD MORE rank() TESTS
+  [Test]
+  public void RankTest3() {
+    int[] arr = {15, 10, 9, 7, 4, 2};
+    int key = 4;
+    int expected = 4;
+    int actual = BinarySearch.Rank(key, arr);
+    Assert.AreNotEqual(expected, actual);
+    Results.Print($"rank({key}, [15,10,9,7,4,2]) != {expected}");
+  }
+
+  [Test]
+  public void RankTest4() {
+    int[] arr = {9, 4, 3, 2, 10, 7};
+    int key = 4;
+    int expected = 1;
+    int actual = BinarySearch.Rank(key, arr);
+    Assert.AreNotEqual(expected, actual);
+    Results.Print($"rank({key}, [9,4,3,4,10,7]) != {expected}");
+  }
+
+  [Test]
+  public void MaxTest1() {
+    double[] arr = {9.0, 4.0, 3.0, -2.0, 10.0, 7.0};
+    double expected = 10;
+    double actual = MathFunctions.Max(arr);
+    Assert.AreEqual(expected, actual);
+    Results.Print($"Max([9,4,3,-2,10,7] == 10)");
+  }
 
 }

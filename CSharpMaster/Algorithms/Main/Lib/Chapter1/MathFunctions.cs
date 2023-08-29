@@ -8,16 +8,27 @@ public class MathFunctions {
       regards to its full mathematical definition
       This version, Euclid's version, should only accept natural numbers and 0
     */
-
+    /*
+    GCD(24, 18)
+      return GCD(18, 6)
+        return GCD(6, 0)
+          return 6
+    */
     if (q == 0) {
       return p;
     }
     return GCD(q, p % q);
   }
+  
+  public static double Max(in double[] arr) {
+    double max = arr[0];
+    for (int i = 1; i < arr.Length; ++i) {
+      if (arr[i] > max) {
+        max = arr[i];
+      }
+    }
+    return max;
+  } 
+
+
 }
-/*
-GCD(24, 18)
-  return GCD(18, 6)
-    return GCD(6, 0)
-      return 6
-*/
