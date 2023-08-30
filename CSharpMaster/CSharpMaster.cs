@@ -697,9 +697,9 @@ class Program {
   }
 }
 // -----
-// in_ref is copy by value: copies the value (the addr held by the ref) to the function's local variable
-// in_and_out_ref accepts the actual variable z from main(), changes what it points to
-// out_ref accepts a declared-only variable or declared-in-arg variable: 
+// normal ref parameter in in_ref is copy by value: copies the value (the addr held by the ref) to the function's local variable
+// ref param in in_and_out_ref accepts the actual variable z from main(), changes what it points to
+// out param in out_ref accepts a declared-only variable or declared-in-arg variable: 
 //   both need to be initialized inside the function, outside can also be initialized outside the function
 //   neither can be defaulted, function operates on the actual variables in main
 // see CONST, READONLY, IN for "in" keyword in parameters

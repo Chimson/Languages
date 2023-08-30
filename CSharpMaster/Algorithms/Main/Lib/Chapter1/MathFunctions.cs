@@ -19,16 +19,5 @@ public class MathFunctions {
     }
     return GCD(q, p % q);
   }
-  
-  public static double Max(in double[] arr) {
-    double max = arr[0];
-    for (int i = 1; i < arr.Length; ++i) {
-      if (arr[i] > max) {
-        max = arr[i];
-      }
-    }
-    return max;
-  } 
-
 
 }

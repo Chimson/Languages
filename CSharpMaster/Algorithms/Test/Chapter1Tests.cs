@@ -81,9 +81,22 @@ public class Chapter1Tests {
   public void MaxTest1() {
     double[] arr = {9.0, 4.0, 3.0, -2.0, 10.0, 7.0};
     double expected = 10;
-    double actual = MathFunctions.Max(arr);
+    double actual = ArrayProcess.Max(arr);
     Assert.AreEqual(expected, actual);
-    Results.Print($"Max([9,4,3,-2,10,7] == 10)");
+    Results.Print($"Max([9,4,3,-2,10,7] == {expected})");
   }
+
+  [Test]
+  public void AverageTest1() {
+    double[] arr = {9.0, 4.0, 3.0, -2.0, 10.0, 7.0};
+    double expected = 31.0 / 6.0;
+    double actual = ArrayProcess.Average(arr);
+    Assert.AreEqual(expected, actual);
+    Results.Print($"Average(9,4,3,-2,10,7) == {expected}");
+  }
+
+  [Test]
+  public void
+
 
 }
