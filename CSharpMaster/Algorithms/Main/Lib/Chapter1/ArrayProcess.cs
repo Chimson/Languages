@@ -33,4 +33,14 @@ public class ArrayProcess {
     return to;
   }
 
+  public static void Reverse(double[] arr) {
+    int N = arr.Length;
+    for (int i = 0; i < N/2; ++i) {
+      double temp = arr[i];
+      int rind = N - 1 - i;
+      arr[i] = arr[rind]; 
+      arr[rind] = temp;
+    }
+  }
+
 }
