@@ -24,9 +24,9 @@ public class ArrayProcess {
     return sum / N;
   }
 
-  public static int[] Copy(in int[] from) {
+  public static double[] Copy(in double[] from) {
     int N = from.Length;
-    int[] to = new int[N];
+    double[] to = new double[N];
     for (int i = 0; i < N; ++i) {
       to[i] = from[i];
     }

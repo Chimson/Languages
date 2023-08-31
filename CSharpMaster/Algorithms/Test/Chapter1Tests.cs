@@ -96,7 +96,12 @@ public class Chapter1Tests {
   }
 
   [Test]
-  public void
-
+  public void CopyTest1() {
+    double[] arr = {9.0, 4.0, 3.0, -2.0, 10.0, 7.0};
+    double[] copy = ArrayProcess.Copy(arr);
+    Assert.AreEqual(arr, copy);
+    Assert.AreNotSame(arr, copy);
+    Results.Print($"Copy(array) passes");
+  } 
 
 }
