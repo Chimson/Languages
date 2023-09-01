@@ -1,5 +1,6 @@
 namespace Lib.Chapter1;
 
+
 public class MathFunctions {
   
   public static int GCD(in int p, in int q) {
@@ -40,6 +41,55 @@ public class MathFunctions {
       }
     }
     return c;
+  }
+
+  public static double Abs(double x) {
+    if (x < 0) {
+      return -x;
+    }
+    else {
+      return x;
+    }
+  }
+
+  public static bool IsPrime(int N) {
+    /*
+      only need to iterate until i^2 < N
+      if N is div by one i then its not prime
+      if N is not div by any i than it is prime
+      (does not account for when N is negative)
+    */
+    if (N < 2) {return false;}
+    for (int i = 2; i*i <= N; ++i) {
+      if (N % i == 0) {return false;}
+    }
+    return true;
+  }
+
+  public static double Sqrt(double c) {
+    /*
+      Based on Newton's method, derived from Taylor's Theorem
+    */
+    if (c < 0) {return double.NaN;}
+    double err = 1e-15;   
+    double temp = c;
+    while (Math.Abs(temp - c / temp) > err * temp) {
+      temp = (c / temp + temp) / 2.0;
+    }
+    return temp;
+  }
+
+  public static double H(int N) {
+    /*
+      Harmonic Numbers
+      0 + 1/1 + 1/2 + ... 1/N ~ ln(N)
+      does not acount for when N < 0
+    */
+    double sum = 0.0;
+    for (int i = 1; i <= N; ++i) {
+      sum += 1.0 / i;
+    }
+    return sum;
   }
 
   

@@ -138,4 +138,61 @@ public class Chapter1Tests {
     Results.Print($"a x b = c\nc:\n{Results.TwoDArrStr<double>(actual)}");
     Assert.AreEqual(expected, actual);
   }
+
+  [Test]
+  public void AbsTest1() {
+    int x = -1;
+    int actual = (int) MathFunctions.Abs(x);
+    int expected = 1;
+    Assert.AreEqual(expected, actual);
+    Results.Print($"abs(-1) == {actual}");
+  }
+
+  [Test]
+  public void AbsTest2() {
+    int x = 1;
+    int actual = (int) MathFunctions.Abs(x);
+    int expected = 1;
+    Assert.AreEqual(expected, actual);
+    Results.Print($"abs(1) == {actual}");
+  }
+
+  [Test] 
+  public void IsPrimeTest1() {
+    int x = 25;
+    bool actual = MathFunctions.IsPrime(x);
+    bool expected = false;
+    Assert.AreEqual(expected, actual);
+    Results.Print($"isPrime(25) == false");
+  }
+
+  [Test] 
+  public void IsPrimeTest2() {
+    int x = 19;
+    bool actual = MathFunctions.IsPrime(x);
+    bool expected = true;
+    Assert.AreEqual(expected, actual);
+    Results.Print($"isPrime(19) == true");
+  }
+
+  [Test]
+  public void SqrtTest() {
+    double x = 4.0;
+    double actual = MathFunctions.Sqrt(x);
+    double expected = 2.0;
+    Assert.AreEqual(expected, actual);
+    Results.Print($"Sqrt(4.0) == 2.0");
+  }
+
+  [Test]
+  public void HTest() {
+    int N = 2;
+    double actual = MathFunctions.H(N); 
+    double expected = 1.5;
+    Assert.AreEqual(expected, actual);
+    Results.Print($"H(2) = {actual}");
+  }
+
+  // STOPPED ON PAGE 38
+
 }

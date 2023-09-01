@@ -39,4 +39,8 @@ public class Results {
     Print(Results.TwoDArrStr<double>(expected));
   }
 
+  public static void Log(string msg) {
+    Console.WriteLine($"{Title("Debug Log")}\n{msg}\n*********************");
+  }
+
 }
