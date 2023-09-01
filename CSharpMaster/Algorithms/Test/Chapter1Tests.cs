@@ -138,5 +138,4 @@ public class Chapter1Tests {
     Results.Print($"a x b = c\nc:\n{Results.TwoDArrStr<double>(actual)}");
     Assert.AreEqual(expected, actual);
   }
-
 }
