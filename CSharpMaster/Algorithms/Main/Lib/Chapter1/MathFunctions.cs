@@ -43,7 +43,7 @@ public class MathFunctions {
     return c;
   }
 
-  public static double Abs(double x) {
+  public static double Abs(in double x) {
     if (x < 0) {
       return -x;
     }
@@ -52,7 +52,7 @@ public class MathFunctions {
     }
   }
 
-  public static bool IsPrime(int N) {
+  public static bool IsPrime(in int N) {
     /*
       only need to iterate until i^2 < N
       if N is div by one i then its not prime
@@ -66,7 +66,7 @@ public class MathFunctions {
     return true;
   }
 
-  public static double Sqrt(double c) {
+  public static double Sqrt(in double c) {
     /*
       Based on Newton's method, derived from Taylor's Theorem
     */
@@ -79,7 +79,7 @@ public class MathFunctions {
     return temp;
   }
 
-  public static double H(int N) {
+  public static double H(in int N) {
     /*
       Harmonic Numbers
       0 + 1/1 + 1/2 + ... 1/N ~ ln(N)
@@ -91,6 +91,11 @@ public class MathFunctions {
     }
     return sum;
   }
+
+  public static double Hypotenuse(in double a, in double b) {
+    return Math.Sqrt(a*a+ b*b);
+  }
+
 
   
 

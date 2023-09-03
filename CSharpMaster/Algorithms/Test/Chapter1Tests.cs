@@ -44,7 +44,7 @@ public class Chapter1Tests {
     int expected = 2;
     int actual = BinarySearch.Rank(key, arr);
     Assert.AreEqual(expected, actual);
-    Results.Print($"rank({key}, [2,4,7,9,10,15]) == {actual}");
+    Results.Print($"rank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
   }
 
   [Test]
@@ -54,27 +54,27 @@ public class Chapter1Tests {
     int expected = -1;
     int actual = BinarySearch.Rank(key, arr);
     Assert.AreEqual(expected, actual);
-    Results.Print($"rank({key}, [2,4,7,9,10,15]) == {actual}");
+    Results.Print($"rank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
   }
 
   [Test]
   public void RankTest3() {
     int[] arr = {15, 10, 9, 7, 4, 2};
     int key = 4;
-    int expected = 4;
+    int expected = -1;
     int actual = BinarySearch.Rank(key, arr);
-    Assert.AreNotEqual(expected, actual);
-    Results.Print($"rank({key}, [15,10,9,7,4,2]) != {actual}");
+    Assert.AreEqual(expected, actual);
+    Results.Print($"rank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
   }
 
   [Test]
   public void RankTest4() {
-    int[] arr = {9, 4, 3, 2, 10, 7};
-    int key = 4;
-    int expected = 1;
+    int[] arr = {2, 5, 6, 8, 9, 10};
+    int key = 9;
+    int expected = 4;
     int actual = BinarySearch.Rank(key, arr);
-    Assert.AreNotEqual(expected, actual);
-    Results.Print($"rank({key}, [9,4,3,4,10,7]) != {actual}");
+    Assert.AreEqual(expected, actual);
+    Results.Print($"rank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
   }
 
   [Test]
@@ -83,7 +83,7 @@ public class Chapter1Tests {
     double expected = 10;
     double actual = ArrayProcess.Max(arr);
     Assert.AreEqual(expected, actual);
-    Results.Print($"Max([9,4,3,-2,10,7] == {actual})");
+    Results.Print($"Max({Results.ArrStr<double>(arr)} == {actual})");
   }
 
   [Test]
@@ -92,7 +92,7 @@ public class Chapter1Tests {
     double expected = 31.0 / 6.0;
     double actual = ArrayProcess.Average(arr);
     Assert.AreEqual(expected, actual);
-    Results.Print($"Average(9,4,3,-2,10,7) == {actual}");
+    Results.Print($"Average({Results.ArrStr<double>(arr)}) == {actual}");
   }
 
   [Test]
@@ -181,7 +181,7 @@ public class Chapter1Tests {
     double actual = MathFunctions.Sqrt(x);
     double expected = 2.0;
     Assert.AreEqual(expected, actual);
-    Results.Print($"Sqrt(4.0) == 2.0");
+    Results.Print($"Sqrt(4.0) == {actual}");
   }
 
   [Test]
@@ -193,6 +193,98 @@ public class Chapter1Tests {
     Results.Print($"H(2) = {actual}");
   }
 
-  // STOPPED ON PAGE 38
+  [Test]
+  public void HypTest() {
+    double a = 3.0;
+    double b = 4.0;
+    double actual = MathFunctions.Hypotenuse(a, b);
+    double expected = 5.0;
+    Assert.AreEqual(expected, actual);
+    Results.Print($"Hypotenus(3, 4) == {actual}"); 
+  }
 
+  [Test]
+  public void RecRankTest1() {
+    int[] arr = {2, 4, 7, 9, 10, 15};
+    int key = 7;
+    int expected = 2;
+    int actual = BinarySearch.Rank(key, arr);
+    Assert.AreEqual(expected, actual);
+    Results.Print($"RecRank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
+  }
+
+  [Test]
+  public void RecRankTest2() {
+    int[] arr = {2, 4, 7, 9, 10, 15};
+    int key = 6;
+    int expected = -1;
+    int actual = BinarySearch.Rank(key, arr);
+    Assert.AreEqual(expected, actual);
+    Results.Print($"RecRank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
+  }
+
+  [Test]
+  public void RecRankTest3() {
+    int[] arr = {15, 10, 9, 7, 4, 2};
+    int key = 4;
+    int expected = -1;
+    int actual = BinarySearch.Rank(key, arr);
+    Assert.AreEqual(expected, actual);
+    Results.Print($"RecRank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
+  }
+
+  [Test]
+  public void RecRankTest4() {
+    int[] arr = {2, 5, 6, 8, 9, 10};
+    int key = 9;
+    int expected = 4;
+    int actual = BinarySearch.Rank(key, arr);
+    Assert.AreEqual(expected, actual);
+    Results.Print($"RecRank({key}, {Results.ArrStr<int>(arr)}) == {actual}");
+  }
+
+  [Test]
+  public void UniformTest() {
+    int N = 10;
+    string msg = "random doubles in [0, 10): ";
+    for (int i = 0; i < N; ++i) {
+      msg += $"{Rand.Uniform(0, 10)} ";
+    }
+    msg += $"\n";
+    Results.Print(msg);
+    Assert.Pass();
+  }
+  [Test]
+  public void DiscreteTest() {
+    
+    // produce an array of 10 doubles that sums to 1
+    // (may be a better way, see Shuffle())
+    double factor = -1;
+    double[] a = new double[10];
+    while(factor < 0) {
+      factor = 1;
+      for (int i = 0; i < 9; ++i) {
+        a[i] = Rand.Uniform(0, 1);
+        factor -= a[i];
+      }
+      a[9] = factor;
+    }
+   
+    Results.Print($"random ints from discrete dist: " + 
+      $"{Rand.Discrete(a)} from {Results.ArrStr<double>(a)}");
+    Assert.Pass();
+  }
+
+  [Test]
+  public void ShuffleTest() {
+    double[] a = {2, 5, 6, 8, 9, 10};  
+    double[] actual = new double[6];
+    a.CopyTo(actual, 0);
+    Rand.Shuffle(actual);
+    Results.Print($"{Results.ArrStr<double>(a)} " + 
+      $"randomly shuffles to {Results.ArrStr<double>(actual)}");
+    Assert.Pass();
+  }
+
+  // STOPPED AT PG. 46 (not printed number)
 }

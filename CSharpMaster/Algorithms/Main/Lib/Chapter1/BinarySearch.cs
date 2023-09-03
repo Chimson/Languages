@@ -23,4 +23,33 @@ public class BinarySearch {
     }
     return -1;
   }
+
+  public static int RecRank(in int key, in int[] a) {
+    return RecRank(key, a, 0, a.Length - 1);
+  }
+
+  public static int RecRank(in int key, in int[] a, in int lo, in int hi) {
+    /*
+      a needs to be sorted increasing
+      change the interval, dependent on which current half the key could live in
+      R(3, [2,3,4,7,9,10], 0, 5) = 1 
+        mid = 2
+        return R(3, a, 0, 1) = 1
+          mid = 0
+          return R(3, a, 1, 1) = 1 
+            mid = 1
+            return 1
+    */
+    if (lo > hi) {return -1;}
+    int mid = lo + (hi - lo)/2;
+    if (key < a[mid]) {
+      return RecRank(key, a, lo, mid - 1);
+    }
+    else if (key > a[mid]) {
+      return RecRank(key, a, mid + 1, hi);
+    }
+    else {
+      return mid;
+    }
+  }
 }
