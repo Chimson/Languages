@@ -286,5 +286,15 @@ public class Chapter1Tests {
     Assert.Pass();
   }
 
-  // STOPPED AT PG. 46 (not printed number)
+  [Test]
+  public void BagTest1() {
+    Bag<int> bag = new Bag<int>(-1, 0);
+    bag.Add(1);
+    // bag.Add(2);
+    // bag.Add(3);
+    Node<int> index = bag.First;
+    Results.Log(bag.ToString());
+    Assert.Pass();
+  }
+
 }

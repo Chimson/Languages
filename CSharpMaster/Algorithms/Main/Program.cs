@@ -1,7 +1,6 @@
-﻿// using Lib.Chapter1;
-
-class Program {
+﻿class Program {
+  
   static void Main(string[] args) { 
-    // Check.PrintHi();
   }
+
 }
