@@ -1,23 +1,35 @@
-using System.Collections;
+namespace Lib.Chapter1;
+
+using System.Collections;  // for IEnumerator
+
+/*
+  Bags are iterable unordered collections
+*/
 
 public class Bag<Item>  {
 
   public Node<Item> First{get; private set;}
-  private IEnumerator<Node<Item>> Iter;
+  public int Size {get; private set;}
 
   public void Add(Item item) {
-    Node<Item> old_first = this.First;
-    this.First = new Node<Item>(item, old_first);
+    // add it to the top
+    Node<Item> old_first = First;
+    First = new Node<Item>(item, old_first);
+    ++Size;
   }
 
-  public Bag(Item pre, Item first) {
-    this.First = new Node<Item>(first, null);
-    this.Iter = new BagIterator<Item>(this, new Node<Item>(pre, First));
+  public Bag(Node<Item> first) {
+    First = first;
+    Size = 1;
+  }
+
+  public Bag(Item first) {
+    First = new Node<Item>(first, null);
+    Size = 1;
   }
 
   public override string ToString() {
-    string msg = "";
-    Node<Item> index = First;
+    string msg = $"({Size} Items) ";
     foreach (Node<Item> node in this) {
       msg += $"{node.ToString()}-> ";
     }
@@ -26,7 +38,7 @@ public class Bag<Item>  {
   }
 
   public IEnumerator<Node<Item>> GetEnumerator() {
-    return Iter;
+    return new BagIterator<Item>(this);
   }
 
 
@@ -35,35 +47,37 @@ public class Bag<Item>  {
 internal class BagIterator<Item> : IEnumerator<Node<Item>> {
 
   private Bag<Item> Bag;
-  private Node<Item> CurNode;
-  private Node<Item> Empty;
+  private Node<Item> _curnode;
+  private int raw_index = 0;
 
-  public BagIterator(Bag<Item> bag, Node<Item> empty) {
+  public BagIterator(Bag<Item> bag) {
     Bag = bag; 
-    Empty = empty;
-    Empty.Next = Bag.First;
-    CurNode = Empty;
+    _curnode = Bag.First;
   }
 
   public bool MoveNext() {
-    if (CurNode.Next == null) {
-      return false;
+    if (_curnode.Next != null) {
+      if (raw_index != 0) {
+        _curnode = _curnode.Next;
+      }
+      ++raw_index;
+      return true;
     }
     else {
-      CurNode = CurNode.Next;
-      return true;
+      return false;
     }
   }
 
   public void Reset() {
-    CurNode = Empty;
+    _curnode = Bag.First;
+    raw_index = 0;
   }
 
   void IDisposable.Dispose() {}
 
   public Node<Item> Current {
     get {
-      return CurNode;
+      return _curnode;
     }
   }
 
@@ -72,10 +86,5 @@ internal class BagIterator<Item> : IEnumerator<Node<Item>> {
       return Current;
     }
   }
-
-  public IEnumerator<Node<Item>> GetEnumerator() {
-    return this;
-  }
-
 
 } 

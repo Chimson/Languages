@@ -288,13 +288,72 @@ public class Chapter1Tests {
 
   [Test]
   public void BagTest1() {
-    Bag<int> bag = new Bag<int>(-1, 0);
-    bag.Add(1);
-    // bag.Add(2);
-    // bag.Add(3);
-    Node<int> index = bag.First;
-    Results.Log(bag.ToString());
+    Node<int> third = new Node<int>(2, null);
+    Node<int> second = new Node<int>(1, third);
+    Node<int> first = new Node<int>(0, second);
+    Bag<int> bag = new Bag<int>(first);
     Assert.Pass();
   }
+
+  [Test]
+  public void BagTest2() {
+    Bag<int> bag = new Bag<int>(0);
+    bag.Add(1);
+    bag.Add(2);
+    bag.Add(3);
+    bag.Add(4);
+    Results.Print($"BagTest2: {bag.ToString()}");
+    Assert.Pass();
+  }
+
+  [Test]
+  public void BagIter1() {
+    Bag<int> bag = new Bag<int>(0);
+    bag.Add(1);
+    bag.Add(2);
+    Results.Print($"BagIter1: {bag.ToString()}\n");
+    Results.Print($"BagIter1: {bag.ToString()}");
+    Assert.Pass();
+  }
+
+  [Test]
+  public void BagIter2() {
+    Bag<int> bag = new Bag<int>(0);
+    bag.Add(1);
+    bag.Add(2);
+    Results.Print($"BagIter2: {bag.ToString()}\n");
+    bag.Add(3);
+    bag.Add(4);
+    Results.Print($"BagIter2: {bag.ToString()}");
+    Assert.Pass();
+  }
+
+  [Test]
+  public void QueueTest1() {
+    Queue<int> queue = new Queue<int>(0);
+    queue.Enqueue(1);
+    queue.Enqueue(2);
+    queue.Enqueue(3);
+    queue.Enqueue(4);
+    Assert.AreEqual(queue.Size, 5);
+    Results.Print($"QueueTest1: Size of {queue.Size}");
+  }
+  
+  [Test]
+  public void QueueTest2() {
+    Queue<int> queue = new Queue<int>(0);
+    queue.Enqueue(1);
+    queue.Enqueue(2);
+    queue.Enqueue(3);
+    queue.Enqueue(4);
+    queue.Dequeue();
+    queue.Dequeue();
+    queue.Dequeue();
+    queue.Dequeue();
+    queue.Dequeue();
+    Assert.True(queue.IsEmpty());
+    Results.Print("Dequeue removes all items");
+  }
+  
 
 }
