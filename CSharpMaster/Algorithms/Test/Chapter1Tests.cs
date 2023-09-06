@@ -287,6 +287,12 @@ public class Chapter1Tests {
   }
 
   [Test]
+  public void BagTest0() {
+    Bag<int> bag = new Bag<int>(0);
+    Results.Print($"BagTest0: {bag.ToString()}");
+  }
+
+  [Test]
   public void BagTest1() {
     Node<int> third = new Node<int>(2, null);
     Node<int> second = new Node<int>(1, third);
@@ -325,6 +331,13 @@ public class Chapter1Tests {
     bag.Add(3);
     bag.Add(4);
     Results.Print($"BagIter2: {bag.ToString()}");
+    Assert.Pass();
+  }
+
+  [Test]
+  public void QueueTest0() {
+    Queue<int> queue = new Queue<int>(0);
+    Results.Print($"QueueTest0: {queue.ToString()}");
     Assert.Pass();
   }
 

@@ -13,10 +13,6 @@ public class Queue<Item>  {
   public int Size {get; private set;}
 
   public Queue(Item item) {
-    AddFirst(item);
-  }
-
-  private void AddFirst(Item item) {
     First = new Node<Item>(item, null);
     Last = First;
     Size = 1;
@@ -32,10 +28,12 @@ public class Queue<Item>  {
   }
 
   public void Enqueue(Item item) {
-    
     // add to the null end
+    
     if (IsEmpty()) {
-      AddFirst(item);
+      First = new Node<Item>(item, null);
+      Last = First;
+      Size = 1;
     }
     else {
       Node<Item> old_last = Last;
@@ -57,68 +55,77 @@ public class Queue<Item>  {
     }
     else {
       Item item = First.Item;
-      First = First.Next;
+      if (First.Next != null) {   // this should always be true
+        First = First.Next;
+      }
       --Size;
       return item;
     }
   }
 
-  // public override string ToString() {
-  //   string msg = $"({Size} Items) ";
-  //   foreach (Node<Item> node in this) {
-  //     msg += $"{node.ToString()}-> ";
-  //   }
-  //   msg += $"null";
-  //   return msg;
-  // }
+  public override string ToString() {
+    string msg = $"({Size} Items) ";
+    foreach (Node<Item> node in this) {
+      msg += $"{node.ToString()}-> ";
+    }
+    msg += $"null";
+    return msg;
+  }
 
-  // public IEnumerator<Node<Item>> GetEnumerator() {
-  //   return new QueueIterator<Item>(this);
-  // }
+  public IEnumerator<Node<Item>> GetEnumerator() {
+    return new QueueIterator<Item>(this);
+  }
 }
 
 
-// internal class QueueIterator<Item> : IEnumerator<Node<Item>> {
+internal class QueueIterator<Item> : IEnumerator<Node<Item>> {
 
-  // private Queue<Item> Queue;
-  // private Node<Item> _curnode;
-  // private int raw_index = 0;
+  private Queue<Item> Queue;
+  private Node<Item> _curnode;
+  private int raw_index = 0;                
 
-  // public QueueIterator(Queue<Item> queue) {
-  //   Queue = queue; 
-  //   _curnode = queue.First;
-  // }
+  public QueueIterator(Queue<Item> queue) {
+    Queue = queue; 
+    _curnode = queue.First;
+  }
 
-  // public bool MoveNext() {
-  //   if (_curnode.Next != null) {
-  //     if (raw_index != 0) {
-  //       _curnode = _curnode.Next;
-  //     }
-  //     ++raw_index;
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
+  public bool MoveNext() {
+    /*
+      0 -> null
+      ^ _curnode
+    */
+    if (_curnode.Next != null) {
+      if (raw_index != 0) {
+        _curnode = _curnode.Next;
+      }
+      ++raw_index;
+      return true;
+    }
+    else {
+      if (Queue.Size == 1) {
+        return true;
+      }
+      return false;
+    }
+  }
 
-  // public void Reset() {
-  //   _curnode = Queue.First;
-  //   raw_index = 0;
-  // }
+  public void Reset() {
+    _curnode = Queue.First;
+    raw_index = 0;
+  }
 
-  // void IDisposable.Dispose() {}
+  void IDisposable.Dispose() {}
 
-  // public Node<Item> Current {
-  //   get {
-  //     return _curnode;
-  //   }
-  // }
+  public Node<Item> Current {
+    get {
+      return _curnode;
+    }
+  }
 
-  // object IEnumerator.Current {
-  //   get {
-  //     return Current;
-  //   }
-  // }
+  object IEnumerator.Current {
+    get {
+      return Current;
+    }
+  }
 
-// } 
+} 
