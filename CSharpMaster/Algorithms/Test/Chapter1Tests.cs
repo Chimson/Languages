@@ -287,17 +287,9 @@ public class Chapter1Tests {
   }
 
   [Test]
-  public void BagTest0() {
-    Bag<int> bag = new Bag<int>(0);
-    Results.Print($"BagTest0: {bag.ToString()}");
-  }
-
-  [Test]
   public void BagTest1() {
-    Node<int> third = new Node<int>(2, null);
-    Node<int> second = new Node<int>(1, third);
-    Node<int> first = new Node<int>(0, second);
-    Bag<int> bag = new Bag<int>(first);
+    Bag<int> bag = new Bag<int>(0);
+    Results.Print($"BagTest1: {bag.ToString()}");
     Assert.Pass();
   }
 
@@ -305,10 +297,36 @@ public class Chapter1Tests {
   public void BagTest2() {
     Bag<int> bag = new Bag<int>(0);
     bag.Add(1);
+    Results.Print($"BagTest2: {bag.ToString()}");
+    Assert.Pass();
+  }
+
+    public void BagTest3() {
+    Bag<int> bag = new Bag<int>(0);
+    bag.Add(1);
+    bag.Add(2);
+    Results.Print($"BagTest3: {bag.ToString()}");
+    Assert.Pass();
+  }
+
+  [Test]
+  public void BagTestNoAdd() {
+    Node<int> third = new Node<int>(2, null);
+    Node<int> second = new Node<int>(1, third);
+    Node<int> first = new Node<int>(0, second);
+    Bag<int> bag = new Bag<int>(first);
+    Results.Print($"BagTestNoAdd passes");
+    Assert.Pass();
+  }
+
+  [Test]
+  public void BagTest5() {
+    Bag<int> bag = new Bag<int>(0);
+    bag.Add(1);
     bag.Add(2);
     bag.Add(3);
     bag.Add(4);
-    Results.Print($"BagTest2: {bag.ToString()}");
+    Results.Print($"BagTest5: {bag.ToString()}");
     Assert.Pass();
   }
 
@@ -335,25 +353,53 @@ public class Chapter1Tests {
   }
 
   [Test]
-  public void QueueTest0() {
+  public void QueueTest1() {
+    // add 0
     Queue<int> queue = new Queue<int>(0);
-    Results.Print($"QueueTest0: {queue.ToString()}");
-    Assert.Pass();
+    Assert.AreEqual(queue.First.Item, 0);
+    Assert.AreEqual(1, queue.Size);
+    int num = 0;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.IsFalse(queue.IsEmpty());
+    Results.Print($"QueueTest1: {queue.ToString()}");
   }
 
   [Test]
-  public void QueueTest1() {
+  public void QueueTest2() {
+    // add 0, enq 1
+    Queue<int> queue = new Queue<int>(0);
+    queue.Enqueue(1);
+    int num = 0;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.AreEqual(2, queue.Size);
+    Assert.IsFalse(queue.IsEmpty());
+    Results.Print($"QueueTest2: {queue.ToString()}");
+  }
+
+  [Test]
+  public void QueueEnqueueTest() {
+    // add 0, enq 1 2 3 4
     Queue<int> queue = new Queue<int>(0);
     queue.Enqueue(1);
     queue.Enqueue(2);
     queue.Enqueue(3);
     queue.Enqueue(4);
-    Assert.AreEqual(queue.Size, 5);
-    Results.Print($"QueueTest1: Size of {queue.Size}");
+    int num = 0;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.AreEqual(5, queue.Size);
+    Assert.IsFalse(queue.IsEmpty());
+    Results.Print($"QueueEnqueueTest: {queue.ToString()}");
   }
   
   [Test]
-  public void QueueTest2() {
+  public void QueueDequeueAllTest() {
+    // add 0, enq 1 2 3 4, deq 5 times  
     Queue<int> queue = new Queue<int>(0);
     queue.Enqueue(1);
     queue.Enqueue(2);
@@ -364,9 +410,105 @@ public class Chapter1Tests {
     queue.Dequeue();
     queue.Dequeue();
     queue.Dequeue();
+    Assert.AreEqual(0, queue.Size);
+    int num = 0;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
     Assert.True(queue.IsEmpty());
-    Results.Print("Dequeue removes all items");
+    Results.Print($"QueueDequeueAllTest: {queue.ToString()}");
+  }
+
+  [Test]
+  public void QueueDequeueTest01() {
+    // add 0, deq 
+    Queue<int> queue = new Queue<int>(0);
+    int actual = queue.Dequeue();
+    Assert.AreEqual(0, actual);
+    int num = 0;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.True(queue.IsEmpty());
+    Assert.AreEqual(0, queue.Size);
+    Results.Print($"QueueDequeueTest01: {queue.ToString()}");
   }
   
+  [Test]
+  public void QueueDequeueTest1() {
+    // add 0, deq, enq 1
+    Queue<int> queue = new Queue<int>(0);
+    int actual = queue.Dequeue();
+    queue.Enqueue(1);
+    Assert.AreEqual(0, actual);
+    Assert.AreEqual(1, queue.Size);
+    int num = 1;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.IsFalse(queue.IsEmpty());
+    Results.Print($"QueueDequeueTest1: {queue.ToString()}");
+  }
+
+  [Test]
+  public void QueueDequeueTest02() {
+    // add 0, deq, enq 1, deq
+    Queue<int> queue = new Queue<int>(0);
+    Assert.AreEqual(0, queue.Dequeue());
+    queue.Enqueue(1);
+    Assert.AreEqual(1, queue.Dequeue());
+    int num = 0;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.AreEqual(0, queue.Size);
+    Assert.IsTrue(queue.IsEmpty());
+    Results.Print($"QueueDequeueTest02: {queue.ToString()}");
+  }  
+
+  [Test]
+  public void QueueDequeueTest2() {
+    // add 0, deq, enq 1, enq 2
+    Queue<int> queue = new Queue<int>(0);
+    int val1 = queue.Dequeue();
+    queue.Enqueue(1);
+    queue.Enqueue(2);
+    Assert.AreEqual(0, val1);
+    int num = 1;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.AreEqual(2, queue.Size);
+    Assert.IsFalse(queue.IsEmpty());
+    Results.Print($"QueueDequeueTest2: {queue.ToString()}");
+  }  
+
+  [Test]
+  public void QueueDequeueTest3() {
+    // add 0, deq, enq 1, enq 2, deq, deq
+    Queue<int> queue = new Queue<int>(0);
+    Assert.AreEqual(0, queue.Dequeue());
+    queue.Enqueue(1);
+    queue.Enqueue(2);
+    Assert.AreEqual(1, queue.Dequeue());
+    Assert.AreEqual(2, queue.Dequeue());
+    int num = 0;
+    foreach (Node<int> node in queue) {
+      Assert.AreEqual(node.Item, num++);
+    }
+    Assert.AreEqual(0, queue.Size);
+    Assert.True(queue.IsEmpty());
+    Results.Print($"QueueDequeueTest3: {queue.ToString()}");
+  }
+
+  [Test]
+  public void QueueDequeueEmptyThrows() {
+    Queue<int> queue = new Queue<int>(0);
+    queue.Dequeue();
+    Assert.Throws<Exception>(() => queue.Dequeue());
+    Results.Print($"Dequeue on Empty Throws");
+  }
+
+
 
 }

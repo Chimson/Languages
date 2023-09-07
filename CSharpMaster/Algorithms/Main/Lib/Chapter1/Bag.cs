@@ -55,15 +55,26 @@ internal class BagIterator<Item> : IEnumerator<Node<Item>> {
     _curnode = Bag.First;
   }
 
+  // I didn't want to add a fake Node at the beginning
   public bool MoveNext() {
-    if (_curnode.Next != null) {
-      if (raw_index != 0) {
-        _curnode = _curnode.Next;
-      }
+    if (_curnode.Next != null && raw_index != 0) {
+      // bag size > 1 and not at the first node: return and travel
+      _curnode = _curnode.Next;
+      ++raw_index;
+      return true;
+    }
+    else if (_curnode.Next != null && raw_index == 0) {
+      // bag size > 1 and at first node: return and do not travel
+      ++raw_index;
+      return true;
+    }
+    else if (_curnode.Next == null && raw_index == 0) {
+      // bag size == 1 and at the first node: return and do not travel
       ++raw_index;
       return true;
     }
     else {
+      // bag size == 1 and already returned the node: do nothing
       return false;
     }
   }

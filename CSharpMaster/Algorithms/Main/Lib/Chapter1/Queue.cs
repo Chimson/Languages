@@ -19,12 +19,7 @@ public class Queue<Item>  {
   }
 
   public bool IsEmpty() {
-    if (Size == 0) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return Size == 0;
   }
 
   public void Enqueue(Item item) {
@@ -64,9 +59,12 @@ public class Queue<Item>  {
   }
 
   public override string ToString() {
+    
     string msg = $"({Size} Items) ";
-    foreach (Node<Item> node in this) {
-      msg += $"{node.ToString()}-> ";
+    if (Size != 0) {
+      foreach (Node<Item> node in this) {
+        msg += $"{node.ToString()}-> ";
+      }
     }
     msg += $"null";
     return msg;
@@ -89,22 +87,23 @@ internal class QueueIterator<Item> : IEnumerator<Node<Item>> {
     _curnode = queue.First;
   }
 
+  // I didn't want to add a fake Node at the beginning
   public bool MoveNext() {
-    /*
-      0 -> null
-      ^ _curnode
-    */
-    if (_curnode.Next != null) {
-      if (raw_index != 0) {
-        _curnode = _curnode.Next;
-      }
+    if (Queue.Size == 0) {return false;}
+    if (_curnode.Next != null && raw_index != 0) {
+      _curnode = _curnode.Next;
+      ++raw_index;
+      return true;
+    }
+    else if (_curnode.Next != null && raw_index == 0) {
+      ++raw_index;
+      return true;
+    }
+    else if (_curnode.Next == null && raw_index == 0) {
       ++raw_index;
       return true;
     }
     else {
-      if (Queue.Size == 1) {
-        return true;
-      }
       return false;
     }
   }
