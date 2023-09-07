@@ -61,10 +61,8 @@ public class Queue<Item>  {
   public override string ToString() {
     
     string msg = $"({Size} Items) ";
-    if (Size != 0) {
-      foreach (Node<Item> node in this) {
-        msg += $"{node.ToString()}-> ";
-      }
+    foreach (Node<Item> node in this) {
+      msg += $"{node.ToString()}-> ";
     }
     msg += $"null";
     return msg;
@@ -80,7 +78,7 @@ internal class QueueIterator<Item> : IEnumerator<Node<Item>> {
 
   private Queue<Item> Queue;
   private Node<Item> _curnode;
-  private int raw_index = 0;                
+  private bool is_first = true;                
 
   public QueueIterator(Queue<Item> queue) {
     Queue = queue; 
@@ -90,27 +88,28 @@ internal class QueueIterator<Item> : IEnumerator<Node<Item>> {
   // I didn't want to add a fake Node at the beginning
   public bool MoveNext() {
     if (Queue.Size == 0) {return false;}
-    if (_curnode.Next != null && raw_index != 0) {
+    if (_curnode.Next != null && !is_first) {
       _curnode = _curnode.Next;
-      ++raw_index;
+      is_first = false;
       return true;
     }
-    else if (_curnode.Next != null && raw_index == 0) {
-      ++raw_index;
+    else if (_curnode.Next != null && is_first) {
+      is_first = false;
       return true;
     }
-    else if (_curnode.Next == null && raw_index == 0) {
-      ++raw_index;
+    else if (_curnode.Next == null && is_first) {
+      is_first = false;
       return true;
     }
     else {
+      // _curnode.Next == null && !is_first (first has already been read)
       return false;
     }
   }
 
   public void Reset() {
     _curnode = Queue.First;
-    raw_index = 0;
+    is_first = true;
   }
 
   void IDisposable.Dispose() {}
