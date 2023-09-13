@@ -509,6 +509,136 @@ public class Chapter1Tests {
     Results.Print($"Dequeue on Empty Throws");
   }
 
+  [Test]
+  public void FixedStackTest0() {
+    FixedStack<string> names = new FixedStack<string>(5);
+    names.Push("Ben");
+    names.Push("Mags");
+    names.Push("Finn");
+    names.Push("Willie");
+    names.Push("Cal");
+    string msg = "FixedStackTest0 Iterator and Push check: ";
+    foreach (string name in names.Enum()) {
+      msg += $"{name} ";
+    }
+    Results.Print(msg);
+    Assert.Pass();
+  }
 
+  [Test]
+  public void FixedStackTest1() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    names.Push("Mags");
+    names.Push("Finn");
+    names.Push("Willie");
+    Assert.Throws<IndexOutOfRangeException>(() => names.Push("Cal"));
+    Results.Print("FixedStackTest1: throws exception on a push after a maxed out stack");
+  }
+
+  [Test]
+  public void FixedStackTest2() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    Assert.True(names.IsEmpty());
+    Results.Print("FixedStackTest2: IsEmpty() passes on no pushes");
+  }
+  
+  [Test]
+  public void FixedStackTest3() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    Assert.AreEqual(1, names.Size);
+    Results.Print("FixedStackTest3: Size of 1 passes");
+  }
+
+  [Test]
+  public void FixedStackTest4() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    names.Push("Mags");
+    Assert.AreEqual(2, names.Size);
+    Results.Print("FixedStackTest4: Size of 2 passes");
+  }
+
+  [Test]
+  public void FixedStackTest5() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    Assert.Throws<IndexOutOfRangeException>(() => names.Pop());
+    Results.Print("FixedStackTest5: throws exception on a pop on empty stack");
+  }
+
+  [Test]
+  public void FixedStackTest6() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    Assert.AreEqual("Ben", names.Pop());
+    Assert.AreEqual(0, names.Size);
+    Assert.True(names.IsEmpty());
+    Results.Print("FixedStackTest6: push, pop passes");
+  }
+
+  [Test]
+  public void FixedStackTest7() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    names.Push("Mags");
+    Assert.AreEqual("Mags", names.Pop());
+    Assert.AreEqual(1, names.Size);
+    Assert.False(names.IsEmpty());
+    Results.Print("FixedStackTest7: push, push, pop passes");
+  }
+
+  [Test]
+  public void FixedStackTest8() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    names.Push("Mags");
+    Assert.AreEqual("Mags", names.Pop());
+    Assert.AreEqual("Ben", names.Pop());
+    Assert.AreEqual(0, names.Size);
+    Assert.True(names.IsEmpty());
+    Results.Print("FixedStackTest8: push, push, pop, pop passes");
+  }
+
+  [Test]
+  public void FixedStackTest9() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    names.Pop();
+    names.Push("Mags");
+    Assert.AreEqual(1, names.Size);
+    Assert.False(names.IsEmpty());
+    Results.Print("FixedStackTest9: push, pop, push passes");
+  }
+
+  [Test]
+  public void FixedStackTest10() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    names.Pop();
+    names.Push("Mags");
+    names.Pop();
+    Assert.AreEqual(0, names.Size);
+    Assert.True(names.IsEmpty());
+    Results.Print("FixedStackTest10: push, pop, push, pop passes");
+  }
+
+  [Test]
+  public void FixedStackTest11() {
+    FixedStack<string> names = new FixedStack<string>(4);
+    names.Push("Ben");
+    names.Push("Mags");
+    names.Push("Finn");
+    names.Push("Willie");
+    Assert.AreEqual("Willie", names.Pop());
+    Assert.AreEqual("Finn", names.Pop());
+    Assert.AreEqual("Mags", names.Pop());
+    Assert.AreEqual("Ben", names.Pop());
+    Assert.AreEqual(0, names.Size);
+    Assert.True(names.IsEmpty());
+    Results.Print("FixedStackTest11: 4 pops passes");
+  }
 
 }
+
+// STOPPED ON PAGE 141 (not printed)

@@ -594,6 +594,9 @@ class Program {
     }
   }
 }
+// -----
+// see setting up the iterator by inheritance in "Algorithms > Chapter1 > Queue"
+//    inherits IEnumerator
 
 EXCEPTION
 // basic try catch any exception

@@ -3,7 +3,7 @@ namespace Lib.Chapter1;
 using System.Collections;  // for IEnumerator
 
 /*
-  Queues are iterable unordered collections
+  Queues can preserve the order of the items
 */
 
 public class Queue<Item>  {
