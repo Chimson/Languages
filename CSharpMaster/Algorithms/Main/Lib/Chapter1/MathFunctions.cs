@@ -100,36 +100,45 @@ public class MathFunctions {
   public static string Evaluate(string expr) {
     // ignore ( and "", on ) pop an op and its vals
     // push result bach on to vals
-    // needs to be in form: ((3 + 4) + 5)
+    // needs to be in form: ( ( 3 + 4.78 ) + 5 )
+    //   every token seperated by spaces and wrapped in ()
 
-    int max_size = expr.Length;
-    IStack<char> ops = new FixedStack<char>(max_size);
+
+    string[] tokens = expr.Split(' ');
+    int max_size = tokens.Length;
+    IStack<string> ops = new FixedStack<string>(max_size);
     IStack<double> vals = new FixedStack<double>(max_size);
-    
-    foreach (char c in expr) {
-      if ("+-/*".Contains(c)) {
-        ops.Push(c);
+    double pot_dbl;
+
+    foreach (string s in tokens) {
+      if ("+-/*".Contains(s)) {
+        ops.Push(s);
       }
-      else if (" (".Contains(c)) {
+      else if ("(".Contains(s)) {
         continue;
       }
-      else if (c == ')') {
-        char op = ops.Pop();
+      else if (s == ")") {
+        string op = ops.Pop();
         double val = vals.Pop();
-        if (op == '+') {val += vals.Pop();}
-        else if (op == '-') {val -= vals.Pop();}
-        else if (op == '*') {val *= vals.Pop();}
-        else if (op == '/') {val /= vals.Pop();}
+        if (op == "+") {val = vals.Pop() + val;}
+        else if (op == "-") {val = vals.Pop() - val;}  // order matters here, so last popped is on left
+        else if (op == "*") {val = vals.Pop() * val;}
+        else if (op == "/") {val = vals.Pop() / val;}
         vals.Push(val);
       }
-      else if ()
+      else if (Double.TryParse(s, out pot_dbl)) {
+        vals.Push(pot_dbl);
+      }
       else {
-        throw new Exception("expression contains an invalid char");
+        throw new Exception("invalid token or formatting");
       }
     }
-
-    return "";
-  
+    if (vals.Size() != 1) {
+      throw new Exception("eval did not finish");
+    }
+    else {
+      return $"{vals.Pop()}";
+    }
   }
   
 

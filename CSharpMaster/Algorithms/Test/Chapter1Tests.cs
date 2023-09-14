@@ -640,12 +640,79 @@ public class Chapter1Tests {
   }
 
   [Test]
-  public void EvaluateTest() {
-    string expr = "(3 + 4.5)";
-    MathFunctions.Evaluate(expr);
-    Assert.Pass();
+  public void EvaluateTest0() {
+    string expr = "( 3 + 4.5 )";
+    string actual = MathFunctions.Evaluate(expr);
+    Assert.AreEqual("7.5", actual);
+    Results.Print($"EvaluateTest0: {expr} = {actual}");
   }
+
+  [Test]
+  public void EvaluateTest1() {
+    string expr = "( ( 3.0012 + 4.5 ) * 22.1 )";
+    string actual = MathFunctions.Evaluate(expr);
+    Assert.AreEqual("165.77652", actual);
+    Results.Print($"EvaluateTest1: {expr} = {actual}");
+  }
+
+  [Test]
+  public void EvaluateTest2() {
+    // no wrapping ()
+    string expr = "( 3.0012 + 4.5 ) * 22.1";
+    Exception? ex = Assert.Throws<Exception>(() => MathFunctions.Evaluate(expr));
+    Results.Print($"EvaluateTest2: {expr} throws \"{ex?.Message}\"");
+  }
+
+  [Test]
+  public void EvaluateTest3() {
+    // no space before last )
+    string expr = "( 3.0012 + 4.5 ) * 22.1)";
+    Exception? ex = Assert.Throws<Exception>(() => MathFunctions.Evaluate(expr));
+    Results.Print($"EvaluateTest3: {expr} throws \"{ex?.Message}\"");
+  }  
+
+  [Test]
+  public void EvaluateTest4() {
+    // pop past the stack
+    string expr = "( 3.0012 + 4.5 ) * )";
+    IndexOutOfRangeException? ex = Assert.Throws<IndexOutOfRangeException>(() => MathFunctions.Evaluate(expr));
+    Results.Print($"EvaluateTest4: {expr} throws \"{ex?.Message}\"");
+  }  
+
+  [Test]
+  public void EvaluateTest5() {
+    // extra )
+    string expr = "( 3.0012 + 4.5 ) * 22.1))";
+    Exception? ex = Assert.Throws<Exception>(() => MathFunctions.Evaluate(expr));
+    Results.Print($"EvaluateTest5: {expr} throws \"{ex?.Message}\"");
+  }  
+
+  [Test]
+  public void EvaluateTest6() {
+    string expr = "( ( 3.0012 + 4.5 ) * ( 22.1 / 3 ) )";
+    string actual = MathFunctions.Evaluate(expr);
+    Assert.AreEqual("55.25884", actual);
+    Results.Print($"EvaluateTest6: {expr} = {actual}");
+  }
+
+  [Test]
+  public void EvaluateTest7() {
+    string expr = "( ( 3.0012 + 4.5 ) * ( -22.1 / 3 ) )";
+    string actual = MathFunctions.Evaluate(expr);
+    Assert.AreEqual("-55.25884", actual);
+    Results.Print($"EvaluateTest7: {expr} = {actual}");
+  }
+
+  [Test]
+  public void EvaluateTest8() {
+    string expr = "( ( ( 3.0012 + 4.5 ) * ( -22.1 / 3 ) ) - 8.46 )";
+    string actual = MathFunctions.Evaluate(expr);
+    Assert.AreEqual("-63.71884", actual);
+    Results.Print($"EvaluateTest8: {expr} = {actual}");
+  }  
 
 }
 
-// STOPPED ON PAGE 141 (not printed)
+// STOPPED ON PAGE 142 (not printed)
+// execute one test, without the specific warning printed
+// > dotnet test -warnAsMessage:NUnit2005 Test --filter "Chapter1Tests.EvaluateTest6"
