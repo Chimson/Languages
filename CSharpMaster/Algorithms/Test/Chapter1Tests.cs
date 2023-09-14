@@ -547,7 +547,7 @@ public class Chapter1Tests {
   public void FixedStackTest3() {
     FixedStack<string> names = new FixedStack<string>(4);
     names.Push("Ben");
-    Assert.AreEqual(1, names.Size);
+    Assert.AreEqual(1, names.Size());
     Results.Print("FixedStackTest3: Size of 1 passes");
   }
 
@@ -556,7 +556,7 @@ public class Chapter1Tests {
     FixedStack<string> names = new FixedStack<string>(4);
     names.Push("Ben");
     names.Push("Mags");
-    Assert.AreEqual(2, names.Size);
+    Assert.AreEqual(2, names.Size());
     Results.Print("FixedStackTest4: Size of 2 passes");
   }
 
@@ -572,7 +572,7 @@ public class Chapter1Tests {
     FixedStack<string> names = new FixedStack<string>(4);
     names.Push("Ben");
     Assert.AreEqual("Ben", names.Pop());
-    Assert.AreEqual(0, names.Size);
+    Assert.AreEqual(0, names.Size());
     Assert.True(names.IsEmpty());
     Results.Print("FixedStackTest6: push, pop passes");
   }
@@ -583,7 +583,7 @@ public class Chapter1Tests {
     names.Push("Ben");
     names.Push("Mags");
     Assert.AreEqual("Mags", names.Pop());
-    Assert.AreEqual(1, names.Size);
+    Assert.AreEqual(1, names.Size());
     Assert.False(names.IsEmpty());
     Results.Print("FixedStackTest7: push, push, pop passes");
   }
@@ -595,7 +595,7 @@ public class Chapter1Tests {
     names.Push("Mags");
     Assert.AreEqual("Mags", names.Pop());
     Assert.AreEqual("Ben", names.Pop());
-    Assert.AreEqual(0, names.Size);
+    Assert.AreEqual(0, names.Size());
     Assert.True(names.IsEmpty());
     Results.Print("FixedStackTest8: push, push, pop, pop passes");
   }
@@ -606,7 +606,7 @@ public class Chapter1Tests {
     names.Push("Ben");
     names.Pop();
     names.Push("Mags");
-    Assert.AreEqual(1, names.Size);
+    Assert.AreEqual(1, names.Size());
     Assert.False(names.IsEmpty());
     Results.Print("FixedStackTest9: push, pop, push passes");
   }
@@ -618,7 +618,7 @@ public class Chapter1Tests {
     names.Pop();
     names.Push("Mags");
     names.Pop();
-    Assert.AreEqual(0, names.Size);
+    Assert.AreEqual(0, names.Size());
     Assert.True(names.IsEmpty());
     Results.Print("FixedStackTest10: push, pop, push, pop passes");
   }
@@ -634,9 +634,16 @@ public class Chapter1Tests {
     Assert.AreEqual("Finn", names.Pop());
     Assert.AreEqual("Mags", names.Pop());
     Assert.AreEqual("Ben", names.Pop());
-    Assert.AreEqual(0, names.Size);
+    Assert.AreEqual(0, names.Size());
     Assert.True(names.IsEmpty());
     Results.Print("FixedStackTest11: 4 pops passes");
+  }
+
+  [Test]
+  public void EvaluateTest() {
+    string expr = "(3 + 4.5)";
+    MathFunctions.Evaluate(expr);
+    Assert.Pass();
   }
 
 }

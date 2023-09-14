@@ -1,6 +1,6 @@
 namespace Lib.Chapter1;
 
-public class FixedStack<Item> {
+public class FixedStack<Item> : IStack<Item> {
   // stacks pop in reverse order
 
   private Item[] items;
@@ -12,7 +12,7 @@ public class FixedStack<Item> {
 
   public bool IsEmpty() => N == 0;
 
-  public int Size => N;
+  public int Size() => N;
 
   public void Push(Item item) {
     items[N++] = item;

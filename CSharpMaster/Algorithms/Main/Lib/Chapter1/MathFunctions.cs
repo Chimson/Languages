@@ -97,6 +97,40 @@ public class MathFunctions {
   }
 
 
+  public static string Evaluate(string expr) {
+    // ignore ( and "", on ) pop an op and its vals
+    // push result bach on to vals
+    // needs to be in form: ((3 + 4) + 5)
+
+    int max_size = expr.Length;
+    IStack<char> ops = new FixedStack<char>(max_size);
+    IStack<double> vals = new FixedStack<double>(max_size);
+    
+    foreach (char c in expr) {
+      if ("+-/*".Contains(c)) {
+        ops.Push(c);
+      }
+      else if (" (".Contains(c)) {
+        continue;
+      }
+      else if (c == ')') {
+        char op = ops.Pop();
+        double val = vals.Pop();
+        if (op == '+') {val += vals.Pop();}
+        else if (op == '-') {val -= vals.Pop();}
+        else if (op == '*') {val *= vals.Pop();}
+        else if (op == '/') {val /= vals.Pop();}
+        vals.Push(val);
+      }
+      else if ()
+      else {
+        throw new Exception("expression contains an invalid char");
+      }
+    }
+
+    return "";
+  
+  }
   
 
 

@@ -204,6 +204,7 @@ OPERATORS
 
 TYPES
 // may not be full list
+char
 int, uint, short, long, float
 double, decimal   // decimal is better for checking equality accuracy than doubles
 bool
