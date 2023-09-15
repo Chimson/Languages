@@ -23,6 +23,8 @@ public class FixedStack<Item> : IStack<Item> {
   }
 
   public IEnumerable<Item> Enum() {
+    // top of the stack is on the left
+    // in the array it is on the right side
     for (int i = N - 1; i > -1; --i) {
       yield return items[i];
     }

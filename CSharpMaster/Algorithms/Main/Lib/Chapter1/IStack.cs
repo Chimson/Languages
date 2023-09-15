@@ -6,5 +6,5 @@ public interface IStack<Item> {
   public int Size();
   public void Push(Item item);
   public Item Pop();
-  public IEnumerable<Item> Enum();
+  public IEnumerable<Item?> Enum();
 }

@@ -105,9 +105,8 @@ public class MathFunctions {
 
 
     string[] tokens = expr.Split(' ');
-    int max_size = tokens.Length;
-    IStack<string> ops = new FixedStack<string>(max_size);
-    IStack<double> vals = new FixedStack<double>(max_size);
+    IStack<string> ops = new ResizingStack<string>();
+    IStack<double> vals = new ResizingStack<double>();
     double pot_dbl;
 
     foreach (string s in tokens) {
