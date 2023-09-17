@@ -8,8 +8,8 @@ using System.Collections;  // for IEnumerator
 
 public class Queue<Item>  {
 
-  public Node<Item> First{get; private set;}
-  public Node<Item> Last{get; private set;}
+  public Node<Item> First {get; private set;}
+  public Node<Item> Last {get; private set;}
   public int Size {get; private set;}
 
   public Queue(Item item) {

@@ -830,8 +830,112 @@ public class Chapter1Tests {
     Results.Print("ResizingStack11: 4 pops passes");
   }
 
+  [Test]
+  public void LinkedListStack0() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Push("Mags");
+    names.Push("Finn");
+    names.Push("Willie");
+    names.Push("Cal");
+    string msg = $"LinkedListStack0 Iterator and Push check: {names.ToString()}";
+    Results.Print(msg);
+    Assert.Pass();
+  }
+
+  [Test]
+  public void LinkedListStack2() {
+    // empty stack check
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    Assert.AreEqual("Ben", names.Pop());
+    Assert.True(names.IsEmpty());
+    Assert.AreEqual(names.Size(), 0);
+    Results.Print($"LinkedListStack2: {names.ToString()}");
+  }
+
+  [Test]
+  public void LinkedListStack3() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    Assert.False(names.IsEmpty());
+    Assert.AreEqual(1, names.Size());
+    Results.Print($"LinkedListStack3: {names.ToString()}");
+  }
+
+  [Test]
+  public void LinkedListStack4() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Push("Mags");
+    Assert.False(names.IsEmpty());
+    Assert.AreEqual(2, names.Size());
+    Results.Print($"LinkedListStack4: {names.ToString()}");
+  }
+
+[Test]
+  public void LinkedListStack5() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Pop();
+    Assert.Throws<Exception>(() => names.Pop());
+    Results.Print("LinkedListStack5: throws exception on a pop on empty stack");
+  }
+
+  [Test]
+  public void LinkedListStack7() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Push("Mags");
+    Assert.AreEqual("Mags", names.Pop());
+    Assert.AreEqual(1, names.Size());
+    Assert.False(names.IsEmpty());
+    Results.Print($"LinkedListStack7: {names.ToString()}");
+  }
+
+  [Test]
+  public void LinkedListStack8() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Push("Mags");
+    Assert.AreEqual("Mags", names.Pop());
+    Assert.AreEqual("Ben", names.Pop());
+    Assert.AreEqual(0, names.Size());
+    Assert.True(names.IsEmpty());
+    Results.Print($"LinkedListStack8: {names.ToString()}");
+  }
+
+  [Test]
+  public void LinkedListStack9() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Pop();
+    names.Push("Mags");
+    Assert.AreEqual(1, names.Size());
+    Assert.False(names.IsEmpty());
+    Results.Print($"LinkedListStack9: {names.ToString()}");
+  }
+
+  [Test]
+  public void LinkedListStack10() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Pop();
+    names.Push("Mags");
+    names.Pop();
+    Assert.AreEqual(0, names.Size());
+    Assert.True(names.IsEmpty());
+    Results.Print($"LinkedListStack10: {names.ToString()}");
+  }
+
+  [Test]
+  public void LinkedListStack11() {
+    IStack<string> names = new LinkedListStack<string>("Ben");
+    names.Push("Mags");
+    names.Push("Finn");
+    names.Push("Willie");
+    Assert.AreEqual("Willie", names.Pop());
+    Assert.AreEqual("Finn", names.Pop());
+    Assert.AreEqual("Mags", names.Pop());
+    Assert.AreEqual("Ben", names.Pop());
+    Assert.AreEqual(0, names.Size());
+    Assert.True(names.IsEmpty());
+    Results.Print($"LinkedListStack11: {names.ToString()}");
+  }
+
 }
 
-// STOPPED ON PAGE 155 (not printed)
+// STOPPED ON PAGE 185 (not printed)
 // execute one test, without the specific warning printed
 // > dotnet test -warnAsMessage:NUnit2005 Test --filter "Chapter1Tests.EvaluateTest6"
