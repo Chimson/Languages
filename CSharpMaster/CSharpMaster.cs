@@ -141,6 +141,7 @@ class Program {
 }
 // -----
 // Console is a class and can be used statically (without a object) by using static
+// only applies to classes with static members
 using static System.Console;
 class Program {
   static void Main(string[] args) { 
@@ -285,7 +286,7 @@ var d = 3.14M;  // decimal
 var f = 3.14F  // float
 
 STRING
-// $ allows embedding of variable syntax for string, see CONSOLE
+// $ interpolated strings, allows embedding of variable syntax for string, see CONSOLE
 // @ are verbatim strings, \n is not interpreted as escape chars 
 int i = 3; double p = 3.14;
 string s = $"{i}, {p}"; 
@@ -1865,6 +1866,17 @@ class Program {
 			arg1: p);  
 	} 
 }
+// -----
+// string format specifiers and alignment
+// , for alignment with - for left aligned and right without -
+// : for digits
+//  F fixed point (integral and decimals), N number (integral and decimal with ,)
+// B binary, X Hex, D Decimal (integers only), P percent, R round trip
+//  C Currency, E exponential, G general (fixed pt or scientific)
+double val = 100/3.0;
+Console.WriteLine($"{val:F2}");  // 6 decimal place
+Console.WriteLine($"|{val,-10:F2}|{val,10:F2}|");  // with left and right alignment
+Console.WriteLine($"|{val,-10:00000.000}|{val,10:00000.000}|");  // with potential leading zeros and 3 decimal places
 
 MATH
 // in System namespace
