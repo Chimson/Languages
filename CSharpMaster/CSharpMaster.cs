@@ -1173,6 +1173,27 @@ class Program {
   }  
 }
 // -----
+// can use a delegate like a type, to hold a reference to a function
+// with delegate keyword, lambda notation, and as an expression bodied member
+// delegate types can be declared in the namespace or class level
+// can use delegates with lambdas, both named and anonymous
+delegate float BinOp(float a, float b);   // namespace level
+class Program {
+  delegate float UnaryOp(float x);    // class level
+  static void Main(string[] args) {
+    BinOp Multiply = delegate(float a, float b) {return a * b;};
+    Console.WriteLine(Multiply(3.1f, 6.6f));
+    BinOp Add = (float a, float b) => {return a + b;};  // as a lambda
+    Console.WriteLine(Add(2.1f, 2.1f));
+    BinOp Subtract = (float a, float b) => a - b;  // expression bodied member
+    float Negate(float a) => -a;   // named lambda 
+    UnaryOp UOp = Negate;         // attach the named lambda to a UOp reference,
+    Console.WriteLine(UOp(-3.0f));
+    UOp = (a) => 2*a;     // with an anoynmous lambda
+    Console.WriteLine(UOp(-3.0f));
+  }
+}
+// -----
 // delegates contain the memory addr of a method that matches the same signature as the delegate
 // MyDelegate should have the same params as the method it stands in for
 // delegates can be used to implement events
@@ -1213,13 +1234,26 @@ class Program {
   }
 }
 // -----
-// named and anonymous lambdas
+// Action is a predefined delegate that has void return type
+// generic parameters refer to the types on the parameters
+// var will pick Action or Func type, depending on which makes sense
+class Program {
+  static void Main(string[] args) {
+    Action<string, int> PMsg = (string name, int age) => Console.WriteLine(name + $" is of age: {age}");
+    PMsg("Ben", 38);
+    var PHi = () => Console.WriteLine("Hi");
+    PHi();
+  }
+}
+// -----
+// Func are predefined delegates
+// named and anonymous lambdas, more examples above
 // accepted as an argument
 // as a field in a class called an expression bodied property, see PROPERTY
-// also see System.Func<Tin, Tout> delegates
+// also see System.Func<Tin, Tout> delegates, with the return type on the right-most generic param
 class OpLambda {
   Func<int, int, int> lmb;
-  public OpLambda(Func<int, int, int> lmb) {
+  public OpLambda(Func<int, int, int> lmb) {  // (int, int) => int
     this.lmb = lmb;
   }
   public int operate(int i, int j) {
