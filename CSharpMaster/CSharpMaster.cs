@@ -296,6 +296,19 @@ string v = @"i\n";
 string str = "Ben Harki";
 str.Substring(0, 5), str.Replace("X", "replaces X"), str.Insert(3, "jamin ");  
 str.IndexOf("B");   
+// -----
+// StringBuilder class for memory efficient string concatenation
+// allocates a buffer for a string and adds to it, instead of many allocations of small strings
+using System.Text;
+class Program {
+  static void Main(string[] args) {
+    StringBuilder sb = new StringBuilder(); 
+    Console.WriteLine($"current char capacity: {sb.Capacity}");
+    sb.AppendLine("Add a few lines, with a line terminator");
+    sb.Append("Here is the 2nd line");
+    Console.WriteLine(sb);
+  }
+}
 
 ARRAY
 // with explicit initialization
@@ -998,6 +1011,29 @@ class Program {
   }
 }
 // -----
+// use Lazy<> for the lazy creation/execution of an object
+// lazy means that the creation is suspended until it is explicitly used
+// can give it a method instead of using the parm-less constr
+class ComplicatedObj {
+  public List<string> list {get; private set;}
+  // imagine that the initialization of this is complicated 
+  public ComplicatedObj() {
+    list = new List<string>();
+    list.Add("Ben");
+    list.Add("Mags");
+    list.Add("Finn");
+    list.Add("Willy");
+  }
+}
+class Program {
+  static void Main(string[] args) {
+    Lazy<ComplicatedObj> lazy_builder = new Lazy<ComplicatedObj>();  // calls the param-less constr
+    foreach (string name in lazy_builder.Value.list) {   // Value is the ComplicatedObj here
+      Console.WriteLine(name);
+    }
+  }
+}
+// -----
 // see "using" block in OS, to automatically dispose of objects, when the block completes
 
 
@@ -1559,6 +1595,33 @@ class Program {
     Console.WriteLine(c);
   }
 }
+// -----
+// example of overriding the implicit casting operator
+// implicitly converts a MyFloat to a MyInt
+class MyInt {
+  public int I {get; private set;}
+  public MyInt(int i) {
+    I = i;
+  }
+  public static implicit operator MyInt(MyFloat myf) {
+    return new MyInt((int) myf.F);
+  }
+  public override string ToString() {
+    return $"{I}";
+  } 
+}
+class MyFloat {
+  public float F {get; private set;}
+  public MyFloat(float f) {
+    F = f;
+  }
+}
+class Program {
+  static void Main(string[] args) {
+    MyInt myi = new MyFloat(3.4f);
+    Console.WriteLine(myi);  // 3
+  }
+}
 
 INTERFACES
 // any class that implements an interface needs to write the implementation of the interface method
@@ -1965,6 +2028,7 @@ class Program {
 // -----
 // see example in GENERIC
 // see List with an object initializer in Iterator
+// another example in Class using Lazy<>
 
 TUPLE
 // see Chp 5 > writing and calling methods > combining multiple return values using tuples

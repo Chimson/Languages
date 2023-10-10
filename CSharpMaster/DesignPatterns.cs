@@ -282,4 +282,164 @@ class Program {
   }
 }
 
-// STOPPED AT PG 55. CHAPTER 3
+// BUILDER
+// example of a Simple Builder, with Add, to help in construction
+//    Add could also be written to add one at a time
+// builders simplify the process of creating a complicated object that cannot
+//    be built in a simple constructor call
+// flexible enough to add to when needed, could also add a ToString() if you wanted
+class FixedStack<Item> {
+  // stacks pop in reverse order
+  private Item[] items;
+  private int N;
+  public FixedStack(int size) {
+    items = new Item[size];
+  }
+  public bool IsEmpty() => N == 0;
+  public int Size() => N;
+  public void Push(Item item) {
+    items[N++] = item;
+  }
+  public Item Pop() {
+    return items[--N];
+  }
+  public IEnumerable<Item> Enum() {
+    // top of the stack is on the left
+    // in the array it is on the right side
+    for (int i = N - 1; i > -1; --i) {
+      yield return items[i];
+    }
+  }
+}
+class FixedStackBuilder<Item> {
+  public FixedStack<Item> Stack {get; private set;}
+  public FixedStackBuilder(int size) {
+    Stack = new FixedStack<Item>(size);
+  }
+  public void Add(Item[] items) {
+    foreach (Item item in items) {
+      Stack.Push(item);
+    }
+  }
+}
+class Program {
+  static void Main(string[] args) {
+    string[] names = {"Ben", "Mags", "Finn", "Willie"};
+    FixedStackBuilder<string> names_builder = new FixedStackBuilder<string>(names.Length);
+    names_builder.Add(names);
+    FixedStack<string> stack = names_builder.Stack;
+    foreach (string name in stack.Enum()) {
+      Console.WriteLine(name);
+    }
+  }
+}
+// -----
+// Fluent Builder
+// fluent class has methods that return the object, to simplify method call syntax
+// use with FixedStack<> class above
+// Add returns the object to allow for Add method call chaining
+// can construct and build all in one line
+class FixedStackBuilder<Item> {
+  public FixedStack<Item> Stack {get; private set;}
+  public FixedStackBuilder(int size) {
+    Stack = new FixedStack<Item>(size);
+  }
+  public FixedStackBuilder<Item> Add(Item item) {
+    Stack.Push(item);
+    return this;
+  }
+}
+class Program {
+  static void Main(string[] args) {
+    FixedStackBuilder<string> names_builder =    
+      new FixedStackBuilder<string>(4).Add("Ben").Add("Mags").Add("Finn").Add("Willie");
+    FixedStack<string> stack = names_builder.Stack;
+    foreach (string name in stack.Enum()) {
+      Console.WriteLine(name);
+    }
+  }
+}
+// -----
+// Static Initialization
+// use with FixedStack<> above
+// similar to the FluentBuilder, but syntax is a little cleaner
+// create a static method Init(), to avoid the "new" syntax on the creation of the builder
+// could also have seperate Inits, for seperate versions of the objects
+class FixedStackBuilder<Item> {
+  public FixedStack<Item> Stack {get; private set;}
+  public FixedStackBuilder(int size) {
+    Stack = new FixedStack<Item>(size);
+  }
+  public FixedStackBuilder<Item> Add(Item item) {
+    Stack.Push(item);
+    return this;
+  }
+  public static FixedStackBuilder<Item> Init(int size) {  
+    return new FixedStackBuilder<Item>(size);
+  }
+}
+class Program {
+  static void Main(string[] args) {
+    FixedStackBuilder<string> names_builder = 
+      FixedStackBuilder<string>.Init(4).Add("Ben").Add("Mags").Add("Finn").Add("Willie");
+    FixedStack<string> stack = names_builder.Stack;
+    foreach (string name in stack.Enum()) {
+      Console.WriteLine(name);
+    }
+  }
+}
+// -----
+// force the use of a builder, by hiding the Stack constructor
+// using private here, but could also use protected to avoid subclassing
+// static Create() method is added to the stack class to force the builder to be used
+//   rather than Stack constructor 
+//   Create is a Factory method
+// uses the overloading of the implicit cast operator, so that the Builder is converted directly to
+//    to a Stack after creation
+class FixedStack<Item> {
+  // stacks pop in reverse order
+  private Item[] items;
+  private int N;
+  private FixedStack(int size) {  // constructor is private
+    items = new Item[size];
+  }
+  public bool IsEmpty() => N == 0;
+  public int Size() => N;
+  public void Push(Item item) {
+    items[N++] = item;
+  }
+  public Item Pop() {
+    return items[--N];
+  }
+  public IEnumerable<Item> Enum() {
+    // top of the stack is on the left
+    // in the array it is on the right side
+    for (int i = N - 1; i > -1; --i) {
+      yield return items[i];
+    }
+  }
+  public static FixedStackBuilder<Item> Create(int size) {
+    return new FixedStackBuilder<Item>(new FixedStack<Item>(size));
+  }
+  public static implicit operator FixedStack<Item>(FixedStackBuilder<Item> builder) {
+    return builder.Stack;
+  } 
+}
+class FixedStackBuilder<Item> {
+  public FixedStack<Item> Stack {get; private set;}
+  public FixedStackBuilder(FixedStack<Item> stack) {
+    Stack = stack;
+  }
+  public FixedStackBuilder<Item> Add(Item item) {
+    Stack.Push(item);
+    return this;
+  }
+}
+class Program {
+  static void Main(string[] args) {
+    // after the builder obj is done adding, it is implicitly casted to a Stack obj
+    FixedStack<string> stack_builder = FixedStack<string>.Create(4)
+      .Add("Ben").Add("Mags").Add("Finn").Add("Willie");  
+  }
+}
+// STOPPED AT PG 62. CHAPTER 3
