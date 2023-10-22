@@ -1746,7 +1746,7 @@ class Program {
 // -----
 // see an interface that inherits other interfaces in DesignPatterns.cs > Solid Principles > ISP
 // TODO: structs can inherit interfaces, but not other classes, write a struct with an interface
-// TODO: interfaces can have static members, but they need an implementation, write one
+// TODO: interfaces can have static members, but they need an implementation or declared abstract, write one
 
 INHERITANCE
 // all types implicity inherit System.Object
@@ -1942,6 +1942,7 @@ System.Exception   // inherit to make custom exception classes
 System.Attribute   // class you can inherit to create your own attributes
 System.EventHandler  // see EVENTHANDLER
 System.IO  // File, reading and writing files
+System.IComparable // interface for ToCompare() method, used in sorts 
 
 CONSOLE
 // In System namespace
