@@ -390,12 +390,16 @@ class Program {
 }
 // -----
 // force the use of a builder, by hiding the Stack constructor
-// using private here, but could also use protected to avoid subclassing
+// using private here, but could also use protected (accessible by class and those that subclass it)
 // static Create() method is added to the stack class to force the builder to be used
 //   rather than Stack constructor 
 //   Create is a Factory method
 // uses the overloading of the implicit cast operator, so that the Builder is converted directly to
 //    to a Stack after creation
+// Stack is mutable here by push and pop methods
+//   can make it immutable if you make the builder a nested class
+//   builder can the use any private properties or fields instead of its public ones
+//   may break Single Resposibility Principle and OCP (open closed principle)
 class FixedStack<Item> {
   // stacks pop in reverse order
   private Item[] items;
@@ -442,4 +446,63 @@ class Program {
       .Add("Ben").Add("Mags").Add("Finn").Add("Willie");  
   }
 }
-// STOPPED AT PG 62. CHAPTER 3
+// -----
+// use Composite Builder for when you need to split up a builder into more builders
+//    for more complicated objs, each subbuilder can construct multiple parts,
+// protected is used to make accessible within class and those who inherit it
+// inheritance is used to preserve the obj ref between PersonBuilder and subbuilders
+// could maybe make Person immutable if PersonBuilder is nested in it
+// person ref gets passed around in subbuilder constr, which calls the parent constr
+//   resets the ref back to itself
+// implicit cast to Person operator is overridden so that PersonBuilder can cast directly to a Person
+// drawbacks: base class is aware of subclasses, so not easily extendable
+//    breaks OCP since PersonBuilder needs adjusted if a new subconstructor is needed
+class Person {
+  public string? name;
+  public string? addr;
+  public override string ToString(){
+    return $"{name} lives at {addr}";
+  }
+}
+class PersonBuilder {
+  protected Person person;
+  public PersonBuilder() {
+    this.person = new Person();
+  }
+  public PersonBuilder(Person person) {
+    this.person = person;
+  }
+  public PersonAddressBuilder Address => new PersonAddressBuilder(person);
+  public PersonNameBuilder Name => new PersonNameBuilder(person);
+  public static implicit operator Person(PersonBuilder pb) {   
+    return pb.person;
+  }
+}
+class PersonAddressBuilder : PersonBuilder {
+  // one arg constr is needed so that another new obj is not created when calling the other builder
+  public PersonAddressBuilder(Person person) : base(person) {}  // using the base() constr will incorrectly make that new obj
+  public PersonAddressBuilder At(string addr) {
+    person.addr = addr;
+    return this;
+  }
+}
+class PersonNameBuilder : PersonBuilder {
+  public PersonNameBuilder(Person person) : base(person) {}
+  public PersonNameBuilder Of(string name) {
+    person.name = name;
+    return this;
+  }
+}
+
+class Program {
+  static void Main(string[] args) {
+    PersonBuilder pb = new PersonBuilder();
+    Person person = pb
+      .Name
+        .Of("Ben Harki")  // could add more like .Last, .First
+      .Address
+        .At("Melrose St.");
+    Console.WriteLine(person);
+  }
+}
+// STOPPED AT PG 67. Builder Marker Interfaces
