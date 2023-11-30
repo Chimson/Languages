@@ -493,7 +493,6 @@ class PersonNameBuilder : PersonBuilder {
     return this;
   }
 }
-
 class Program {
   static void Main(string[] args) {
     PersonBuilder pb = new PersonBuilder();
