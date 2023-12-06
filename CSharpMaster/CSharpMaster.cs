@@ -68,6 +68,14 @@ COMPILE AND RUN
 // -----
 // run project contained in the Main folder
 > dotnet run --project Main
+// -----
+// new console program with MyName as the root folder name
+> dotnet new console -n MyName
+// -----
+// creates a named class library
+// don't forget to add its reference to another .csproj, see below
+> dotnet new classlib -n Lib  
+
 
 UNIT TESTING
 // unit testing library in NUnit.Framework
@@ -85,7 +93,7 @@ Overall Structure, as two seperate projects, only some files shown
 /Project/Test> dotnet new nunit
 /Project/Test> dotnet add reference ../Main/Project.csproj   // allows Test proj to see src proj 
 /Project/Test> dotnet test   // run unit tests
-// add to /Test/UnitTest1.cdd to see the code lib:
+// add to /Test/UnitTest1.cs to see the code lib:
 using ProjLib; 
 // -----
 // There are other ways to do this with a dotnet classlib and dotnet sln, see MS documentation
