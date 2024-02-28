@@ -212,12 +212,13 @@ OPERATORS
 () [] . 
 
 TYPES
-// may not be full list
+// built in types
 char
-int, uint, short, long, float
-double, decimal   // decimal is better for checking equality accuracy than doubles
+string
+sbyte, byte, int, uint, nint, nuint, short, ushort, long, ulong, 
+float, double, decimal   // decimal is better for checking equality accuracy than doubles
 bool
-object
+object, dynamic
 null
 // -----
 // sizeof() returns num of bytes the type takes up in memory
@@ -341,7 +342,7 @@ class Program {
 // 2d arrays
 double[,] expected = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};  // decl and init
 double[,] expected2 = new double [2,3];  // decl only
-double[][] expected3 = {new double[] {1,2,3}, new double[] {4,5,6}};  // jacgged array, which is an array of arrays
+double[][] expected3 = {new double[] {1,2,3}, new double[] {4,5,6}};  // jagged array, which is an array of arrays
 // -----
 // GetLength(0) returns the size of the 1st dim, GetLength(1) of the 2nd
 public static string TwoDArrStr<T>(in T[,] mat) {
