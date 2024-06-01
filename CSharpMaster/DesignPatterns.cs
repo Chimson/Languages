@@ -234,7 +234,7 @@ class Program {
 }
 // ----
 // Dependency Inversion Principle
-// code should depend on abstract sturctures, not concrete ones
+// code should depend on abstract structures, not concrete ones
 // having a dependency on concrete structures can force rewriting of the code
 //   if the memory design or any other design of the concrete structure changes
 // Main is coded to the "interface objs"
@@ -504,4 +504,65 @@ class Program {
     Console.WriteLine(person);
   }
 }
-// STOPPED AT PG 69 Stepwise Builder (Wizard)
+// -----
+// Stepwize Builder builds an object in order
+// Here you need to set the Type before you set the WheelSize of the car
+//   also you cannot leave out any of the method calls
+// This is also known as a "wizard"
+// To do this you can use a chain of interfaces where
+//   an interface method returns an object from another interface, and so on
+// The interfaces live in the builder class, which sort of hides them from the 
+//   client since they are not in their own files, although they are still public
+// There is a private class to hide the builder details
+// You can also create a private class Impl, in the builder, to hide the creation of the car
+//    if it was public then the order could be changed
+// the interfaces are public, so that each interface method can see the 
+//   its returned interface
+// can also refactor this so that Car has a private constructor and fields and
+//   then make CarBuilder a private class, so that only the builder has control
+//   of the creation of a car
+public enum CarType {Sedan, Crossover};
+public class Car {
+  public CarType Type;
+  public int WheelSize;
+}
+public class CarBuilder {
+  public static ISpecifyCarType Create() {
+    return new Impl();
+  }
+  public interface ISpecifyCarType {
+    ISpecifyWheelSize OfType(CarType type);
+  }
+  public interface ISpecifyWheelSize {
+    IBuildCar WithWheels(int size);
+  } 
+  public interface IBuildCar {
+    Car Build(); 
+  }
+  private class Impl: ISpecifyCarType, ISpecifyWheelSize, IBuildCar {
+    private Car car = new Car();
+    public ISpecifyWheelSize OfType(CarType type) {
+      car.Type = type;
+      return this;
+    }
+    public IBuildCar WithWheels(int size) {
+      car.WheelSize = size;
+      return this;
+    }
+    public Car Build() {
+      return car;
+    }
+
+  }
+}
+class Program {
+  static void Main(string[] args) {
+    Car car = 
+      CarBuilder.Create()
+        .OfType(CarType.Sedan)
+          .WithWheels(18)
+            .Build();
+  }
+}
+
+// STOPPED ON BUILDER PARAMETER pg 56
