@@ -8,6 +8,8 @@ function Main() {
 // Symbol is a primitive type
 // undefines and null do not have their own methods
 //   but the other primitive types do
+// typeof() returns the type
+console.log(typeof(null));   // object
 // -----
 // everything else is an object of Object class, see OBJECT
 // object types are mutable
@@ -21,6 +23,26 @@ function Main() {
 0o377   // octal
 1.47E-32  // scientific notation for float
 2**4
+// -----
+// Booleans
+// these values convert to false:
+// undefined, null, 0, -0, NaN, ""
+// all other values convert to true 
+true.toString();   // to explicitly convert to a string
+// -----
+// null is a language keyword
+// null is the absense of an object, type(null) == 'object'
+// null can be used to indicate that there is no number or other primitive
+// -----
+// undefined is the value of variables that have not been initialized
+// also indicates the value of some method or property that does not exist
+// undefined is returned when a function as no explicit return value
+// undefined is a predefined global object, who is the sole member of the undefined class
+let undef;
+console.log("undef = " + undef);
+// -----
+// null and undefined have no methods or properties, and when trying to invoke 
+//   any raise a TypeError
 
 // OPERATORS
 // Operators: %, +, -, *, **, /, ++, --, +=, ...
@@ -56,21 +78,60 @@ var zz = "weird var";
 
 
 // STRING
+// immutable sequences of Unicode 16-bit chars
 // can use "", or '' for strings
+// they are iterable by character, use 0-indexing
+// no char type, just a string of size one
+// can use \n for next line, where \ is an escape char
 let str1 = "string";
 let str2 = 'str';
+let str3len = str1.length;
 // -----
 // here is a formatted string using `` and ${}
+// these are called template literals
+// anything inside ${} is a JS expression
+// adds new lines and you can use escape sequences
 let int1 = 300;
 let str3 = `this is ${int1}`;
+let smath = `here is some math: ${200 % 2 == 0}`;
+console.log(smath);
+let str5 = `this prints
+as it 
+looks`;
+console.log(str5);
 // -----
 // You can use any Unicode character
 // can also use them variable names
 // two versions, one with \uXXXX and one with \u{XXXXXX}
-// {} version is expanded to include emojis
+// {} version is expanded to codepoints >16 bits (emoji's for ex) 
 let uni1 = "\u00E9";
 let uni2 = "\u{1F600}";
 console.log(uni1 + ' ' + uni2);
+// -----
+// long strings written across multiple lines
+let str4 = 'this is\
+displayed\
+on one line';
+// -----
+// escape sequences
+'\n\b\t\v\f\r\'';
+'\uAABB'  // 16-bit unicode
+'\xAF'   // 8-bit unicode
+// -----
+// concat with +
+let cc = "ben" + "Harki";
+// -----
+// other operators: <, >, <=, >=, ===, !==
+// methods: .slice(), .split(), .substring(), etc.
+// strings are immutable so the methods return new strings
+let ben = "Ben";
+ben.slice(0,1);
+// -----
+// can use [] to read a char, like arrays
+let mags = "Magdalene";
+console.log(mags[3]);
+// -----
+// see tagged template literals using tag functions in FUNCTION
 
 // OBJECTS
 // objects are of typee Object and are collections of 
@@ -180,10 +241,12 @@ console.log("length of concat:" + abad) // 12, but could be 6
 
 
 // EQUALITY
-// === and !== checks if their values are equal
+// === and !== checks if their values are equal or not-equal
 let xval = 1, yval = 3;
 console.log(xval === yval);   // false
 console.log(xval !== yval);   // true
+// -----
+// == considers null and undefined the same, while === says they are different
 
 // FUNCTION
 // functions can be created on the fly
@@ -218,6 +281,20 @@ points.dist = function() {
   return Math.sqrt(a*a + b*b);
 }
 console.log(`distance is ${points.dist()}`);
+// -----
+// you can pass template literals into tag functions by using
+//   functions names as a prefix to the `` string
+// these are called tagged template literals
+// this is when a function expression is followed by a template literal, and then 
+//   function is invoked
+// first arg is an array of substrings of the template literal substrings around each ${}
+// other args (which are not necessary) can be of any type, 
+//   and are the ${} interpolated values  
+// can return any type, so you can use strings to parse and return any data or object
+function MultStr(arrstrs, val1, val2) {
+  return `${val1} ${arrstrs[1][1]} ${val2} = ${val1 * val2}`; 
+}
+console.log(MultStr`${3} x ${4}`);
 
 // FUNCTIONAL PROGRAMMING
 // uses arrow functions, but can also use the function keyword version
@@ -328,7 +405,9 @@ SKIPPED
     123000000000n  
   3.2.6 Dates and Times
     Date class with timestamp
-STOPPED AT 3.3 Text
+  3.3.5 Pattern Matching
+    strings have methods that accept RegExp string args 
+STOPPED AT 3.6 Symbols
 */
 
 
