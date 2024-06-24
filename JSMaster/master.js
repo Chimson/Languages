@@ -1,6 +1,10 @@
 // execution starting point
 function Main() {
 
+// OPERATORS
+// Operators: %, +, -, *, **, /, ++, --, +=, ...
+// Boolean Operators: ===, !==, <, <=, >, >=, &&, ||, !
+
 // TYPES
 // primitive types are immutable
 // Number, String, Boolean are primitive
@@ -43,26 +47,46 @@ console.log("undef = " + undef);
 // -----
 // null and undefined have no methods or properties, and when trying to invoke 
 //   any raise a TypeError
-
-// OPERATORS
-// Operators: %, +, -, *, **, /, ++, --, +=, ...
-// Boolean Operators: ===, !==, <, <=, >, >=, &&, ||, !
+// -----
+// Number's toString() be given a value to display a different base
+console.log(Number(127).toString(16));   // to hexadecimal 7f
+// -----
+// Number also has toFixed(), toExponential(), toPrecision methods
+//   to control float formatting
+// Also has parseInt() and parseFloat() that both take strings
+//   and try to convert to a number 
+// -----
+// grab a value from a different module/object
+let pi = Math.PI;
+// -----
+// global object in Node.js contains globally defined identifiers available
+//   to a JS program
+console.log(globalThis);
 
 // LET and CONST
+// block scoped, so only visible in the block of code that 
+//   they are declared in
 // variables are declared with let and assigned with =
-// immutable values are named with const
-// some examples of the different types
-let x;
+// immutable variables are named with const
+// const requires initialization, let can be declared 
+// when a declaration is made outside of all blocks in a file then
+//   it is considered a global variable, whose scope is the file
+//   it is declared in
+// if it is in a <script> in HTML then it is visible in all scripts
+//   in the HTML file
+let x;   // declared but assigned undefined by default
 let y = 10;
-let z = 4.5, a = 5;   // Numbers can be floats or ints
 const x2 = 44; 
 let tbool = true;
-let fbool = false;
-let nval = null;
 let uval = undefined;
 // -----
-// grab a value from a different module
-let pi = Math.PI;
+// you cannot use the same var name with more than one let or const
+//   declaration in the same scope
+// you can in a nested scope, like in an if or loop, or in other braces
+let x4 = 100; {
+  let x4 = 101;
+}
+
 
 // VAR
 // TODO: Show these Examples
@@ -75,7 +99,6 @@ let pi = Math.PI;
 //   they may be see before defined, if initialization is deep in the function stack
 //   in this case the var is given an undefined value, until initialized
 var zz = "weird var";
-
 
 // STRING
 // immutable sequences of Unicode 16-bit chars
@@ -133,20 +156,29 @@ console.log(mags[3]);
 // -----
 // see tagged template literals using tag functions in FUNCTION
 
+
 // OBJECTS
-// objects are of typee Object and are collections of 
+// objects are of type Object and are unordered collections of 
 //   properties
 // properties have a name and value (value can be primitive)
 //    or another object
 // create an object on the fly and add properties on the fly
-// objects are name value pairs, can access with . or like a dict
+// objects are name value pairs, can access with . or like a dictionary with []
 // all objects have a default print string
 // initialize using initializer expression
-let book = {topic: "Javascript", edition:7}; 
-console.log(book.topic);
-console.log(book["topic"])   
+let book = {topic: "Javascript", edition: 7}; 
 book.author = "Ben Harki";
-console.log(book);         
+console.log(book.topic);
+console.log(book);
+book.author = "XXX";   // objects are mutable;
+console.log(book);
+// ------
+// can use [] to read/write properties
+let finn = {};
+finn['name'] = "Finn";
+console.log(finn.name);   // still can use .
+console.log(finn['name']);
+console.log(finn);     
 // -----
 // empty object
 let empty = {};
@@ -154,6 +186,23 @@ let empty = {};
 // use ? to conditionally access properties
 let maybe;
 console.log(maybe?.something);   // undefined
+// -----
+// Symbol is used to also define private properties for an object
+// can only access the property with [], not a dot 
+// Symbol() returns a unique Symbol value, to avoid property conflicts
+let person = {};
+let fname = Symbol("Private fname");
+person[fname] = "Ben";   // assign a value
+console.log(person[fname]); 
+console.log(person[Symbol("Private fname")]);  // undefined, since its unique from fname 
+// -----
+// Symbol.for is used for public properties
+// always returns the same value, based on the key
+let ben2 = {};
+let fname2 = Symbol.for("fname");
+ben2[fname2] = "Ben";
+console.log(ben2[fname2]);
+console.log(ben2[Symbol.for("fname")]);  // Ben, since it is public
 
 // ARRAYS 
 // arrays are untyped in that they can have elements of any type
@@ -179,8 +228,13 @@ console.log(arr);
 let spars = [1,,,4]; 
 // of size 2, since there is an optional trailing 
 let undefs = [,,];   
-// ----- 
+// empty array 
 let emptyarr = [];
+// -----
+// use Array.from() to deep copy arrays
+let ar = [0, 1, 2, 3, 4, 5];
+let arcopy = Array.from(ar);
+console.log(ar === arcopy);   // false, since they are seperate objs
 
 // MULTIDIMENSIONAL ARRAYS
 // using an initializer expression
@@ -240,13 +294,43 @@ console.log("length of concat:" + abad) // 12, but could be 6
 //   them and omitting the ; (see page 69)
 
 
-// EQUALITY
+// EQUALITY AND CONVERSION
+// === is strict equality
 // === and !== checks if their values are equal or not-equal
 let xval = 1, yval = 3;
 console.log(xval === yval);   // false
 console.log(xval !== yval);   // true
 // -----
 // == considers null and undefined the same, while === says they are different
+// -----
+// objects are reference types, so under === their 
+// references are compared not the values of their properties
+let o1 = {x:1, y:0};
+let o2 = {x:1, y:0};
+console.log(o1 === o2);  // false
+o2 = o1;
+console.log(o1 == o2); // true
+// -----
+// == returns true if one can can be converted to the other
+//   and they are the same value
+// the only exception is the implicit conversion to booleans
+//   of all objects
+console.log(0 == "0");   // true
+console.log(undefined == false);   // false even though this conversion does happen implicitly in if()
+// -----
+// all types will try to convert to another
+let val = 10 + "11 + 12";
+console.log(typeof(val));    // string
+// -----
+// explicit conversion of primitive types using Type function
+// do not use "new" like a constructor, this is a wrapper type
+//   leftover from old JS
+let pi2 = Number("3.14");
+console.log(typeof(pi2));   // number
+// -----
+// operators will perform implicit type conversions
+console.log(typeof(100 + ""));   // string
+console.log(typeof(+"100"));  // number 
 
 // FUNCTION
 // functions can be created on the fly
@@ -326,12 +410,30 @@ else {
 
 // LOOPS
 // like a for each loop
+// for of itertates over an iterable object
+// can also use const, where the local variable cannot change 
+//    within an iteration
 let larr = [1, 2, 3, 4, 5];
 let sum = 0;
 for (let val of larr) {
   sum += val;
 }
+sum = 0;
+for (const val of larr) {
+  sum += val;
+}
 console.log(sum);
+// -----
+// for in loops can be used to read/write properites in an object
+// does not accept . notation to read properties
+// will also skip private Symbols
+let fobj = {x:0, y:1, z:2};
+priv = Symbol('private');
+fobj[priv] = 3;
+for (let prop in fobj) {
+  // prop = 'XXX'; fobj[prop] = 'nothing yet';  // writes to the props
+  console.log(`${prop}: ${fobj[prop]}`);
+}
 // -----
 // for with indices
 // mutable
@@ -365,6 +467,8 @@ console.log(p.mysum());
 // you can define a standalone class in this file, see below
 let myint = new MyInt(10);
 console.log(myint);
+
+
 
 }   // end of Main() function
 
@@ -407,7 +511,9 @@ SKIPPED
     Date class with timestamp
   3.3.5 Pattern Matching
     strings have methods that accept RegExp string args 
-STOPPED AT 3.6 Symbols
+  3.9.3 Object to Primitive Conversions
+    includes how to convert from objects to primitives
+STOPPED AT 3.10.1 Declarations with Let and Const > Declarations and Types
 */
 
 
