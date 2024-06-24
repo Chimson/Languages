@@ -86,19 +86,77 @@ let uval = undefined;
 let x4 = 100; {
   let x4 = 101;
 }
+// -----
+// let variables are visible in further nested scopes,
+// let variable does not affect the same variable in its parent's scope
+// this is the same with var actually
+function f1() {
+  let nval1 = "Ben";
+  let nval2 = "Mags";
+  function f2() {
+    let nval2 = "Finn";  
+    console.log(nval1);  // Ben 
+    console.log(nval2);  // Finn
+  }  
+  f2();
+  console.log(nval2);   // Mags
+}
+// console.log(nval1); // not visible
+f1();
+// -----
+// an attempt to hoist like var, but it throws exception
+function nohoist() {
+  // console.log(hval);    // uncomment for hoist attempt, but ReferenceError
+  let hval = 100;   // replace with var and hval above is hoisted
+  console.log(hval);   // 100
+}
+nohoist();
 
 
 // VAR
-// TODO: Show these Examples
-// var declarations do not have block scope like let
-//   they are scoped to the body of the containing function, no matter how deep they are nested
-// vars outside of functions are global, and are implemented as properties to the globalThis object
+// you can have multiple declarations of same var names in the same scope, unlike let
+var wvar;
+var wvar;
+let wvar2;
+// let wvar2;    // throws a SyntaxError
+// -----
+// var declared in other scopes than functions
+//   will make the variable visible in containing scopes
+// this is not true for let
+let arr3 = [0, 1, 2, 3];
+for (var val of arr3) {
+  val = 10;
+}
+console.log(val);
+// -----
+// var outside of functions are global
+// they are implemented as properties to the globalThis object
 //   this is different from let and const
-// you can have multiple declarations of var, unlike let
-// var variables are "hoisted" up to the top enclosing function
-//   they may be see before defined, if initialization is deep in the function stack
-//   in this case the var is given an undefined value, until initialized
-var zz = "weird var";
+// If I try to read it with console.log() it doesn't print it
+//   since this is defined inside Main
+// In the node repl it does
+var globv = "global";
+console.log(Object.hasOwn(globalThis, globv));  // true
+// -----
+// var variables are "hoisted" up to top of current enclosing function
+//   they may be seen before defined, if initialization is deep in the function stack
+// var is given an undefined value, until initialized
+// hoisting can also occur in deeper nested non-function scopes
+function hoistdemo() {
+  console.log(hval);    // undefined, but visible bc of hoisting
+  var hval = 100;
+  console.log(hval);   // 100
+}
+console.log(hval);  // undefined, since hval is hoisted in below line
+var hval;    // if this line is not included the above line throws a ReferencerError
+hoistdemo();
+console.log(hval);  // still undefined, even though assignment in hoistdemo()
+// -----
+// variables declared without let, const, or var
+//   are global variables
+// bad idea in general, should use let, const, or var
+x = 3;
+console.log(globalThis);  // this does actually work unlike above, even in Main() function
 
 // STRING
 // immutable sequences of Unicode 16-bit chars
@@ -319,8 +377,8 @@ console.log(0 == "0");   // true
 console.log(undefined == false);   // false even though this conversion does happen implicitly in if()
 // -----
 // all types will try to convert to another
-let val = 10 + "11 + 12";
-console.log(typeof(val));    // string
+let val2 = 10 + "11 + 12";
+console.log(typeof(val2));    // string
 // -----
 // explicit conversion of primitive types using Type function
 // do not use "new" like a constructor, this is a wrapper type
@@ -513,9 +571,8 @@ SKIPPED
     strings have methods that accept RegExp string args 
   3.9.3 Object to Primitive Conversions
     includes how to convert from objects to primitives
-STOPPED AT 3.10.1 Declarations with Let and Const > Declarations and Types
+STOPPED AT 3.10.3 Destructuring Assignment
 */
-
 
 
 
