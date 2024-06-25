@@ -158,6 +158,39 @@ console.log(hval);  // still undefined, even though assignment in hoistdemo()
 x = 3;
 console.log(globalThis);  // this does actually work unlike above, even in Main() function
 
+// DESTRUCTURING ASSIGNMENT
+// values from within an array or other iterable object (like a string) 
+//   from the right are extracted to variables on the left
+// you can have extra vars on the left or values on the right
+// can use them to assign via an expression
+// can be used to easily return arrays from functions
+// Object.entries() returns an array of [key, value] property arrays
+// can be used in variable declarations in for loops
+// works with nested arrays and nested objects
+let [ax, ay, az] = [2, 4, 6];
+[ax, ay, az] = [ax + 1, az, ay];
+console.log(ax, ay, az);   // 3, 6, 4
+let obj2 = {x:1, y:2};
+console.log(Object.entries(obj2));   
+let [ox, oy] = Object.entries(obj2);   // extraction from an obj
+console.log(ox, oy);
+// -----
+// ... will collect the remaining values into the variable
+let [frst, ...rem] = [0, 1, 2, 3, 4, 5];
+console.log(frst, rem);  // 0 [1, 2, 3, 4, 5]
+// -----
+// extract straight out of an object
+let {xob, yob} = {x:1, y:2};
+// -----
+// you can use destructuring to make it easier to use members
+//   from another namespace
+// any variable from the left that does not exist in the module
+//   is assigned undefined
+// can use : to temporarily rename a member in a module
+const {sin, cos, tan: tangent} = Math;    
+console.log(sin(3.14));   // close to 0
+console.log(tangent(3.14));  // close to 0
+
 // STRING
 // immutable sequences of Unicode 16-bit chars
 // can use "", or '' for strings
@@ -224,14 +257,15 @@ console.log(mags[3]);
 // objects are name value pairs, can access with . or like a dictionary with []
 // all objects have a default print string
 // initialize using initializer expression
-let book = {topic: "Javascript", edition: 7}; 
+// Object literals can be nested
+let book = {topic: "Javascript", edition: 7};   // Object literal/initializer
 book.author = "Ben Harki";
 console.log(book.topic);
 console.log(book);
 book.author = "XXX";   // objects are mutable;
 console.log(book);
 // ------
-// can use [] to read/write properties
+// can use [expression] to read/write properties
 let finn = {};
 finn['name'] = "Finn";
 console.log(finn.name);   // still can use .
@@ -241,9 +275,21 @@ console.log(finn);
 // empty object
 let empty = {};
 // ------
-// use ? to conditionally access properties
-let maybe;
-console.log(maybe?.something);   // undefined
+// null and undefined do not have properties so if they
+//   are attempted access then a TypeError is thrown
+// you can use ? or ?. to avoid the error
+// if the value exists for the property, then it is returned
+// optional chaining can short circuit execution, avoiding an error
+//   when a property does not exist, and ? returns undefined,
+//   then any other properties are skipped and undefined is returned withour error
+let maybe = {x: null};
+console.log(maybe.x);   // null
+// console.log(maybe.x.val);  // throws a TypeError 
+console.log(maybe.x?.val);  // no error, but returns undefined
+console.log(maybe['y']);  // undefined
+// console.log(maybe['y']['z']);  // TypeError
+console.log(maybe['y']?.['z']);  // undefined
+console.log(maybe.x?.y.z.q.e);   // optional chaining
 // -----
 // Symbol is used to also define private properties for an object
 // can only access the property with [], not a dot 
@@ -269,7 +315,7 @@ console.log(ben2[Symbol.for("fname")]);  // Ben, since it is public
 // arrays can also be sparse
 // indexing, assignment, length property, push() 
 // TODO: use ... spread operator to place in elements of another array 
-let arr = [1.1, 2.2, 3.3, 4.4];   // array literal
+let arr = [1.1, 2.2, 3.3, 4.4];   // array literal (aka array initializer)
 let weird = ['a', 1, {'age':1}];   // different types, w/an object
 arr.push(5.5);
 console.log(arr.length)
@@ -322,10 +368,15 @@ function MYDOUBLEARR(vals) {
 // expressions can be evaluated to produce a value
 //   they do not alter program state
 // statements end in ; and alter the state
-// arithmetic, concat, propertie expressions
+// arithmetic, concat, property expressions
+// any literal is a primary expression 
+// JS keywords that are primary exp: true, false, null, this
+"H" + "arki"; 
+/regex/;   // regular expression encloded in / /
+// -----
+// expression involving an object
 obj1 = {x:1};
 obj1.x + 3;
-"H" + "arki"; 
 // -----
 // you can usually omit semicolons between two statements
 //   if they are on seperate lines
@@ -402,7 +453,7 @@ console.log(func2(3));
 // with const, and a param list in ()
 const cfunc = (x,y) => x + y;
 // -----
-// traditional function
+// traditional function, can be thought of as an expression
 function firstfunc(param) {
   return param;
 }
@@ -530,7 +581,7 @@ console.log(myint);
 
 }   // end of Main() function
 
-// standalone class
+// Test a standalone class
 class MyInt {
   constructor(i) {
     this.i = i;
@@ -571,7 +622,7 @@ SKIPPED
     strings have methods that accept RegExp string args 
   3.9.3 Object to Primitive Conversions
     includes how to convert from objects to primitives
-STOPPED AT 3.10.3 Destructuring Assignment
+STOPPED AT 4.5 Invocation Expressions
 */
 
 
