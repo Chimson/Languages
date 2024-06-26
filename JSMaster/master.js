@@ -17,7 +17,7 @@ console.log('x' in sobj);  // true
 // typeof returns the name of the class as a string
 let n = new Number(1);
 console.log(n instanceof Number);  // true, since it was created with a constructor
-nn = 1
+nn = 1;
 console.log(nn instanceof Number);  // false, no idea why
 console.log(typeof 1 == 'number');  // true
 // -----
@@ -27,13 +27,13 @@ undefx = 0;   // converts to boolean false in ||, but defined as 0 in ??
 console.log(undefx ?? defx);  // 0
 console.log(undefx || defx);  // 10 
 // -----
-// comma operator
+// comma operator creates expressions
 // left operand value is discarded and right
 //   operand value is returned
 // multiple assignment that returns 3
 //   generally should use let, var, or const for declaration
 //   see VAR
-i=1, j=2, k=3;    // returns 3
+ival=1, jval=2, kval=3;    // returns 3
 
 // TYPES
 // primitive types are immutable
@@ -92,6 +92,10 @@ let pi = Math.PI;
 // global object in Node.js contains globally defined identifiers available
 //   to a JS program
 console.log(globalThis);
+// -----
+// falsy values that will convert to false implicitly
+null, undefined, false, 0, -0,'', NaN
+
 
 // LET and CONST
 // block scoped, so only visible in the block of code that 
@@ -549,20 +553,59 @@ console.log(arr2);
 
 // CONTROL
 // IF
+// can take expressions that eval to something that can be implicitly converted to a boolean
+// should use {} to enclose body since else will always 
+//   be attached to the nearest if
+// don't forget about the difference between ==, != and ===, !== 
+//   see EQUALITY
 let x1 = 2;
-if (x1 % 2 == 0) {
+if (x1 % 2 === 0) {
   console.log("It is even");
 }
 else {
   console.log("It is not even");
 }
-// TODO: if(){} else if(){} else{} case
+// -----
+// if if is given a "falsy value", or an expression that evals
+//   to one, then execution proceeds to the false branch
+// see Types for "falsy values" 
+// literally has to be defined undefined (declared) for next to work
+if (0) {;} else {console.log("false branch");}
+let undef2;   // without this line a ReferenceError is thrown
+if (undef2) {;} else {undef2 = "now its defined";}
+console.log(undef2);
+// -----
+// simple if, else if
+let i = 2;
+if(i===0){;} else if(i===1) {;} else{console.log("you found it");} 
+// -----
+// switch is a better version of if, else if
+// It will not revaluate the condition expression in each case like if
+// the condition and the cases can be described by expressions
+// comparison of their evaluation uses ===
+// default is optional, if not there and other cases do not match
+//   then nothing happens
+// without break, execution can fall through the cases, when
+//   the expression evals to the same value
+let nval3 = 12;
+switch(nval3 % 2) {   // this evals to 0
+  case nval3 % 4:
+    console.log(`${nval3} is divisible by 4`); 
+  case nval3 % 6:
+    console.log(`${nval3} is divisible by 6`);
+    break;
+  default:
+    console.log(`${nval3} is not divisible by them`);
+    break;
+} 
 
 // LOOPS
 // like a for each loop
 // for of itertates over an iterable object
 // can also use const, where the local variable cannot change 
 //    within an iteration
+// for's initialize, test, increment can all be expressions 
+// can also use the empty statement ;, for example for(;;) is an infinite loop
 let larr = [1, 2, 3, 4, 5];
 let sum = 0;
 for (let val of larr) {
@@ -573,6 +616,19 @@ for (const val of larr) {
   sum += val;
 }
 console.log(sum);
+// -----
+// for of loops also work with Object.keys(obj)
+//    Object.values(obj) and Object.entries(obj), all return arrays
+// [key, val] is destructuring, not an array, even though
+//    Object.entries returns an array of [key, val] arrays
+//    see DESTRUCTURING ASSIGNMENT
+let forobj = {x:1, y:2, z:3};
+for (let [key, val] of Object.entries(forobj)) {
+  console.log(`[${key}, ${val}]`);
+}
+// ----
+// TODO: Map and Set have iterators
+//   Map iterator returns a key value pair, like Object.entries() for loop example
 // -----
 // for in loops can be used to read/write properites in an object
 // does not accept . notation to read properties
@@ -592,13 +648,35 @@ for (i=0; i < arr2.length; i++) {
 }
 console.log(larr);
 // -----
-// common use of comma operator in a for loop
+// common use of comma expression in a for loop
 for(let i=0,j=10; i < j; i++,j--) {
     console.log(i+j);
 }
 // -----
-// while() {}
+// for with an empty statement
+for (let i = 0; i < 3; console.log(i), ++i) ;
+// -----
+// while condition can be an expression that evals
+//   to a boolean, or can be implicitly converted to one 
+// comma expressions return the right operand 
+//   so when it is flipped, it is an infinite loop
+let count = -1;
+while (++count, count < 10) {
+  console.log(count);
+}
+// -----
+// do while will guarantess the body executes
+//   at least once
+// checks the expression at the end of each iteration
+let count2 = 0;
+do {
+  console.log(++count2);   
+}
+while(count2 < 1);
+// -----
 // SEE FUNCTIONAL PROGRAMMING for foreach()
+// TODO: for has an "await" of version for asynchronous
+//   iterators, see page 220 
 
 // CLASS
 // create a class
@@ -668,23 +746,15 @@ SKIPPED
     strings have methods that accept RegExp string args 
   3.9.3 Object to Primitive Conversions
     includes how to convert from objects to primitives
-  4.7 Operator Overview
-    looked at briefly: all the normal order of operators evaled in expressions
-  4.8 Arithmetic Expressions
-    briefly
-  4.9 Relational Expressions
-    briefly
   4.10 Logical Expressions
     all the rules for when ||, &&, handle "truthy" or "falsy" values
   4.11 Assignment Expressions
     +=, etc,
   4.12 Evaluation Expressions
     eval("") like in Python, but could be a security issue
-  4.13 Miscelanious Operators
+  4.13 Miscellaneous Operators
     typeof, delete, await, void, comma
-    briefly
-
-STOPPED AT 5 Statements
+STOPPED AT 5.4.5 for/in
 */
 
 
