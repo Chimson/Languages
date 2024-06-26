@@ -3,14 +3,44 @@ function Main() {
 
 // OPERATORS
 // Operators: %, +, -, *, **, /, ++, --, +=, ...
-// Boolean Operators: ===, !==, <, <=, >, >=, &&, ||, !
+// Boolean Operators: ===, !==, ==, !=, <, <=, >, >=, &&, ||, !
+// Keyword Operators: delete, typeof, void, instanceof, in
+//   ??, ?:
+// Bitwise Operators: ~, &, ^, |, <<, >>, >>>, &=, ...
+// ----
+// in checks if properties exist, or if its an index of a defined element in an array
+let sobj = {x:1};
+console.log('x' in sobj);  // true
+// -----
+// instanceof is more particular
+// objects need to be checked against classes with constructor
+// typeof returns the name of the class as a string
+let n = new Number(1);
+console.log(n instanceof Number);  // true, since it was created with a constructor
+nn = 1
+console.log(nn instanceof Number);  // false, no idea why
+console.log(typeof 1 == 'number');  // true
+// -----
+// ?? evaluates to the first defined variable's value
+defx = 10;
+undefx = 0;   // converts to boolean false in ||, but defined as 0 in ??
+console.log(undefx ?? defx);  // 0
+console.log(undefx || defx);  // 10 
+// -----
+// comma operator
+// left operand value is discarded and right
+//   operand value is returned
+// multiple assignment that returns 3
+//   generally should use let, var, or const for declaration
+//   see VAR
+i=1, j=2, k=3;    // returns 3
 
 // TYPES
 // primitive types are immutable
 // Number, String, Boolean are primitive
 // undefined and null are primitive
 // Symbol is a primitive type
-// undefines and null do not have their own methods
+// undefined and null do not have their own methods
 //   but the other primitive types do
 // typeof() returns the type
 console.log(typeof(null));   // object
@@ -153,7 +183,7 @@ hoistdemo();
 console.log(hval);  // still undefined, even though assignment in hoistdemo()
 // -----
 // variables declared without let, const, or var
-//   are global variables
+//   are global variables, even if defined in nested scopes/functions
 // bad idea in general, should use let, const, or var
 x = 3;
 console.log(globalThis);  // this does actually work unlike above, even in Main() function
@@ -488,6 +518,17 @@ function MultStr(arrstrs, val1, val2) {
   return `${val1} ${arrstrs[1][1]} ${val2} = ${val1 * val2}`; 
 }
 console.log(MultStr`${3} x ${4}`);
+// -----
+// conditionally invoke a function or method using ?.()
+// when the function variable name is null or undefined
+// can still throw a type error if the var is defined, but not a function
+// also short-circuiting so any expression arg would not compute
+//   see OBJECT
+let nofunc = undefined;
+// nofunc();   // Throws a TypeError
+nofunc?.();   // no exception and evals to undefined
+
+
 
 // FUNCTIONAL PROGRAMMING
 // uses arrow functions, but can also use the function keyword version
@@ -550,6 +591,11 @@ for (i=0; i < arr2.length; i++) {
   larr[i] += 10;
 }
 console.log(larr);
+// -----
+// common use of comma operator in a for loop
+for(let i=0,j=10; i < j; i++,j--) {
+    console.log(i+j);
+}
 // -----
 // while() {}
 // SEE FUNCTIONAL PROGRAMMING for foreach()
@@ -622,7 +668,23 @@ SKIPPED
     strings have methods that accept RegExp string args 
   3.9.3 Object to Primitive Conversions
     includes how to convert from objects to primitives
-STOPPED AT 4.5 Invocation Expressions
+  4.7 Operator Overview
+    looked at briefly: all the normal order of operators evaled in expressions
+  4.8 Arithmetic Expressions
+    briefly
+  4.9 Relational Expressions
+    briefly
+  4.10 Logical Expressions
+    all the rules for when ||, &&, handle "truthy" or "falsy" values
+  4.11 Assignment Expressions
+    +=, etc,
+  4.12 Evaluation Expressions
+    eval("") like in Python, but could be a security issue
+  4.13 Miscelanious Operators
+    typeof, delete, await, void, comma
+    briefly
+
+STOPPED AT 5 Statements
 */
 
 
