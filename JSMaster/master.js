@@ -435,7 +435,29 @@ console.log("length of concat:" + abad) // 12, but could be 6
 // -----
 // TODO: ++ and -- postfix and => have exceptions when using 
 //   them and omitting the ; (see page 69)
-
+// -----
+// label statements can be used in statements
+//   that have bodies, like loops or conditionals
+// break and continue are the only JS statements
+//   that use statement labels
+// statement labels are only used within the statement
+//   they are defined
+// labeled statements may themselves be labeled
+// they have their own rules for namespace, but basically
+//   can conflict in names, unless neither is nested in the other
+// labeled breaks are useful when you want to escape an entire statement
+//   that contains more than one loop and not just the current loop
+// labeled breaks do not travel across function boundaries
+let ix = 0;
+ploop : while(++ix < 10) {
+  if (10 % ix == 3) {  
+    console.log(ix);    // 7
+    break ploop;
+  }
+  else {
+    continue ploop;
+  }
+}
 
 // EQUALITY AND CONVERSION
 // === is strict equality
@@ -478,6 +500,8 @@ console.log(typeof(+"100"));  // number
 // FUNCTION
 // functions can be created on the fly
 // arrow functions are lambda functions
+// return will return the evaluation of a given expression
+// without a return value a function will return undefined
 console.log(firstfunc(3.14));
 let myfunc = function(x) {return x*x;}
 console.log(myfunc(2));
@@ -531,7 +555,8 @@ console.log(MultStr`${3} x ${4}`);
 let nofunc = undefined;
 // nofunc();   // Throws a TypeError
 nofunc?.();   // no exception and evals to undefined
-
+// -----
+// TODO: see yield to create generator functions
 
 
 // FUNCTIONAL PROGRAMMING
@@ -606,6 +631,7 @@ switch(nval3 % 2) {   // this evals to 0
 //    within an iteration
 // for's initialize, test, increment can all be expressions 
 // can also use the empty statement ;, for example for(;;) is an infinite loop
+// break exits the loop and continue skips the next iteration
 let larr = [1, 2, 3, 4, 5];
 let sum = 0;
 for (let val of larr) {
@@ -633,7 +659,10 @@ for (let [key, val] of Object.entries(forobj)) {
 // for in loops can be used to read/write properites in an object
 // does not accept . notation to read properties
 // will also skip private Symbols
-let fobj = {x:0, y:1, z:2};
+// there are other properties that are not enumerable with a for
+//   in, like toString, but those you create are enumerable by default
+// if fobj is undefined the loop is not executed
+let fobj = {x:0, y:undefined, z:2};
 priv = Symbol('private');
 fobj[priv] = 3;
 for (let prop in fobj) {
@@ -656,6 +685,21 @@ for(let i=0,j=10; i < j; i++,j--) {
 // for with an empty statement
 for (let i = 0; i < 3; console.log(i), ++i) ;
 // -----
+// for loops can accept expressions that eval to something suitable for the 
+//   the local variable
+// copies the property names of the obj to the array
+let o = {x:1, y:2, z:3};
+let a = [];
+let k = 0;
+for (a[k++] in o);
+console.log(a);   // [x, y, z];
+// -----
+// for in loops applied to arrays with assign
+//   the indices to the local variable
+for (i in [10, 20, 30]) {  
+  console.log(i);   // 0, 1, 2
+} 
+// -----
 // while condition can be an expression that evals
 //   to a boolean, or can be implicitly converted to one 
 // comma expressions return the right operand 
@@ -665,7 +709,7 @@ while (++count, count < 10) {
   console.log(count);
 }
 // -----
-// do while will guarantess the body executes
+// do while will guarantee the body executes
 //   at least once
 // checks the expression at the end of each iteration
 let count2 = 0;
@@ -754,7 +798,7 @@ SKIPPED
     eval("") like in Python, but could be a security issue
   4.13 Miscellaneous Operators
     typeof, delete, await, void, comma
-STOPPED AT 5.4.5 for/in
+STOPPED AT 5.5.6 throw
 */
 
 
