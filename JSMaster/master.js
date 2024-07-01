@@ -745,7 +745,18 @@ console.log(p.mysum());
 let myint = new MyInt(10);
 console.log(myint);
 
-
+// EXCEPTIONS
+// throw can accept a value of any type like a string or a number
+// throw can also except an expression that evals to a type
+// throw "an issue";
+// -----
+// using the Error class
+throw Error("an error has occurred")
+// -----
+// try-catch-finally
+// when code throws an error in a try block
+//    it is handled in the catch block
+// finally block executes regardless if a an error is present
 
 }   // end of Main() function
 
