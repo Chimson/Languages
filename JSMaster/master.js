@@ -751,12 +751,10 @@ console.log(myint);
 // throw "an issue";
 // -----
 // using the Error class
-throw Error("an error has occurred")
+// throw Error("an error has occurred")
 // -----
-// try-catch-finally
-// when code throws an error in a try block
-//    it is handled in the catch block
-// finally block executes regardless if a an error is present
+
+
 
 }   // end of Main() function
 
@@ -809,7 +807,7 @@ SKIPPED
     eval("") like in Python, but could be a security issue
   4.13 Miscellaneous Operators
     typeof, delete, await, void, comma
-STOPPED AT 5.5.6 throw
+STOPPED AT 5.5.7 try/catch/finally
 */
 
 
