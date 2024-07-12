@@ -149,6 +149,7 @@ nohoist();
 
 // VAR
 // you can have multiple declarations of same var names in the same scope, unlike let
+// there is really no reason to use var anymore, since let is available
 var wvar;
 var wvar;
 let wvar2;
@@ -283,15 +284,34 @@ console.log(mags[3]);
 
 
 // OBJECTS
+// mutable
 // objects are of type Object and are unordered collections of 
 //   properties
-// properties have a name and value (value can be primitive)
-//    or another object
-// create an object on the fly and add properties on the fly
+// properties have a name (as a string) and value (value can be primitive)
+//    or another object, or some expression that evals to either
+//    each value to a propeties is evaled each time an object literal is evaled
 // objects are name value pairs, can access with . or like a dictionary with []
 // all objects have a default print string
-// initialize using initializer expression
+// all objects inherit the prototype object
+//   non-inherited properties are called "own properties"
+// all own properties have have these attributes: 
+//   writable (set the value of the propety), enumerable (returned by a for-in loop), 
+//   configurable (whether the property can be deleted and its attributes altered)
+// some built in object's properties may not have some of these attributes disabled
+// no object can have two properties of the same name
+//   functions and attrs cannot have the same name, since they are both propeties
+// -----
+// Objects are mutable and can be modfied through their reference
+// defined using the string key, access using the .
+// object referenced by obj is modified through xobj reference
+let obj = {"x":0, "y":1};
+let xobj = obj;   // x is a ref to the same object obj refers to
+xobj.x = 10; 
+console.log(obj); // {x:10, y:1}  
+// -----
+// initialize using initializer expression, like an object literal
 // Object literals can be nested
+// create an object on the fly and add properties on the fly
 let book = {topic: "Javascript", edition: 7};   // Object literal/initializer
 book.author = "Ben Harki";
 console.log(book.topic);
@@ -341,6 +361,8 @@ let fname2 = Symbol.for("fname");
 ben2[fname2] = "Ben";
 console.log(ben2[fname2]);
 console.log(ben2[Symbol.for("fname")]);  // Ben, since it is public
+// -----
+// objects can be created with "new" and its class constructor, see class
 
 // ARRAYS 
 // arrays are untyped in that they can have elements of any type
@@ -498,6 +520,11 @@ console.log(typeof(100 + ""));   // string
 console.log(typeof(+"100"));  // number 
 
 // FUNCTION
+// -----
+// function declarations are hoisted in that they are visible
+//   at the top of the scope in which they are defined in, 
+//   even before they are called
+// -----
 // functions can be created on the fly
 // arrow functions are lambda functions
 // return will return the evaluation of a given expression
@@ -557,6 +584,7 @@ let nofunc = undefined;
 nofunc?.();   // no exception and evals to undefined
 // -----
 // TODO: see yield to create generator functions
+
 
 
 // FUNCTIONAL PROGRAMMING
@@ -748,12 +776,35 @@ console.log(myint);
 // EXCEPTIONS
 // throw can accept a value of any type like a string or a number
 // throw can also except an expression that evals to a type
-// throw "an issue";
+// throw "an issue";   // throwing a string message
 // -----
 // using the Error class
 // throw Error("an error has occurred")
 // -----
-
+// try-catch-finally
+// can use a try-finally without a catch
+// when code throws an error in a try block
+//    it is handled in the catch block
+// catch can accept an argument, but can be called without it
+// finally block executes regardless if a an error is present in the try
+//    used to clean up anything when an error triggers in the try block
+//    will also execute just before a jump from a return, break, etc. in try 
+let den = 0;
+let num = 100;
+let result = undefined;
+try {
+  if (den === 0) {
+    throw new Error("You divided by 0!");
+  }
+  result = num/den;
+}
+catch(e) {
+  console.log(e);   // print the error
+}
+finally {
+  result = 0;
+  console.log(result);
+}
 
 
 }   // end of Main() function
@@ -765,7 +816,9 @@ class MyInt {
   }
 }
 
-// EXPORT AND IMPORT
+// EXPORT, IMPORT, MODULE
+// a module is a JS file with its own global namespace
+//   independent of other modules
 // Node.js defines a global exports object that is used to 
 //   export classes, functions, properties, etc to another file
 // This is not useable in AppsScript Workspace, so it needs commented there
@@ -773,11 +826,11 @@ class MyInt {
 exports.Main = Main;
 exports.MyInt = MyInt;
 // -----
-// to import this file in Node.js use require()
-// this is code in test.js, that imports this file
+// to import this file in Node.js you can use require()
+// this is code in some other file (runmaster.js), that imports this file master.js
 // const master = require('./master.js')
 // master.Main()
-
+// -----
 
 
 /*
@@ -807,7 +860,18 @@ SKIPPED
     eval("") like in Python, but could be a security issue
   4.13 Miscellaneous Operators
     typeof, delete, await, void, comma
-STOPPED AT 5.5.7 try/catch/finally
+  5.6.1 with
+    with is depreciated, but it allows you to create variables from
+      properties of an object
+  5.6.2 debugger
+    debugger keyword is available when running a debugger
+  5.6.3 use strict
+    forces a js script function or file to run in strict mode
+    strict mode restricts the usage of JS language in specific ways
+  5.7.4 import and export
+    I couldn't get these keywords to work in Node.js, but I used
+      the exports global object
+STOPPED AT 6.2.3 Prototypes
 */
 
 
