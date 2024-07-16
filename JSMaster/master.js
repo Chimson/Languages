@@ -291,9 +291,13 @@ console.log(mags[3]);
 //    or another object, or some expression that evals to either
 //    each value to a propeties is evaled each time an object literal is evaled
 // objects are name value pairs, can access with . or like a dictionary with []
+//    [] makes objects like an associative array (hash, map or dictionary) 
 // all objects have a default print string
-// all objects inherit the prototype object
+// all objects inherit the prototype object, Object.prototype
 //   non-inherited properties are called "own properties"
+// Objects created with "new" and {} also inherit its specific
+//    classe's prototype property, seperate from Object.prototype
+//    this system is called the prototype chain
 // all own properties have have these attributes: 
 //   writable (set the value of the propety), enumerable (returned by a for-in loop), 
 //   configurable (whether the property can be deleted and its attributes altered)
@@ -311,7 +315,8 @@ console.log(obj); // {x:10, y:1}
 // -----
 // initialize using initializer expression, like an object literal
 // Object literals can be nested
-// create an object on the fly and add properties on the fly
+// create an object on the fly and add properties on the fly (loose typing)
+// lhs can be an expression who evals to an aboj reference
 let book = {topic: "Javascript", edition: 7};   // Object literal/initializer
 book.author = "Ben Harki";
 console.log(book.topic);
@@ -320,6 +325,9 @@ book.author = "XXX";   // objects are mutable;
 console.log(book);
 // ------
 // can use [expression] to read/write properties
+//   expression in brackets must eval to a string or a Symbol ref
+// allows for dynamic creation of objects
+// lhs can be an expression who evals to an obj referencex
 let finn = {};
 finn['name'] = "Finn";
 console.log(finn.name);   // still can use .
@@ -363,6 +371,8 @@ console.log(ben2[fname2]);
 console.log(ben2[Symbol.for("fname")]);  // Ben, since it is public
 // -----
 // objects can be created with "new" and its class constructor, see class
+// -----
+// can use Object.create()
 
 // ARRAYS 
 // arrays are untyped in that they can have elements of any type
@@ -728,6 +738,8 @@ for (i in [10, 20, 30]) {
   console.log(i);   // 0, 1, 2
 } 
 // -----
+
+// -----
 // while condition can be an expression that evals
 //   to a boolean, or can be implicitly converted to one 
 // comma expressions return the right operand 
@@ -871,7 +883,7 @@ SKIPPED
   5.7.4 import and export
     I couldn't get these keywords to work in Node.js, but I used
       the exports global object
-STOPPED AT 6.2.3 Prototypes
+STOPPED AT 6.3.2 Inheritance
 */
 
 
