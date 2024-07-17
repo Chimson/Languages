@@ -280,7 +280,17 @@ ben.slice(0,1);
 let mags = "Magdalene";
 console.log(mags[3]);
 // -----
+// console.log() with a template string will by default use toString() given an object
+//   this defaults to [object Object]
+// you can use JSON.stringify() for the pretty printing version
+//   prints a string that looks like an obj literal
+let sobj1 = {'x':1, 'y':2};
+console.log(sobj1);   //  { x: 1, y: 2 }
+console.log(`${sobj1}`);   // [object Object]
+console.log(JSON.stringify(sobj1));  //  {"x":1,"y":2}
+// -----
 // see tagged template literals using tag functions in FUNCTION
+
 
 
 // OBJECTS
@@ -370,9 +380,19 @@ ben2[fname2] = "Ben";
 console.log(ben2[fname2]);
 console.log(ben2[Symbol.for("fname")]);  // Ben, since it is public
 // -----
-// objects can be created with "new" and its class constructor, see class
+// Object Inheritance
+// Object.create() allows you to create a new object
+//   from another class prototype (like using "new") or object (unlike "new")
+// the resulting object inherits from the object or prototype
+let unitcircle = {r: 1}; 
+let c = Object.create(unitcircle);
+c.x = 1; c.y = 1; 
+console.log(`c.r = ${c.r}`);  // 1
+c.r = 2;  // overrides the inherited propertie, unitcircle is unchanged
+console.log(`c.r = ${c.r}`);  // 2
 // -----
-// can use Object.create()
+// objects can be created with "new" and its class constructor, see class
+
 
 // ARRAYS 
 // arrays are untyped in that they can have elements of any type
@@ -883,7 +903,7 @@ SKIPPED
   5.7.4 import and export
     I couldn't get these keywords to work in Node.js, but I used
       the exports global object
-STOPPED AT 6.3.2 Inheritance
+STOPPED AT 6.3.3 Inheritance
 */
 
 
