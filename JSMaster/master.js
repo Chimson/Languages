@@ -9,6 +9,7 @@ function Main() {
 // Bitwise Operators: ~, &, ^, |, <<, >>, >>>, &=, ...
 // ----
 // in checks if properties exist, or if its an index of a defined element in an array
+//   will return true, even if the property is set to undefined
 let sobj = {x:1};
 console.log('x' in sobj);  // true
 // -----
@@ -333,6 +334,7 @@ console.log(book.topic);
 console.log(book);
 book.author = "XXX";   // objects are mutable;
 console.log(book);
+console.log(book.nope);   // undefined
 // ------
 // can use [expression] to read/write properties
 //   expression in brackets must eval to a string or a Symbol ref
@@ -391,8 +393,48 @@ console.log(`c.r = ${c.r}`);  // 1
 c.r = 2;  // overrides the inherited propertie, unitcircle is unchanged
 console.log(`c.r = ${c.r}`);  // 2
 // -----
+// JSON, JavaScriptObjectNotation is built in to the language
+// JSON.stringify() takes an object and returns its JSON string 
+//   only serializes "own properties"
+// JSON.parse() takes a string and returns the object
+let jobj = {'a':0, 'b':1, 'person':{'first': 'Ben', 'last': 'Harki'}};
+console.log(typeof(jobj));   // object (from a literal)
+let strobj = JSON.stringify(jobj);
+console.log(typeof(strobj));  // string
+let jobj2 = JSON.parse(strobj);
+console.log(typeof(jobj2));   // object
+// -----
+// toString() returns '[object Object]' by default
+// quick way to override toString()
+let obj4 = {'x': 0};
+console.log(obj4.toString());  // [object Object]
+let obj3 = {'x': 0, toString: function() {return `x: ${this.x}`}};  // returns overide
+console.log(obj3);
+// -----
+// can override toString() automatically with JSON
+// can override toJSON(), that is called by JSON.stringify()
+// using the obj in a template string will return toString()
+//   now it replaces [object Object] with its JSON
+let jobj3 = {'a':0, 'b':1, 'person':{'first': 'Ben', 'last': 'Harki'}};
+jobj3.toJSON = function() {return `a: ${this.a}, b: ${this.b}, person: ${this.person.last}`}; 
+jobj3.toString = function() {return JSON.stringify(jobj3)};   // or toJSON()
+console.log(`${jobj3}`);
+// -----
+// define a method quickly without the function keyword
+let nofuncc = {
+  'a': 0, 
+  'b':1,
+  mymeth() {return "hi";}
+};
+console.log(nofuncc.mymeth());
+// -----
 // objects can be created with "new" and its class constructor, see class
-
+// delete operator removes properties from an object
+// hasOwnProperty() method can determine if a property
+//   is an "own property" or something inherited from a prototype
+// propertyIsEnumerable(), checks if it is an own property and is enumerable
+// you can use Symbols as method names, but need to call it using the 
+//   property array notation
 
 // ARRAYS 
 // arrays are untyped in that they can have elements of any type
@@ -715,6 +757,7 @@ for (let [key, val] of Object.entries(forobj)) {
 //   Map iterator returns a key value pair, like Object.entries() for loop example
 // -----
 // for in loops can be used to read/write properites in an object
+//   they can be their "own" or inherited properties
 // does not accept . notation to read properties
 // will also skip private Symbols
 // there are other properties that are not enumerable with a for
@@ -903,7 +946,26 @@ SKIPPED
   5.7.4 import and export
     I couldn't get these keywords to work in Node.js, but I used
       the exports global object
-STOPPED AT 6.3.3 Inheritance
+  6.4 Deleting Properties
+    the delete operator removes own properties, does not destroy the value
+  6.6 Enumerating Properties
+    difference between properties that are enumerable and when own or
+    inherited enumerable properties are returned from for-in loop
+  6.6.1 Property Inheritance Order
+    order at which they iterate through in for-in or JSON.stringify
+  6.7 Extending Objects
+    Object.assign() allows the copying of one object's properties to 
+      another
+  6.9.2 The toLocaleString() Method
+    returns a class specific toString() method
+  6.9.3 The valueOf() Method
+    object.valueOf() returns the primitive value conversion (other than
+      a string) of the object, can be overridden
+  6.10 Extended Object Literal Syntax
+    the {x:0, y:1} object literal syntax has more rules
+    I did get some of this
+STOPPED AT 6.10.6 Property Getters and Setters
+
 */
 
 
