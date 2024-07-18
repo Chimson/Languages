@@ -963,7 +963,7 @@ SKIPPED
       a string) of the object, can be overridden
   6.10 Extended Object Literal Syntax
     the {x:0, y:1} object literal syntax has more rules
-    I did get some of this
+    I did get some of this, like the get and set properties of object
 STOPPED AT 6.10.6 Property Getters and Setters
 
 */
