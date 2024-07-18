@@ -428,6 +428,30 @@ let nofuncc = {
 };
 console.log(nofuncc.mymeth());
 // -----
+// you can define get and set methods for a property 
+//   in an object, called accessor methods, which can be inherited
+// get methods are called when you want to read the property
+// set methods are called to write to the property
+// you can write them with or without a backing internal
+//   data property
+// backing data property could be public or private
+//   _ is a hint that the property is private, but it is not enforced
+// can choose to only read or write by removing one of them
+let accobj = {
+  xint: 0,   // like public, read/wrrie
+  get x() {return this.xint;},
+  set x(val) {this.xint = val;},
+  _ypriv: 1,
+  get y() {return this._ypriv;},
+  set y(val) {this._ypriv = val;}
+};
+accobj.x = 10;
+console.log(accobj.x);
+console.log(accobj.xint);   // public, but should be accessed through x
+accobj.y = 20;
+console.log(accobj.y);
+console.log(accobj._ypriv); // still can see it
+// -----
 // objects can be created with "new" and its class constructor, see class
 // delete operator removes properties from an object
 // hasOwnProperty() method can determine if a property
@@ -442,12 +466,25 @@ console.log(nofuncc.mymeth());
 // arrays are dynamic, and can grow or shrink as needed
 // arrays can also be sparse
 // indexing, assignment, length property, push() 
+// can use an expression to define a value in an array
+//   expression can eval to a string index value
 // TODO: use ... spread operator to place in elements of another array 
+// can create arrays with Array constructor
 let arr = [1.1, 2.2, 3.3, 4.4];   // array literal (aka array initializer)
 let weird = ['a', 1, {'age':1}];   // different types, w/an object
 arr.push(5.5);
-console.log(arr.length)
+console.log(arr.length);
 console.log(arr[0]);
+// -----
+// you can create an array with Array constructor 
+// can also use Array.of() to ensure that the arg/args
+//   are elements you want to place in an Array
+let arrc0 = new Array(10);   // Array of Length 10, of undefined
+let arrc1 = new Array(0, 1, 2);  // [0, 1, 2]
+let arrc2 = Array.of(1);  // [1]
+let arrc3 = Array.of(0, 1, 2) // [0, 1, 2]
+console.log(arrc0, arrc1, arrc2, arrc3);
+console.log(arrc0[0]);
 // -----
 // assign to an element by assignment
 arr[1] = 5.5;
@@ -464,9 +501,26 @@ let undefs = [,,];
 let emptyarr = [];
 // -----
 // use Array.from() to deep copy arrays
+// can also give Array.from() some iterable
+// can also give Array.from() a function, that is applied to each element
+//   as the array is being created, like map()
 let ar = [0, 1, 2, 3, 4, 5];
 let arcopy = Array.from(ar);
 console.log(ar === arcopy);   // false, since they are seperate objs
+let arc = [0, 1, 2, 3];
+let ar2 = Array.from(arc, (x) => x**2);
+console.log(ar2);  // [0, 1, 4, 9]
+// -----
+// arrays are like objects in that you can add properties
+// any property that is named by a non-neg integer is 
+//   an index
+let warr = [0];
+warr['prop'] = '2';
+console.log(warr);  // [0, prop: '2']
+console.log(warr.length);  // 1, since there is only one element tied to an index
+warr[-2] = 10;  // creates '-2' as a property
+warr['3'] = 14;  // sets the 4th element to 14, with unset assigned undefined
+console.log(warr);  
 
 // MULTIDIMENSIONAL ARRAYS
 // using an initializer expression
@@ -656,8 +710,6 @@ let nofunc = undefined;
 nofunc?.();   // no exception and evals to undefined
 // -----
 // TODO: see yield to create generator functions
-
-
 
 // FUNCTIONAL PROGRAMMING
 // uses arrow functions, but can also use the function keyword version
@@ -962,9 +1014,18 @@ SKIPPED
     object.valueOf() returns the primitive value conversion (other than
       a string) of the object, can be overridden
   6.10 Extended Object Literal Syntax
-    the {x:0, y:1} object literal syntax has more rules
     I did get some of this, like the get and set properties of object
-STOPPED AT 6.10.6 Property Getters and Setters
+    simple way to add properties, saved to variables to objects (shorthand properties)
+    can use [expression], to define a property in an object, where expression
+      can dynamically return a string to set the prop name
+    can also use symbols, saved to a ref, as properties and the [symbolref]
+      syntax
+    spread operator ... in an object literal to spread an object's properties
+      in the creation of another object
+  7.1.2 Array Spread Operator
+    place elements from one array into another using ..., creates shallow copy
+    can apply ... to any iterable object, like a string
+STOPPED AT 7.3 Sparse Arrays
 
 */
 
