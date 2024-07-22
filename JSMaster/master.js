@@ -468,7 +468,9 @@ console.log(accobj._ypriv); // still can see it
 // indexing, assignment, length property, push() 
 // can use an expression to define a value in an array
 //   expression can eval to a string index value
-// TODO: use ... spread operator to place in elements of another array 
+// TODO: use ... spread operator to place in elements of another array or iterable like a string
+// TODO: use the delete operator, to make an element of the array undefined
+// TODO: use splice() to insert, delete, or replace elements, that changes the length
 // can create arrays with Array constructor
 let arr = [1.1, 2.2, 3.3, 4.4];   // array literal (aka array initializer)
 let weird = ['a', 1, {'age':1}];   // different types, w/an object
@@ -479,10 +481,12 @@ console.log(arr[0]);
 // you can create an array with Array constructor 
 // can also use Array.of() to ensure that the arg/args
 //   are elements you want to place in an Array
+// in operator checks if the element is in the array
 let arrc0 = new Array(10);   // Array of Length 10, of undefined
 let arrc1 = new Array(0, 1, 2);  // [0, 1, 2]
 let arrc2 = Array.of(1);  // [1]
 let arrc3 = Array.of(0, 1, 2) // [0, 1, 2]
+console.log(1 in arrc3);  // checks if the index is defined as something
 console.log(arrc0, arrc1, arrc2, arrc3);
 console.log(arrc0[0]);
 // -----
@@ -494,11 +498,26 @@ arr[5] = 6.6;
 console.log(arr);
 // -----
 // sparse array where the missing elements are undefined
-let spars = [1,,,4]; 
-// of size 2, since there is an optional trailing 
-let undefs = [,,];   
+// commas can make sparse arrays, of size 2, since there is an optional trailing 
 // empty array 
+// can add elements to the array at any index, the rest are undefined
+let spars = [1,,,4]; 
+let undefs = [,,];   
 let emptyarr = [];
+emptyarr[3] = 3;
+console.log(emptyarr);
+// -----
+// length counts undefined elements
+// length can be used to shrink or expand the array
+// setting elements to undefined, does not change the length of the array
+let arr4 = [0, 1, 2];
+console.log(arr4.length);  // 3
+arr4[2] = undefined;
+console.log(arr4.length);   // still 3
+arr4.length = 2;  // similar when the length is increased past 3
+console.log(arr4, arr4.length);  // [0, 1] 2
+arr4 = [,,,,,];
+console.log(arr4, arr4.length);  // [<5 empty items>] 5
 // -----
 // use Array.from() to deep copy arrays
 // can also give Array.from() some iterable
@@ -521,10 +540,39 @@ console.log(warr.length);  // 1, since there is only one element tied to an inde
 warr[-2] = 10;  // creates '-2' as a property
 warr['3'] = 14;  // sets the 4th element to 14, with unset assigned undefined
 console.log(warr);  
-
+// -----
+// ... applied to an iterable, like a string, unpacks each char into
+//   as an element of the array
+// entries() retrives a [key, value] array pair
+let arr5 = [..."Ben-Harki"];
+for (let [key, val] of arr5.entries()) {
+  console.log(key, val);
+}
+// -----
+// forEach() and for-of loops
+// forEach() will not apply function on undefined, for-of loops will not
+// forEach() will accept functions of three arguments if you need the index and the whole
+//   array per element
+let arrs = new Array(5);
+for (let val of arrs) {
+  console.log(val);  // all undefined
+}
+arrs.forEach(val => console.log(val));  // prints nothing
+arrs = [..."987"];
+arrs.forEach((val, ind, arr) => console.log(ind, val, arr));  // prints index, val, full array
+// -----
+// see LOOPS for iteration of an array by index, and passing functions with 2 or 3 args
+// see FUNCTIONAL PROGRAMMING for more functions like forEach
 // MULTIDIMENSIONAL ARRAYS
 // using an initializer expression
 let twodarray = [[1.1, 2.2], [3.3, 4.4]];
+// -----
+// length property and multi dim arrays
+// you can have rows of different lengths;
+let marr = [[0,1,2], [3,4,5]];
+console.log(marr.length);  // 2, number of rows
+console.log(marr[0].length);   // 3, number of cols (if all the rows are of the same length)
+console.log(marr[1][2]);  // 5, marr[row, col]
 // -----
 // used in Apps Scripts for Google Sheets
 // C way of creating 2d arrays, by arrays of arrays and a double for loop
@@ -532,7 +580,7 @@ let twodarray = [[1.1, 2.2], [3.3, 4.4]];
 // Array() creates arrays with a fixed size
 //   values are of undefined, and no indexing is possible
 function MYDOUBLEARR(vals) {
-  let cols = vals[0].length;
+  let cols = vals[0].length;   
   let rows = vals.length;
   let doublearr = new Array(rows);   // create an array of arrays
   for (i = 0; i < rows; i++) {
@@ -545,6 +593,23 @@ function MYDOUBLEARR(vals) {
   }
   return doublearr;
 }
+// -----
+// multidim array of rows of different sizes in a for of loop
+// also an indexed loop
+// may want to save the lengths in a local variable
+//   so they do not need retrieved in each iteration
+let mdarr = [[0, 1, 2], [3, 4]];
+for (let row of mdarr) {
+  for (let val of row) {
+    console.log(val);
+  }
+}
+for (let i = 0; i < mdarr.length; ++i) {   // for each row
+  for (let j = 0; j < mdarr[i].length; ++j) {  // for val in the row (col val)
+    console.log(mdarr[i][j]);
+  }
+}
+
 
 // EXPRESSIONS AND STATEMENTS
 // expressions can be evaluated to produce a value
@@ -714,6 +779,7 @@ nofunc?.();   // no exception and evals to undefined
 // FUNCTIONAL PROGRAMMING
 // uses arrow functions, but can also use the function keyword version
 // TODO: examples with find(), findIndex(), every(), some(), reduce(), reduceright(), flat(), flatmap(), concat()
+//  thes functions can accept other functions of three args, see forEach in MULTIDIMENSIONAL ARRAY
 let arr1 = [[0, 1, 2], [3, 4, 5], [6, 7, 8]];
 arr1.forEach(val => {console.log(val);})
 arr1.forEach(
@@ -853,8 +919,6 @@ for (i in [10, 20, 30]) {
   console.log(i);   // 0, 1, 2
 } 
 // -----
-
-// -----
 // while condition can be an expression that evals
 //   to a boolean, or can be implicitly converted to one 
 // comma expressions return the right operand 
@@ -933,7 +997,7 @@ finally {
   console.log(result);
 }
 
-
+console.log("You have reached the end!");
 }   // end of Main() function
 
 // Test a standalone class
@@ -1025,7 +1089,9 @@ SKIPPED
   7.1.2 Array Spread Operator
     place elements from one array into another using ..., creates shallow copy
     can apply ... to any iterable object, like a string
-STOPPED AT 7.3 Sparse Arrays
+  7.8 Array Methods
+    so many array methods, see ARRAY for the list
+STOPPED AT 7.9 Array-Like Objects
 
 */
 
