@@ -291,8 +291,8 @@ console.log(`${sobj1}`);   // [object Object]
 console.log(JSON.stringify(sobj1));  //  {"x":1,"y":2}
 // -----
 // see tagged template literals using tag functions in FUNCTION
-
-
+// strings are like read-only arrays, so you can give them to functions that take generic 
+//   arrays using the function's .call() version
 
 // OBJECTS
 // mutable
@@ -711,23 +711,38 @@ console.log(typeof(100 + ""));   // string
 console.log(typeof(+"100"));  // number 
 
 // FUNCTION
-// -----
 // function declarations are hoisted in that they are visible
 //   at the top of the scope in which they are defined in, 
 //   even before they are called
+// functions can also be though of as an object on their own, can be invoked
+//   through their name
+// functions can be defined in any block, but are only visible in 
+//   in that block
 // -----
-// functions can be created on the fly
+// functions can be created on the fly using function expressions
+// can be assigned to a variable, using let, var, const
 // arrow functions are lambda functions
 // return will return the evaluation of a given expression
-// without a return value a function will return undefined
+// without a return value a function will return undefined\
+// can also give a function expression a name
+// function expressions are not hoisted like function's defined with 
+//   'function' keyword, and cannot be invoked until the expression is evaled
 console.log(firstfunc(3.14));
-let myfunc = function(x) {return x*x;}
+let myfunc = function(x) {return x*x;}   
 console.log(myfunc(2));
 let func2 = x => x - 10;
 console.log(func2(3)); 
+let func3 = function fname(x) {return x**2;}  // given a name, but only defined in func3's scope
+console.log(func3(2)); 
 // -----
-// with const, and a param list in ()
-const cfunc = (x,y) => x + y;
+// long arrow function
+// cannot seperate the param list from the body, since JS automatically places ; in new lines
+// simple arrow function with const, and a param list in ()
+//   can omit the () with only one param, but needs () with no params
+// see their usage with map in FUNCTIONAL PROGRAMMING
+// cannot be used as constructor functions
+let cfunc0 = (x) => {return x;};   // with the {}, return, and inner ;
+const cfunc = (x,y) => x + y;   // can omit these
 // -----
 // traditional function, can be thought of as an expression
 function firstfunc(param) {
@@ -735,6 +750,7 @@ function firstfunc(param) {
 }
 // -----
 // "this" can be used to create a method on the fly
+// this is the object that the method is defined on
 let name = {x:10};
 name.divfunc = function(x) {return this.x / x;};
 console.log(name.divfunc(2));
@@ -773,6 +789,24 @@ console.log(MultStr`${3} x ${4}`);
 let nofunc = undefined;
 // nofunc();   // Throws a TypeError
 nofunc?.();   // no exception and evals to undefined
+// -----
+// functions can be passed as arguments, with arrow or keyword
+// can define functions in other functions (nested)
+function PrintOp(strval, Binop) {
+  function RetNum(val) {return Number(val);}
+  let nval = RetNum(strval);
+  return console.log(Binop(nval));
+}
+PrintOp('3', function(x) {return x**2;});  // 9
+// -----
+// nested functions have access to variables/params in the scope they are defined in 
+function AFunc(x) {
+  function BFunc() {
+    console.log(x);
+  }
+  BFunc();
+}
+AFunc(1);
 // -----
 // TODO: see yield to create generator functions
 
@@ -1091,8 +1125,11 @@ SKIPPED
     can apply ... to any iterable object, like a string
   7.8 Array Methods
     so many array methods, see ARRAY for the list
-STOPPED AT 7.9 Array-Like Objects
-
+  7.9 Array-Like Objects
+    you can define integer keys for an object, to make them array-like, but
+      they don't have the Array methods
+    some built in functions can accept array-like objects using .call() variation
+STOPPED AT 8.2: Invoking Functions
 */
 
 
