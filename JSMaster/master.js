@@ -404,6 +404,8 @@ console.log(typeof(strobj));  // string
 let jobj2 = JSON.parse(strobj);
 console.log(typeof(jobj2));   // object
 // -----
+// "this" keyword refers to the current object a method is called on
+//   cannot assign to "this"
 // toString() returns '[object Object]' by default
 // quick way to override toString()
 let obj4 = {'x': 0};
@@ -727,6 +729,7 @@ console.log(typeof(+"100"));  // number
 // can also give a function expression a name
 // function expressions are not hoisted like function's defined with 
 //   'function' keyword, and cannot be invoked until the expression is evaled
+//   however you can use bind() method on a function object to hoist it
 console.log(firstfunc(3.14));
 let myfunc = function(x) {return x*x;}   
 console.log(myfunc(2));
@@ -801,6 +804,9 @@ function PrintOp(strval, Binop) {
 PrintOp('3', function(x) {return x**2;});  // 9
 // -----
 // nested functions have access to variables/params in the scope they are defined in 
+// if the nested function is in a method, it does not inherit the "this" value
+//   you can save this in a variable that would be visible in the nested function
+//   however arrow functions do
 function AFunc(x) {
   function BFunc() {
     console.log(x);
@@ -812,6 +818,36 @@ AFunc(1);
 // define and invoke a function in one line
 let eleven = (function() {return 10;}()) + 1;
 console.log(eleven);
+// -----
+// can use ['method'] to invoke a method 
+let objm = {'print': function(val) {console.log(val);}};
+objm['print'](10);
+// -----
+// invoking a function on few args than params
+//   defines the params as "undefined" or other default value
+function more_params(x, y, z) {
+  console.log(x, y, z);
+  return x + y + z;
+}
+more_params(1);   // 1 undefined undefined
+// -----
+// you can default parameters to a function
+// they can be given a value or an expression
+// you can give a defaulted param a previously defined param (to its left)
+// this one is defined and invoked in one line
+let deffunc = function(x = 0, y = `x: ${x}`) {
+  console.log(x, y);
+}();
+// -----
+// you can use ...param in the parameter list to collect
+//   an unknown number of args into an array
+// rest parameters cannot be defaulted and is never set "undefined"
+function frest(...rest) {
+  for (let val of rest) {
+    console.log(val);
+  }
+}
+frest(1, 2, 3, 4, 5);
 // -----
 // TODO: see yield to create generator functions
 
@@ -984,6 +1020,9 @@ while(count2 < 1);
 // create a class
 // constructor() is the constructor
 // no return is necessary in the constructor
+//   however you can return a new object with a return statement
+//   any other return statement, like returning a primitive or nothing
+//      will be ignored
 class Point {
   constructor(x, y) {
     this.x = x;
@@ -995,6 +1034,7 @@ class Point {
 }
 // ------
 // construct an object using new, calling constructor
+// can omit the parenthesis on a no args constructor
 let p = new Point(3, 4);
 console.log(p);
 console.log(p.mysum());
@@ -1134,7 +1174,11 @@ SKIPPED
     you can define integer keys for an object, to make them array-like, but
       they don't have the Array methods
     some built in functions can accept array-like objects using .call() variation
-STOPPED AT 8.2: Invoking Functions
+  8.2.4 Indirect Invocation of a function
+    functions are objects, so they methods that can invoke them
+    "can invoke any function as a method of any object, even if it is not 
+      actually a method of that object" - using call() and apply() methods on a function object
+STOPPED AT 8.3.3 The Arguments Object
 */
 
 
