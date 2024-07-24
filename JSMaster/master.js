@@ -751,6 +751,7 @@ function firstfunc(param) {
 // -----
 // "this" can be used to create a method on the fly
 // this is the object that the method is defined on
+// this is not defined on functions that are not a propertyof an object
 let name = {x:10};
 name.divfunc = function(x) {return this.x / x;};
 console.log(name.divfunc(2));
@@ -807,6 +808,10 @@ function AFunc(x) {
   BFunc();
 }
 AFunc(1);
+// -----
+// define and invoke a function in one line
+let eleven = (function() {return 10;}()) + 1;
+console.log(eleven);
 // -----
 // TODO: see yield to create generator functions
 
