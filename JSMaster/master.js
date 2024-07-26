@@ -903,6 +903,8 @@ console.log(AddCounter.val);  // 1
 //   where it is defined, but it knows outer_name anyways
 // this is different from passing the string from the nested to the outer
 //   then back out again
+// function closures capture their own unique version of the state they
+//   are defined in, even if other functions share the same state
 function outer() {
   let outer_name = "Ben Harki";
   function inner() {
@@ -911,6 +913,19 @@ function outer() {
   return inner;
 }
 outer()();  // outer() returns inner and then its invoked
+// -----
+// closures capture local variables in the same scope as
+//   the function definition into their own space private to the function
+// can do this in an immediately invoked function that returns another function
+//   that when called calls from the private state it has access too
+// this is better than saving the state as a function property, that
+//   could be accessed or corrupted
+let uniqueInteger = (function() { 
+  let counter = 0;
+  return function() {return counter++;}; 
+}());
+console.log(uniqueInteger());  // 0 
+console.log(uniqueInteger());  // 1
 // -----
 // TODO: see yield to create generator functions
 
@@ -1243,7 +1258,7 @@ SKIPPED
       actually a method of that object" - using call() and apply() methods on a function object
   8.3.3 The Arguments Object
     can be used instead of the ...rest parameter for a function
-STOPPED AT 8.6 Closures
+STOPPED AT 8.6 Closures pg. 381, counter(n)
 */
 
 
