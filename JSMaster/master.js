@@ -426,7 +426,7 @@ console.log(`${jobj3}`);
 let nofuncc = {
   'a': 0, 
   'b':1,
-  mymeth() {return "hi";}
+  mymeth() {return "hi";}   // can use the function keyword, or an arrow function
 };
 console.log(nofuncc.mymeth());
 // -----
@@ -717,7 +717,11 @@ console.log(typeof(+"100"));  // number
 //   at the top of the scope in which they are defined in, 
 //   even before they are called
 // functions can also be though of as an object on their own, can be invoked
-//   through their name
+//   through their name, can even be stored in an array and invoked
+// functions can act like a namespace, where variables are defined
+//   in the body are only visible in the function
+// You can even use an anonymous function, if you don't want to define a global 
+//   namespace, kind of like an "unamed" namespace, and can be immediately invoked on definition
 // functions can be defined in any block, but are only visible in 
 //   in that block
 // -----
@@ -842,12 +846,71 @@ let deffunc = function(x = 0, y = `x: ${x}`) {
 // you can use ...param in the parameter list to collect
 //   an unknown number of args into an array
 // rest parameters cannot be defaulted and is never set "undefined"
+// rest parameter in the parameter list, spread operator in the call
+// rest parameter collects the args into an array, processed by the function
+//   spread operator spreads an iterable into the args on the function call
 function frest(...rest) {
   for (let val of rest) {
     console.log(val);
   }
 }
 frest(1, 2, 3, 4, 5);
+frest(...[1, 2, 3, 4, 5]);
+// -----
+// you write a function parameter list that destructures iterables into variables
+// can be applied to objects
+// you can simulate the named argument functionality of python, using 
+//   a destructured obj
+// can also default the variables used for destructuring
+function destr([a, b, c, d]) {
+  return a + b + c + d;
+}
+function destr2({x, y}) {  // uses shortened obj form
+  return `(${x}, ${y})`;
+}
+console.log(destr([1, 2, 3, 4]));  // 10
+console.log(destr2({y:1, x:0}));   // (0, 1), like python's named params
+// -----
+// functions are objects, so you can add properties to them
+//   that store data like "static" variables in other languages
+function AddCounter() {
+  if (AddCounter.val === undefined) {
+    AddCounter.val = 0;
+  }
+  else {
+    ++AddCounter.val;      
+  }
+}
+AddCounter();
+console.log(AddCounter.val);  // 0 
+AddCounter();
+console.log(AddCounter.val);  // 1
+// -----
+// this function is unnamed and immediately invoked
+// sort of like an unamed namespace
+// parenthesis on the outside is needed so that a formal function is 
+//   not defined
+(function() {
+  let local = 10;
+  console.log(local);
+}());
+// -----
+// all functions in javascript are closures, in that
+//   they also have access to variables that are defined
+//   in the same scope as the function definition
+// commonly used with nested functions that are returned
+// inner function is returned then invoked in a scope outside of
+//   where it is defined, but it knows outer_name anyways
+// this is different from passing the string from the nested to the outer
+//   then back out again
+function outer() {
+  let outer_name = "Ben Harki";
+  function inner() {
+    console.log(outer_name);
+  }
+  return inner;
+}
+outer()();  // outer() returns inner and then its invoked
 // -----
 // TODO: see yield to create generator functions
 
@@ -1178,7 +1241,9 @@ SKIPPED
     functions are objects, so they methods that can invoke them
     "can invoke any function as a method of any object, even if it is not 
       actually a method of that object" - using call() and apply() methods on a function object
-STOPPED AT 8.3.3 The Arguments Object
+  8.3.3 The Arguments Object
+    can be used instead of the ...rest parameter for a function
+STOPPED AT 8.6 Closures
 */
 
 
