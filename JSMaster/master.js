@@ -758,7 +758,7 @@ function firstfunc(param) {
 // -----
 // "this" can be used to create a method on the fly
 // this is the object that the method is defined on
-// this is not defined on functions that are not a propertyof an object
+// this is not defined on functions that are not a property of an object
 let name = {x:10};
 name.divfunc = function(x) {return this.x / x;};
 console.log(name.divfunc(2));
@@ -808,9 +808,7 @@ function PrintOp(strval, Binop) {
 PrintOp('3', function(x) {return x**2;});  // 9
 // -----
 // nested functions have access to variables/params in the scope they are defined in 
-// if the nested function is in a method, it does not inherit the "this" value
-//   you can save this in a variable that would be visible in the nested function
-//   however arrow functions do
+// this is called the closure of the function
 function AFunc(x) {
   function BFunc() {
     console.log(x);
@@ -898,6 +896,8 @@ console.log(AddCounter.val);  // 1
 // all functions in javascript are closures, in that
 //   they also have access to variables that are defined
 //   in the same scope as the function definition
+// this closure data is implicitly visible to the function
+//   and can act as private variables
 // commonly used with nested functions that are returned
 // inner function is returned then invoked in a scope outside of
 //   where it is defined, but it knows outer_name anyways
@@ -927,6 +927,70 @@ let uniqueInteger = (function() {
 console.log(uniqueInteger());  // 0 
 console.log(uniqueInteger());  // 1
 // -----
+// a function that returns an object with get and set properties 
+// uses the closure of the function, in this case, the parameter
+//   to store data instead of a seperate internal property
+function counter(n) {
+  return {
+    get inc() {
+      return ++n;
+    },
+    set reset(m) {
+      n = m;
+    },
+    toString() {
+      return `${n}`;
+    } 
+  }
+}
+let co = counter(10);
+console.log(`${co}`);
+co.inc;
+console.log(`${co}`);
+co.reset = 40;
+console.log(`${co}`);
+// -----
+// closure example where an object is given a get and set method
+//   that uses data stored in the function's closure
+// uses val and no "this" keyword
+// val is closure storage given implicitly to the object
+// see LOOPS for an error that can happen when using a var as a local
+//   variable in a for loop, that is also a shared closure variable
+function GiveVal(obj) {
+  let val = undefined;
+  obj.getval = function() {return val;};
+  obj.setval = function(v) {val = v;};
+} 
+let clob = {};
+GiveVal(clob);
+clob.setval(100);
+console.log(clob.getval());
+console.log(clob.val);   // undefined
+// -----
+// "this" keyword changes context in the body of a function
+// its the global object in a non-method function, and the current obj if it is a method
+// when "this" is captured into a nested function's closure:
+//   if outer func is non-method, and inner func is non-arrow, then "this" is the global obj
+//   if outer func is a method and inner func is non-arrow, "this" is still the global obj
+//   if outer func if is non-method and inner func is an arrow, "this" is still the global obj
+//   if outer func is a method and inner func is an arrow then "this" is the current obj 
+glob = 10; 
+function outerf() {
+  function innerf() {
+    console.log(this);
+  }
+  return innerf;
+}
+function arrf() {
+  return () => console.log(this);
+}
+outerf()();   // "this" is the global obj
+let eobj = {'outerf': outerf};  
+eobj.outerf()();     // still the global obj, not eobj
+arrf()();   // the global obj
+eobj['arrf'] = arrf;
+eobj.arrf()();  // eobj
+// -----
 // TODO: see yield to create generator functions
 
 // FUNCTIONAL PROGRAMMING
@@ -946,6 +1010,45 @@ let arr2 =
     row => row.map(
       col => 2 * col));
 console.log(arr2);
+// -----
+// this is example of a higher ordered function that adds the 
+//   capablility of "memoizing" a function
+// it will take a function and return one that has an attached
+//   closure used to document the function calls
+// the cache storage is saved as a Map, like a hashmap or dictionary
+// the cached storage helps in performance, so it retrieves
+//   a precalculated value, rather than recomputing factorial calls, like dynamic programming
+function memoize(f) {
+  cache = new Map();   // make this a "let" variable to make it private
+  calls = 0;          // count how many function calls factorial makes
+  return function(...args) {   // ...args saves all the args into an array to generalize
+    calls += 1;
+    let key = '';
+    for (let val of args) {
+      key += `${val},`;
+    }
+    key = key.slice(0, -1);  // everything but the last char, so no extra ','
+    if (cache.has(key)) {
+      console.log(`returned stored val: f(${key})`);
+      return cache.get(key);
+    }
+    else {
+      let result = f.apply(this, args);
+      cache.set(key, result);
+      return result;
+    }
+  }
+}
+const factorial = memoize(
+  function(n) { 
+    return (n <= 1) ? 1 : n * factorial(n-1);});
+factorial(4);
+console.log(cache); // Map(4) { '1' => 1, '2' => 2, '3' => 6, '4' => 24 }
+console.log(`number of function calls: ${calls}`);  // 4
+calls = 0;
+factorial(5);
+console.log(cache); // Map(5) { '1' => 1, '2' => 2, '3' => 6, '4' => 24, '5' => 120 }
+console.log(`number of function calls: ${calls}`);  // 2, only f(5) * f(4), since f(4) is known
 
 // CONTROL
 // IF
@@ -1089,6 +1192,24 @@ do {
   console.log(++count2);   
 }
 while(count2 < 1);
+// -----
+// loops with var variables should be avoided, since
+//   it makes the variable function scoped
+// here i in broken()'s closure is a live variable
+//   shared by all the functions in the array, because of var
+// after the loop completes i is incremented to 5, so all 
+//   i's shared by the functions are 5
+// using let instead of var fixes this
+function broken() {
+  let arr = [];
+  for (var i = 0; i < 5; ++i) {
+    arr[i] = () => i;
+  }
+  return arr;
+}
+let arrb = broken();
+console.log(arrb[1]());   // 5
+console.log(arrb[2]());   // 5
 // -----
 // SEE FUNCTIONAL PROGRAMMING for foreach()
 // TODO: for has an "await" of version for asynchronous
@@ -1258,7 +1379,25 @@ SKIPPED
       actually a method of that object" - using call() and apply() methods on a function object
   8.3.3 The Arguments Object
     can be used instead of the ...rest parameter for a function
-STOPPED AT 8.6 Closures pg. 381, counter(n)
+  8.7 Function Properties
+    length, name, prototype, call, apply, bind, toString, Function() constructor
+    functions are objects too, so they have method
+    call and apply allow you to indirectly invoke a function as thought it were a method
+      so some other object
+    toString() returns the source code of the function
+    functions can be created with the Function() constructor and strings of code for the body
+    bind can perform partial application, like function currying
+  8.8 Functional Programming
+    I have some of this
+    usage of map(), reduce(), join
+    examples of higher order functions, that accept functions and return modified 
+      versions of them
+    their versions of partialLeft and partialRight, similar to partial application
+      functionality of bind, but can partially apply from the right too
+    did an example of memoization of a function, where a function is modified
+      to store data about the call in its closure 
+
+STOPPED AT Chapter 9: Classes
 */
 
 
