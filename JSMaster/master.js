@@ -1321,36 +1321,37 @@ let myi2 = MyInt(12);  // can invoke without the "new" bc of the condition
 console.log(`${myi2}`);
 console.log(MyInt.prototype.constructor.name);  // MyInt
 // -----
-// create a class with more modern syntax
-//   it implicitly defines a class like previous old examples
-// constructor() is the constructor and an empty default one is provided
-//   if you do not define it
-// can add an iterator with a Symbol, see range.methods above
-// no return is necessary in the constructor
-//   however you can return a new object with a return statement
-//   any other return statement, like returning a primitive or nothing
-//      will be ignored
-// you cannot define properties with name: value pairs,like with objects
-//   but you can define computed properties with [expression], methods or properties
-// construct an object using new, calling constructor
-// can omit the parenthesis on a no args constructor
-// you can add more fields in other methods, not just the constructor
-class Point {
-  constructor(x, y) {   // no need to use commas to seperate properties
-    this.x = x;
-    this.y = y;
-  }
-  mysum() {
-    return this.x + this.y; 
-  }
-  ['key']() {return 0;}  
-  ['key2']= function() {return 1;}  // with the function keyword
-}
-let p = new Point(3, 4);
-console.log(p);
-console.log(p.mysum());
-console.log(p['key']());   
-console.log(p.key2());  // can use this, if the name is ok
+// DOES NOT WORK IN GOOGLE AS
+// // create a class with more modern syntax
+// //   it implicitly defines a class like previous old examples
+// // constructor() is the constructor and an empty default one is provided
+// //   if you do not define it
+// // can add an iterator with a Symbol, see range.methods above
+// // no return is necessary in the constructor
+// //   however you can return a new object with a return statement
+// //   any other return statement, like returning a primitive or nothing
+// //      will be ignored
+// // you cannot define properties with name: value pairs,like with objects
+// //   but you can define computed properties with [expression], methods or properties
+// // construct an object using new, calling constructor
+// // can omit the parenthesis on a no args constructor
+// // you can add more fields in other methods, not just the constructor
+// class Point {
+//   constructor(x, y) {   // no need to use commas to seperate properties
+//     this.x = x;
+//     this.y = y;
+//   }
+//   mysum() {
+//     return this.x + this.y; 
+//   }
+//   ['key']() {return 0;}  
+//   ['key2'] = function() {return 1;}  // with the function keyword
+// }
+// let p = new Point(3, 4);
+// console.log(p);
+// console.log(p.mysum());
+// console.log(p['key']());   
+// console.log(p.key2());  // can use this, if the name is ok
 // -----
 // you can use a class definition expression to define a class
 // can be named or anonymous
@@ -1395,38 +1396,40 @@ console.log(gs._val);  // 10, _val is not technically private
 gs.val = 20;     // does nothing, since no set method
 console.log(gs);   // 10
 // -----
-// you can define object data fields outside of a constructor, without "this"
-//   these are not static, or shared, and each object is given their own version
-// public fields defined outside the constuctor do need read through an object
-// private fields need a # prefix, and must be initialized outside the constuctor
-//   they cannot be init inside one, but can be reset
-class Fields {
-  f1 = 0;   // not static, normal obj field
-  #priv   // private, and undefined by default
-  constructor(val) {
-    // no this.f1 needed, since it has been initialized
-    this.#priv = 100;   // can access private fields inside the class body
-  }
-  get priv() {return this.#priv;}   // makes #priv read-only, through public priv
-}
-let fvar = new Fields();
-console.log(fvar.f1);  // 0
-// fvar.#priv = 29;   // cannot set without error
-// console.log(fvar.#priv);   // cannot read without error
-console.log(fvar.priv);  // 100
-fvar.priv = 29;    // does nothing, since no set with the get
-console.log(fvar.priv);  // 100, priv is unchanged
+// DOES NOT WORK IN GOOGLE AS
+// // you can define object data fields outside of a constructor, without "this"
+// //   these are not static, or shared, and each object is given their own version
+// // public fields defined outside the constuctor do need read through an object
+// // private fields need a # prefix, and must be initialized outside the constuctor
+// //   they cannot be init inside one, but can be reset
+// class Fields {
+//   f1 = 0;   // not static, normal obj field
+//   #priv;   // private, and undefined by default
+//   constructor(val) {
+//     // no this.f1 needed, since it has been initialized
+//     this.#priv = 100;   // can access private fields inside the class body
+//   }
+//   get priv() {return this.#priv;}   // makes #priv read-only, through public priv
+// }
+// let fvar = new Fields();
+// console.log(fvar.f1);  // 0
+// // fvar.#priv = 29;   // cannot set without error
+// // console.log(fvar.#priv);   // cannot read without error
+// console.log(fvar.priv);  // 100
+// fvar.priv = 29;    // does nothing, since no set with the get
+// console.log(fvar.priv);  // 100, priv is unchanged
 // -----
-// static fields need the "static" keyword and are 
-//   properties of the constructor function object (like the class name)
-// they are not shared across their objects
-// they can be made private with # prefix
-class HasStatic {
-  static svar = "this is static";
-}
-console.log(HasStatic.svar);  // this is static
-let sobj2 = new HasStatic();
-console.log(sobj2.svar);  // undefined
+// DOES NOT WORK IN GOOGLE AS
+// // static fields need the "static" keyword and are 
+// //   properties of the constructor function object (like the class name)
+// // they are not shared across their objects
+// // they can be made private with # prefix
+// class HasStatic {
+//   static svar = "this is static";
+// }
+// console.log(HasStatic.svar);  // this is static
+// let sobj2 = new HasStatic();
+// console.log(sobj2.svar);  // undefined
 // -----
 
 // EXCEPTIONS
