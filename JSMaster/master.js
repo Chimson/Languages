@@ -1246,6 +1246,10 @@ console.log(arrb[2]());   // 5
 // classes use prototype-based inheritance, where if two objects
 //   inherit properties from the same prototype object then they are of the same class
 // constructors can be created from any function except arrow, async, and generator functions
+// class declarations are not hoisted like functions, so you cannot create a class obj before they
+//   are declared
+//   (this file exports the MyInt class, so when it is run by runmaster.js,
+//      so MyInt is predefined before Main() is invoked)
 // -----
 // old way of creating a class using Object.create, factory method
 //   and no "new" syntax or constructor
@@ -1265,12 +1269,12 @@ function range(from, to) {
 range.methods = {  // protype obj
   includes(x) {
     return x >= this.from && x <= this.to;  
-  },
-  *[Symbol.iterator]() { 
+  },   // commas must seperate properties
+  *[Symbol.iterator]() {    // function*() can be used, when not using the syntax
     for(let x = this.from; x <= this.to; ++x) {
       yield x;
     }
-  },
+  },  
   toString() {
     return `[${this.from}, ${this.to}]`;
   } 
@@ -1317,31 +1321,113 @@ let myi2 = MyInt(12);  // can invoke without the "new" bc of the condition
 console.log(`${myi2}`);
 console.log(MyInt.prototype.constructor.name);  // MyInt
 // -----
-// create a class
-// constructor() is the constructor
+// create a class with more modern syntax
+//   it implicitly defines a class like previous old examples
+// constructor() is the constructor and an empty default one is provided
+//   if you do not define it
+// can add an iterator with a Symbol, see range.methods above
 // no return is necessary in the constructor
 //   however you can return a new object with a return statement
 //   any other return statement, like returning a primitive or nothing
 //      will be ignored
+// you cannot define properties with name: value pairs,like with objects
+//   but you can define computed properties with [expression], methods or properties
+// construct an object using new, calling constructor
+// can omit the parenthesis on a no args constructor
+// you can add more fields in other methods, not just the constructor
 class Point {
-  constructor(x, y) {
+  constructor(x, y) {   // no need to use commas to seperate properties
     this.x = x;
     this.y = y;
   }
   mysum() {
     return this.x + this.y; 
   }
+  ['key']() {return 0;}  
+  ['key2']= function() {return 1;}  // with the function keyword
 }
-// ------
-// construct an object using new, calling constructor
-// can omit the parenthesis on a no args constructor
 let p = new Point(3, 4);
 console.log(p);
 console.log(p.mysum());
+console.log(p['key']());   
+console.log(p.key2());  // can use this, if the name is ok
+// -----
+// you can use a class definition expression to define a class
+// can be named or anonymous
+// you can insert another name, after "class" that can only
+//   be refered to inside the body of the class, like in function definition expressions
+let ClassExp = class {constructor() {this.val = 10;}};  
+console.log(new ClassExp());
+let ClassExp2 = class SomeName {constructor() {this.val = 10;}};  
 // ------
 // you can define a standalone class in this file, see below
+// this Main() function, which invokes the MyInt() must be called 
+//   after the MyInt definition (unless both are exported)
 let myint = new MyInt(10);
 console.log(myint);
+// -----
+// you can define "static" methods, aka class methods, called through the class name
+//   although technically these are defined as properties of the constructor
+// you generally avoid using "this" in static methods
+// this is not a property of the WithStatic.prototype obj
+class WithStatic {
+  static PrintStuff() {
+    console.log("stuff");
+  }
+}
+WithStatic.PrintStuff();
+// -----
+// you can define get and set methods like in an object, see example in OBJECT
+// _val is more of a reminder that it should be private
+//   but its actually still public 
+// no set method is defined, val cannot be assigned too, even if attempted
+class MyIntGS {
+  constructor(val) {
+    this._val = val;
+  }
+  get val() {
+    return this._val;
+  }
+}
+let gs = new MyIntGS(10);
+console.log(gs.val);   // 10
+console.log(gs._val);  // 10, _val is not technically private
+gs.val = 20;     // does nothing, since no set method
+console.log(gs);   // 10
+// -----
+// you can define object data fields outside of a constructor, without "this"
+//   these are not static, or shared, and each object is given their own version
+// public fields defined outside the constuctor do need read through an object
+// private fields need a # prefix, and must be initialized outside the constuctor
+//   they cannot be init inside one, but can be reset
+class Fields {
+  f1 = 0;   // not static, normal obj field
+  #priv   // private, and undefined by default
+  constructor(val) {
+    // no this.f1 needed, since it has been initialized
+    this.#priv = 100;   // can access private fields inside the class body
+  }
+  get priv() {return this.#priv;}   // makes #priv read-only, through public priv
+}
+let fvar = new Fields();
+console.log(fvar.f1);  // 0
+// fvar.#priv = 29;   // cannot set without error
+// console.log(fvar.#priv);   // cannot read without error
+console.log(fvar.priv);  // 100
+fvar.priv = 29;    // does nothing, since no set with the get
+console.log(fvar.priv);  // 100, priv is unchanged
+// -----
+// static fields need the "static" keyword and are 
+//   properties of the constructor function object (like the class name)
+// they are not shared across their objects
+// they can be made private with # prefix
+class HasStatic {
+  static svar = "this is static";
+}
+console.log(HasStatic.svar);  // this is static
+let sobj2 = new HasStatic();
+console.log(sobj2.svar);  // undefined
+// -----
 
 // EXCEPTIONS
 // throw can accept a value of any type like a string or a number
@@ -1498,11 +1584,14 @@ SKIPPED
     did an example of memoization of a function, where a function is modified
       to store data about the call in its closure 
   9.2.C Constructor Property
+    I did some of this
     constructor functions (as objects) have a prototype property, set to an object, and the prototype obj
       has a constructor property set to the function
     prototype property has as default object, while the constuctor property is undefined by default
+  9.3.4 Example
+    example of a complex class with public and private properties     
 
-STOPPED AT Chapter 9: Classes
+STOPPED AT Chapter 9.4
 */
 
 
