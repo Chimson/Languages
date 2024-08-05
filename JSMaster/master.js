@@ -281,7 +281,7 @@ ben.slice(0,1);
 let mags = "Magdalene";
 console.log(mags[3]);
 // -----
-// console.log() with a template string will by default use toString() given an object
+// console.log() with a template string will by default use toString() and give any object
 //   this defaults to [object Object]
 // you can use JSON.stringify() for the pretty printing version
 //   prints a string that looks like an obj literal
@@ -339,12 +339,32 @@ console.log(book.nope);   // undefined
 // can use [expression] to read/write properties
 //   expression in brackets must eval to a string or a Symbol ref
 // allows for dynamic creation of objects
-// lhs can be an expression who evals to an obj referencex
+// lhs can be an expression who evals to an obj reference
 let finn = {};
 finn['name'] = "Finn";
 console.log(finn.name);   // still can use .
 console.log(finn['name']);
-console.log(finn);     
+console.log(finn);   
+// ------
+// another example of defining dynamic properties
+// properties can be data or methods
+// computed property name on an object, using [expr]
+// can dynamically name a property at runtime, evaluating the expression expr
+// can also use symbols as properties
+// see using a symbol as a property below
+// also example of defining a computed property name with shorthand
+//   needs a colon
+let cprop = {};
+function addone(str) {
+  return `${str}_prop`;
+}
+cprop[addone('onehundred')] = 100;
+console.log(cprop['onehundred_prop']); // allows any string, even non-normal property names
+console.log(cprop.onehundred_prop);   // if the property name is like a normal property
+let anothercprop = {
+  [addone('two')] : 2
+};
+console.log(anothercprop.two_prop);
 // -----
 // empty object
 let empty = {};
@@ -369,7 +389,7 @@ console.log(maybe.x?.y.z.q.e);   // optional chaining
 // can only access the property with [], not a dot 
 // Symbol() returns a unique Symbol value, to avoid property conflicts
 let person = {};
-let fname = Symbol("Private fname");
+let fname = Symbol("Private fname");   // no need for "new"
 person[fname] = "Ben";   // assign a value
 console.log(person[fname]); 
 console.log(person[Symbol("Private fname")]);  // undefined, since its unique from fname 
@@ -410,7 +430,9 @@ console.log(typeof(jobj2));   // object
 // quick way to override toString()
 let obj4 = {'x': 0};
 console.log(obj4.toString());  // [object Object]
-let obj3 = {'x': 0, toString: function() {return `x: ${this.x}`}};  // returns overide
+let obj3 = {
+  'x': 0, 
+  toString: function() {return `x: ${this.x}`}};  // returns overide
 console.log(obj3);
 // -----
 // can override toString() automatically with JSON
@@ -1216,6 +1238,45 @@ console.log(arrb[2]());   // 5
 //   iterators, see page 220 
 
 // CLASS
+// -----
+// classes use prototype-based inheritance, where if two objects
+//   inherit properties from the same prototype object then they are of the same class
+// -----
+// old way of creating a class using Object.create, factory method
+//   and no "new" syntax or constructor
+// return a prototype object, using create(), that 
+//   contains properties
+// range() is like a factory method (like a constructor), but range is a function/object
+//   with a methods property, that stores the prototype
+// shows an iterator as a generator function and toString()
+// generator function are defined with * in the shorthand
+// "this" refers back to the r obj returned from range()
+function range(from, to) {
+  let r = Object.create(range.methods);  // sets the methods from prototype obj
+  r.from = from;
+  r.to = to;
+  return r;
+} 
+range.methods = {  // protype obj
+  includes(x) {
+    return x >= this.from && x <= this.to;  
+  },
+  *[Symbol.iterator]() {
+    for(let x = this.from; x <= this.to; ++x) {
+      yield x;
+    }
+  },
+  toString : function () {
+    return `[${this.from}, ${this.to}]`;
+  } 
+};
+let r = range(0, 10);
+console.log(r.includes(2));
+for (let val of r) {   // uses the iterator
+  console.log(val);
+}
+console.log(`${r}`);  // just r calls the JSON, this calls the toString()
+// -----
 // create a class
 // constructor() is the constructor
 // no return is necessary in the constructor
