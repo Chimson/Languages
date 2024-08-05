@@ -15,6 +15,10 @@ console.log('x' in sobj);  // true
 // -----
 // instanceof is more particular
 // objects need to be checked against classes with constructor
+//   technically it checks whether the lhs obj's prototype is set to some prototype obj
+//   which is what a constuctor function (with or without the "constructor" keyword) does implicitly 
+// TODO: obj.isPrototypeof(r) can be used when obj is set as a prototype obj for r, especially when
+//   r was created by a non-constructor function
 // typeof returns the name of the class as a string
 let n = new Number(1);
 console.log(n instanceof Number);  // true, since it was created with a constructor
@@ -1241,6 +1245,7 @@ console.log(arrb[2]());   // 5
 // -----
 // classes use prototype-based inheritance, where if two objects
 //   inherit properties from the same prototype object then they are of the same class
+// constructors can be created from any function except arrow, async, and generator functions
 // -----
 // old way of creating a class using Object.create, factory method
 //   and no "new" syntax or constructor
@@ -1261,12 +1266,12 @@ range.methods = {  // protype obj
   includes(x) {
     return x >= this.from && x <= this.to;  
   },
-  *[Symbol.iterator]() {
+  *[Symbol.iterator]() { 
     for(let x = this.from; x <= this.to; ++x) {
       yield x;
     }
   },
-  toString : function () {
+  toString() {
     return `[${this.from}, ${this.to}]`;
   } 
 };
@@ -1276,6 +1281,41 @@ for (let val of r) {   // uses the iterator
   console.log(val);
 }
 console.log(`${r}`);  // just r calls the JSON, this calls the toString()
+// -----
+// another old way of creating a class by defining a constuctor MyInt() 
+//   use the "new" keyword, and defining the prototype property 
+// constructor function does not return, names are usually capitalized
+//   but can have more than one constuctor, where each one points to the
+//   same prototype
+// "new" implicity creates Object.create() (see previous version of a class)
+//   from the user-overridden prototype property 
+// all (non-arrow) functions have a prototype property, that when user overriden
+//   will turn the function into a constructor for a class
+// "this" refers to the current object, since MyInt() is a constructor
+// new.target will be defined when the constructor is called with new
+//   constructors should be called with new, and the condition enforces it 
+// new.target could be defined when this class is subclass
+// prototype objs have a default constructor property, here it is overridden
+//   to match the MyInt() constructor that invokes it
+function MyInt(val) {
+  if (new.target == undefined) { 
+    return new MyInt(val);   // new is called here, so can call constructor without it
+  }
+  this.num = val;   
+}
+MyInt.prototype = {     // overrides the default obj protype
+  toString: function() {  // with the function, not the shorthand, since this is old JS 
+    return `myint: ${this.num}`;
+  },
+  inc: function() {return ++this.num;},
+  constructor: MyInt
+};
+let myi = new MyInt(10);
+myi.inc();
+console.log(`${myi}`);
+let myi2 = MyInt(12);  // can invoke without the "new" bc of the condition
+console.log(`${myi2}`);
+console.log(MyInt.prototype.constructor.name);  // MyInt
 // -----
 // create a class
 // constructor() is the constructor
@@ -1457,6 +1497,10 @@ SKIPPED
       functionality of bind, but can partially apply from the right too
     did an example of memoization of a function, where a function is modified
       to store data about the call in its closure 
+  9.2.C Constructor Property
+    constructor functions (as objects) have a prototype property, set to an object, and the prototype obj
+      has a constructor property set to the function
+    prototype property has as default object, while the constuctor property is undefined by default
 
 STOPPED AT Chapter 9: Classes
 */
