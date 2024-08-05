@@ -1594,7 +1594,7 @@ SKIPPED
   9.3.4 Example
     example of a complex class with public and private properties     
 
-STOPPED AT Chapter 9.4
+STOPPED AT Chapter 9.4, but FIX PROBLEMS FROM GOOGLE AS
 */
 
 
