@@ -24,7 +24,7 @@ let n = new Number(1);
 console.log(n instanceof Number);  // true, since it was created with a constructor
 nn = 1;
 console.log(nn instanceof Number);  // false, no idea why
-console.log(typeof 1 == 'number');  // true
+console.log(typeof 1 === 'number');  // true
 // -----
 // ?? evaluates to the first defined variable's value
 defx = 10;
@@ -247,7 +247,7 @@ let str3len = str1.length;
 // adds new lines and you can use escape sequences
 let int1 = 300;
 let str3 = `this is ${int1}`;
-let smath = `here is some math: ${200 % 2 == 0}`;
+let smath = `here is some math: ${200 % 2 === 0}`;
 console.log(smath);
 let str5 = `this prints
 as it 
@@ -691,7 +691,7 @@ console.log("length of concat:" + abad) // 12, but could be 6
 // labeled breaks do not travel across function boundaries
 let ix = 0;
 ploop : while(++ix < 10) {
-  if (10 % ix == 3) {  
+  if (10 % ix === 3) {  
     console.log(ix);    // 7
     break ploop;
   }
@@ -1302,7 +1302,7 @@ console.log(`${r}`);  // just r calls the JSON, this calls the toString()
 // prototype objs have a default constructor property, here it is overridden
 //   to match the MyInt() constructor that invokes it
 function MyInt(val) {
-  if (new.target == undefined) { 
+  if (new.target === undefined) { 
     return new MyInt(val);   // new is called here, so can call constructor without it
   }
   this.num = val;   
@@ -1321,37 +1321,37 @@ let myi2 = MyInt(12);  // can invoke without the "new" bc of the condition
 console.log(`${myi2}`);
 console.log(MyInt.prototype.constructor.name);  // MyInt
 // -----
-// DOES NOT WORK IN GOOGLE AS
-// // create a class with more modern syntax
-// //   it implicitly defines a class like previous old examples
-// // constructor() is the constructor and an empty default one is provided
-// //   if you do not define it
-// // can add an iterator with a Symbol, see range.methods above
-// // no return is necessary in the constructor
-// //   however you can return a new object with a return statement
-// //   any other return statement, like returning a primitive or nothing
-// //      will be ignored
-// // you cannot define properties with name: value pairs,like with objects
-// //   but you can define computed properties with [expression], methods or properties
-// // construct an object using new, calling constructor
-// // can omit the parenthesis on a no args constructor
-// // you can add more fields in other methods, not just the constructor
-// class Point {
-//   constructor(x, y) {   // no need to use commas to seperate properties
-//     this.x = x;
-//     this.y = y;
-//   }
-//   mysum() {
-//     return this.x + this.y; 
-//   }
-//   ['key']() {return 0;}  
-//   ['key2'] = function() {return 1;}  // with the function keyword
-// }
-// let p = new Point(3, 4);
-// console.log(p);
-// console.log(p.mysum());
-// console.log(p['key']());   
-// console.log(p.key2());  // can use this, if the name is ok
+// REQUIRES ES6 (GOOGLE AS DOES NOT SUPPORT ES6: method defined using =)
+// create a class with more modern syntax
+//   it implicitly defines a class like previous old examples
+// constructor() is the constructor and an empty default one is provided
+//   if you do not define it
+// can add an iterator with a Symbol, see range.methods above
+// no return is necessary in the constructor
+//   however you can return a new object with a return statement
+//   any other return statement, like returning a primitive or nothing
+//      will be ignored
+// you cannot define properties with name: value pairs,like with objects
+//   but you can define computed properties with [expression], methods or properties
+// construct an object using new, calling constructor
+// can omit the parenthesis on a no args constructor
+// you can add more fields in other methods, not just the constructor
+class Point {
+  constructor(x, y) {   // no need to use commas to seperate properties
+    this.x = x;
+    this.y = y;
+  }
+  mysum() {
+    return this.x + this.y; 
+  }
+  ['key']() {return 0;}  
+  ['key2'] = function() {return 1;}  // with the function keyword
+}
+let p = new Point(3, 4);
+console.log(p);
+console.log(p.mysum());
+console.log(p['key']());   
+console.log(p.key2());  // can use this, if the name is ok
 // -----
 // you can use a class definition expression to define a class
 // can be named or anonymous
@@ -1396,41 +1396,117 @@ console.log(gs._val);  // 10, _val is not technically private
 gs.val = 20;     // does nothing, since no set method
 console.log(gs);   // 10
 // -----
-// DOES NOT WORK IN GOOGLE AS
-// // you can define object data fields outside of a constructor, without "this"
-// //   these are not static, or shared, and each object is given their own version
-// // public fields defined outside the constuctor do need read through an object
-// // private fields need a # prefix, and must be initialized outside the constuctor
-// //   they cannot be init inside one, but can be reset
-// class Fields {
-//   f1 = 0;   // not static, normal obj field
-//   #priv;   // private, and undefined by default
-//   constructor(val) {
-//     // no this.f1 needed, since it has been initialized
-//     this.#priv = 100;   // can access private fields inside the class body
-//   }
-//   get priv() {return this.#priv;}   // makes #priv read-only, through public priv
-// }
-// let fvar = new Fields();
-// console.log(fvar.f1);  // 0
-// // fvar.#priv = 29;   // cannot set without error
-// // console.log(fvar.#priv);   // cannot read without error
-// console.log(fvar.priv);  // 100
-// fvar.priv = 29;    // does nothing, since no set with the get
-// console.log(fvar.priv);  // 100, priv is unchanged
+// REQUIRES ES6 (GOOGLE AS DOES NOT SUPPORT ALL OF ES6, fields defined outside constructor)
+// you can define object data fields outside of a constructor, without "this"
+//   these are not static, or shared, and each object is given their own version
+// public fields defined outside the constuctor do need read through an object
+// private fields need a # prefix, and must be initialized outside the constuctor
+//   they cannot be init inside one, but can be reset
+class Fields {
+  f1 = 0;   // not static, normal obj field
+  #priv;   // private, and undefined by default
+  constructor(val) {
+    // no this.f1 needed, since it has been initialized
+    this.#priv = 100;   // can access private fields inside the class body
+  }
+  get priv() {return this.#priv;}   // makes #priv read-only, through public priv
+}
+let fvar = new Fields();
+console.log(fvar.f1);  // 0
+// fvar.#priv = 29;   // cannot set without error
+// console.log(fvar.#priv);   // cannot read without error
+console.log(fvar.priv);  // 100
+fvar.priv = 29;    // does nothing, since no set with the get
+console.log(fvar.priv);  // 100, priv is unchanged
 // -----
-// DOES NOT WORK IN GOOGLE AS
-// // static fields need the "static" keyword and are 
-// //   properties of the constructor function object (like the class name)
-// // they are not shared across their objects
-// // they can be made private with # prefix
-// class HasStatic {
-//   static svar = "this is static";
-// }
-// console.log(HasStatic.svar);  // this is static
-// let sobj2 = new HasStatic();
-// console.log(sobj2.svar);  // undefined
+// REQUIRES ES6 (GOOGLE AS DOES NOT SUPPORT ALL OF ES6, needed for static fields)
+// static fields need the "static" keyword and are 
+//   properties of the constructor function object (like the class name)
+// they are not shared across their objects
+// they can be made private with # prefix
+class HasStatic {
+  static svar = "this is static";
+}
+console.log(HasStatic.svar);  // this is static
+let sobj2 = new HasStatic();
+console.log(sobj2.svar);  // undefined
 // -----
+// you can add properties to any class dynamically, using the class's
+//   prototype object
+// can add properties to built-in classes, although be careful for name conflicts
+//   future or otherwise
+// can use "this" to access the current object
+Number.prototype.NormalZero = function() {
+  if (this.valueOf() === -0) {
+    return new Number(0);
+  }
+  else {
+    return this;
+  }
+}
+let nonnegz = Number(-0);
+console.log(nonnegz.NormalZero());
+// -----
+// SUBCLASS
+// old way, pre ES6, of creating a primitive subclass by calling
+//   Object.create(), and setting the prototype and constructor properties
+// this version's superclass is created with a constructor (with no keyword)
+//   and a defines a prototype object
+// the subclass only inherits the superclass's prototype object template, nothing
+//   directly from the superclass constructor
+// the subclass does not have its own prototype, only taken from the superclass
+function MyInt2(val) {    // superclass constructor
+  this.val = val;
+}
+MyInt2.prototype = {
+  val: Number(0),
+  toString: function() {return `MyInt2: ${this.val}`;}
+};
+function NegateInt(val) {   // subclass constructor
+  // console.log(this.val);   // 0, inherited from the prototype
+  this.val = -1 * val;
+}
+NegateInt.prototype = Object.create(MyInt2.prototype);
+NegateInt.prototype.constructor = NegateInt;
+let myi3 = new MyInt2(-2);
+console.log(`${myi3}`);
+let nmyi = new NegateInt(-2);
+console.log(`${nmyi}`);   // NegateInt has the inherited MyInt2 toString() property
+// -----
+// REQUIRES ES6 (supported by Google AS)
+// more modern version uses "extends" to inherit
+// can extend builtin classes
+// extends in inherits superclass.prototype nd superclass class 
+//   properties, which includes static properties
+// super represents the superclass, where you can call its constructor
+//   or other superclass methods
+// you can access the superclass properties through this, once super() has been called
+// new.target, defined in the body of a constructor when it was called with new, will
+//   change to the subclass
+// superclass properties will be overriden in the subclass 
+// you may be able to treat superclasses as abstract classes and templates
+class MyString {
+  constructor(str) {
+    this.str = str;
+  }
+  toString() {
+    return `str: ${this.str}`;
+  }
+} 
+class SubMyString extends MyString {
+  constructor(str, val) {
+    super(str);   // calls the superclass constructor
+    this.int = val;
+  }
+  toString() {
+    return `int: ${this.int}, ` + super.toString();  
+  }
+}
+let mystr = new MyString("this string");
+console.log(`${mystr}`);
+let substr = new SubMyString("this string", 10);
+console.log(`${substr}`);
+
 
 // EXCEPTIONS
 // throw can accept a value of any type like a string or a number
@@ -1593,8 +1669,17 @@ SKIPPED
     prototype property has as default object, while the constuctor property is undefined by default
   9.3.4 Example
     example of a complex class with public and private properties     
+  9.5.3 Delegation instead of Inheritance
+    I do what I want
+  9.5.4
+    a convoluted attempt at mimicing abstact classes
 
-STOPPED AT Chapter 9.4, but FIX PROBLEMS FROM GOOGLE AS
+STOPPED AT Chapter 10 Modules:
+  I did actually do some of this, with respect to Google Apps Script
+  Here are some interesting sections if I ever come back to JS:
+    Iterators and Generators
+    Async JS
+    MetaProgramming
 */
 
 
