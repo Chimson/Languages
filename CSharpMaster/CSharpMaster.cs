@@ -2119,8 +2119,8 @@ class Program {
   static void Main(string[] args) { 
     try {
       using (Process myProcess = new Process()) {
-        myProcess.StartInfo.UseShellExecute = false;  // starts without a window
-        myProcess.StartInfo.CreateNoWindow = true;
+        myProcess.StartInfo.UseShellExecute = false;  // 
+        myProcess.StartInfo.CreateNoWindow = true;   // starts without a window
         myProcess.StartInfo.FileName = "python";   // starts python REPL
         myProcess.StartInfo.Arguments = "trythis.py";
         myProcess.Start();
