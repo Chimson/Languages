@@ -204,6 +204,8 @@ OPERATORS
 ++i; i++;   
 // boolean, return bool, applied to bool
 & | ^
+// equality
+== !=
 // conditional, are short-circuiting
 && ||
 // bitwise and shift, applied to integral vals
