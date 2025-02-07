@@ -1,0 +1,44 @@
+REMOVE JAVA IN MAC
+Open Finder
+Delete Java Virtual Machines:
+  Go > Go To Folder:
+    /Library/Java/JavaVirtualMachines/
+Install Homebrew:
+  go to https://brew.sh/
+  copy and paste the install Homebrew command
+Update Homebrew
+  % brew update
+Install Graphviz
+  % brew install graphviz
+Download and Install class code:
+  Create a folder to decompress the zip file:
+    /Users/YourUserName/DataStructures
+  Download the code using the link:
+    https://fpl.cs.depaul.edu/jriely/ds1/extras/ds1.zip
+  Unzip the file in to the folder you created
+    you can copy the file to your folder and double-click/expand
+    creates "eclipse-workspace" folder that contains "algs4" code
+Download and Install Java
+  Go to Amazon's version of OpenJDK, opens sourse Java Development Kit: 
+    https://aws.amazon.com/corretto/
+    Go to "Download Corretto 21" or the most recent Long Term Support (LTS) version
+    Pick the version compatible with your OS and select .pkg version for the package installer
+      M-chips use aarch64/ARM64 versions 
+    Check:
+      % java -version
+      It should produce the OpenJDK version if installed
+      If it doesn't recognize the command then check your installation
+Download and Install Eclipse
+  Go to: https://www.eclipse.org/downloads
+  Look for "Install our favorite desktop IDE" package
+    Select Download AArch64 version for Mac M processors
+    Click to download the .dmg file, disk image file
+    Open the downloaded file, open the Eclipse Installer
+    Select option for Eclipse IDE for Java Developers
+    Select the Amazon Corretto version that you just installed
+    Select the /Applications Folder in "Installation Folder"
+    Select Install
+Launch Eclipse
+  It will prompt you to pick a workspace
+    Select the "eclipse-workspace" folder that you unzipped earlier and nothing else
+  INCOMPLETE
