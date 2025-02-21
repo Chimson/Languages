@@ -27,10 +27,10 @@ INDEX
 	USEFUL CLASSES
 	BASIC PROGRAM
 	IMPORTANT KEYWORDS
-	PRINT EXAMPLE
+	PRINT EXAMPLES
 	OPERATORS
 	LITERALS
-	CHAR, STRING, LITERALS AND ESCAPE
+	CHAR, STRING, LITERALS, AND ESCAPE
 	TYPES
 	TYPE WRAPPER
 	DECLARE, ASSIGN
@@ -43,9 +43,9 @@ INDEX
 	CLASS
 	CLASS, OBJECT CLASS, STATIC, ACCESS MODIFIERS
 	INHERITANCE
+	ABSTRACT CLASS
 	PACKAGES, ACCESS, AND IMPORT
 	INTERFACE
-	ABSTRACT CLASS
 	STATIC OUTER CLASS, STATIC INNER CLASS, INNER CLASS
 	FUNCTIONAL INTERFACE, LAMBDA, METHOD REFERENCE
 	EXCEPTIONS
@@ -203,7 +203,7 @@ LITERALS
 0x3p2  //  12
 true, false   // not 0 or 1 like in C
 
-CHAR, STRING, LITERALS AND ESCAPE
+CHAR, STRING, LITERALS, AND ESCAPE
 '\141'  // a in octal
 '\u00ff'  // another char in hex
 '\''  // '
@@ -559,7 +559,7 @@ public class Testing {		// declares an array and calls in one line
 	}
 }
 
-STRING CLASS
+STRING
 // Strings are immutable, so every operation returns a new String
 String str = "Hello World";	// iterates over chars in String, using array
 System.out.println(str);
@@ -2549,237 +2549,230 @@ toServer (byte stream)            ->    fromClient (converts to char stream)
 */  
 
   
-// OLD STUFF ////////////////////////////////////////////////////
-{// i/o  
+OLD STUFF 
+// i/o  
 //-------
-	import java.io.File;  // creates filename.txt in src folder
-	import java.io.IOException;  
-	public class Testing {
-		public static void main(String[] args) {
-			try {
-				File myObj = new File("filename.txt");		// "C:\\Users\\...\\filename.txt" for win
-				if (myObj.createNewFile()) {	
-					System.out.println("File created: " + myObj.getName());
-				} else {
-					System.out.println("File already exists.");
-				}
-			} catch (IOException e) {	// throws an exception
-				System.out.println("An error occurred.");
-				e.printStackTrace();
-			}
-		}
-	}
+import java.io.File;  // creates filename.txt in src folder
+import java.io.IOException;  
+public class Testing {
+  public static void main(String[] args) {
+    try {
+      File myObj = new File("filename.txt");		// "C:\\Users\\...\\filename.txt" for win
+      if (myObj.createNewFile()) {	
+        System.out.println("File created: " + myObj.getName());
+      } else {
+        System.out.println("File already exists.");
+      }
+    } catch (IOException e) {	// throws an exception
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+    }
+  }
+}
 //-------
-	import java.io.FileWriter;   // creates or overwrites file to write to
-	import java.io.IOException;  
-	public class Testing {
-		public static void main(String[] args) {
-			try {
-				FileWriter myWriter = new FileWriter("filename.txt");
-				myWriter.write("Files in Java might be tricky, but it is fun enough!");
-				myWriter.close();
-				System.out.println("Successfully wrote to the file.");
-			} catch (IOException e) {
-				System.out.println("An error occurred.");
-				e.printStackTrace();
-			}
-		}
-	}
+import java.io.FileWriter;   // creates or overwrites file to write to
+import java.io.IOException;  
+public class Testing {
+  public static void main(String[] args) {
+    try {
+      FileWriter myWriter = new FileWriter("filename.txt");
+      myWriter.write("Files in Java might be tricky, but it is fun enough!");
+      myWriter.close();
+      System.out.println("Successfully wrote to the file.");
+    } catch (IOException e) {
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+    }
+  }
+}
 //-------
-	import java.io.File;  // reads entire txt line by line, each as a string
-	import java.io.FileNotFoundException;  // Import this class to handle errors
-	import java.util.Scanner; // Import the Scanner class to read text files
-	public class Testing {
-		public static void main(String[] args) {
-			try {
-				File myObj = new File("filename.txt");
-				Scanner myReader = new Scanner(myObj);
-				while (myReader.hasNextLine()) {
-					String data = myReader.nextLine();	// reads line by line
-					System.out.println(data);
-				}
-				myReader.close();
-			} catch (FileNotFoundException e) {
-				System.out.println("An error occurred.");
-				e.printStackTrace();
-			}
-		}
-	}	
+import java.io.File;  // reads entire txt line by line, each as a string
+import java.io.FileNotFoundException;  // Import this class to handle errors
+import java.util.Scanner; // Import the Scanner class to read text files
+public class Testing {
+  public static void main(String[] args) {
+    try {
+      File myObj = new File("filename.txt");
+      Scanner myReader = new Scanner(myObj);
+      while (myReader.hasNextLine()) {
+        String data = myReader.nextLine();	// reads line by line
+        System.out.println(data);
+      }
+      myReader.close();
+    } catch (FileNotFoundException e) {
+      System.out.println("An error occurred.");
+      e.printStackTrace();
+    }
+  }
+}	
 //-------
 // print format method
-	public class Testing {	
-		public static void main(String[] args) {
-			int i = 2;
-			double r = Math.sqrt(i);
-			System.out.format("The square root of %d is %f %n", i, r);	// %n is end line, %d is integer displayed as decimal 
-			System.out.format("%2$f, %1$+020.10f", Math.PI, r);  	// 20 total chars, 0s in front, 10 dec places,
-		}						//  1$ is the 1st argument index for ordering  // prints sqrt(2) then pi
-	}
+public class Testing {	
+  public static void main(String[] args) {
+    int i = 2;
+    double r = Math.sqrt(i);
+    System.out.format("The square root of %d is %f %n", i, r);	// %n is end line, %d is integer displayed as decimal 
+    System.out.format("%2$f, %1$+020.10f", Math.PI, r);  	// 20 total chars, 0s in front, 10 dec places,
+  }						//  1$ is the 1st argument index for ordering  // prints sqrt(2) then pi
+}
 //-------
-	import java.util.Scanner;  // Save user input as string
-	public class Testing {
-		public static void main(String[] args) {
-			Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-			System.out.println("Enter username");
-			String userName = myObj.nextLine();  // Read user input, saves as a string, also .nextInt(), .nextDouble()
-			System.out.println("Username is: " + userName);  // Output user input
-		}
-	}
-//-------
+import java.util.Scanner;  // Save user input as string
+public class Testing {
+  public static void main(String[] args) {
+    Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+    System.out.println("Enter username");
+    String userName = myObj.nextLine();  // Read user input, saves as a string, also .nextInt(), .nextDouble()
+    System.out.println("Username is: " + userName);  // Output user input
+  }
 }
 
-
-{// Math class
-	Math.E; Math.PI;
-	Math.max(num1,num2);
-	.min(num1,num2); .sqrt(num); .abs(num);
-	Math.random();	// in [0,1), multiply to get other intervals
-	.abs(); .sin(); .cos(); .tan(); .asin();  // etc. // in radians
-	.toDegrees(); .toRadians();
-	.exp(); .log(); .pow(); .round();
+// Math class
+Math.E; Math.PI;
+Math.max(num1,num2);
+.min(num1,num2); .sqrt(num); .abs(num);
+Math.random();	// in [0,1), multiply to get other intervals
+.abs(); .sin(); .cos(); .tan(); .asin();  // etc. // in radians
+.toDegrees(); .toRadians();
+.exp(); .log(); .pow(); .round();
 //-------
-	int num = (int)(Math.random()*101);	// random # between 1 and 100
+int num = (int)(Math.random()*101);	// random # between 1 and 100
 //-------
-}
 
-{// ArrayList		// size can be modified, of same type
+// ArrayList		// size can be modified, of same type
 					// better to use when adding or removing from ends, accessing random elements
-	A_list.set(ind,item), .remove(ind), .clear(), 
-	.size() 
+A_list.set(ind,item), .remove(ind), .clear(), 
+.size() 
 //-------
-	import java.util.ArrayList;
-	public class Testing {
-		public static void main(String[] args) {
-			ArrayList<String> cars = new ArrayList<String>();
-			cars.add("Volvo");
-			cars.add("BMW");
-			System.out.println(cars);
-			cars.get(1);	// access an item in the list by index
-			for (String i : cars) {	// for-each loop, can also write by index
-				System.out.println(i);
-			}
-		}
-	}
-//-------
-	import java.util.ArrayList;
-	import java.util.Collections;  // Import the Collections class for .sort(A_list)
-	public class Testing {
-		public static void main(String[] args) {
-			ArrayList<String> cars = new ArrayList<String>();
-			cars.add("Volvo");
-			cars.add("BMW");
-			Collections.sort(cars);  // Sort cars
-			for (String i : cars) {
-				System.out.println(i);
-			}
-		}
-	}
-//-------
+import java.util.ArrayList;
+public class Testing {
+  public static void main(String[] args) {
+    ArrayList<String> cars = new ArrayList<String>();
+    cars.add("Volvo");
+    cars.add("BMW");
+    System.out.println(cars);
+    cars.get(1);	// access an item in the list by index
+    for (String i : cars) {	// for-each loop, can also write by index
+      System.out.println(i);
+    }
+  }
 }
+//-------
+import java.util.ArrayList;
+import java.util.Collections;  // Import the Collections class for .sort(A_list)
+public class Testing {
+  public static void main(String[] args) {
+    ArrayList<String> cars = new ArrayList<String>();
+    cars.add("Volvo");
+    cars.add("BMW");
+    Collections.sort(cars);  // Sort cars
+    for (String i : cars) {
+      System.out.println(i);
+    }
+  }
+}
+//-------
 
-{// LinkedList		// better to use when looping through each element
+// LinkedList		// better to use when looping through each element
 //-------	
-	import java.util.LinkedList;
-	public class Main {
-		public static void main(String[] args) {
-			LinkedList<String> cars = new LinkedList<String>();
-			cars.add("Volvo");
-			cars.add("BMW");
-			System.out.println(cars);
-		}
-	}
-//-------
+import java.util.LinkedList;
+public class Main {
+  public static void main(String[] args) {
+    LinkedList<String> cars = new LinkedList<String>();
+    cars.add("Volvo");
+    cars.add("BMW");
+    System.out.println(cars);
+  }
 }
+//-------
 
-{// HashMap		// can also use a HashSet with unique items
+
+// HashMap		// can also use a HashSet with unique items
 hmap.get(key),.remove(key),.get(key),.size(),
 //-------
-	import java.util.HashMap;	// like dict in Python 
-	public class Testing {
-		public static void main(String[] args) {
-			HashMap<String, String> capitalCities = new HashMap<String, String>();
-			capitalCities.put("England", "London");		// (key,value) can also do (string,int)
-			capitalCities.put("Germany", "Berlin");		// key is the index to the value
-			System.out.println(capitalCities);
-			System.out.println(capitalCities.get("England"));	// London
-			for (String i : capitalCities.keySet()) {
-				System.out.println(i);
-			}
-		}
-	}
-//-------
-	import java.util.HashMap;	// like dict in Python 
-	public class Testing {
-		public static void main(String[] args) {
-			HashMap<String, String> capitalCities = new HashMap<String, String>();
-			capitalCities.put("England", "London");		// (key,value) can also do (string,int)
-			capitalCities.put("Germany", "Berlin");		// key is the index to the value
-			System.out.println(capitalCities);
-			System.out.println(capitalCities.get("England"));	// London
-			for (String i : capitalCities.keySet()) {
-				System.out.println(i);	// prints keys England Germany
-			}
-			for (String i : capitalCities.values()) {
-				System.out.println(i);	// prints values
-			}
-			for (String i : capitalCities.keySet()) {	// prints both
-				System.out.println("key: " + i + " value: " + capitalCities.get(i));
-			}
-		}
-	}
-//-------
-	import java.util.HashMap;	// set <key,value> as different types
-	public class Testing {
-		public static void main(String[] args) {
-			HashMap<String, Integer> people = new HashMap<String, Integer>();	// <key,value>
-			people.put("John", 32);
-			people.put("Steve", 30);
-			people.put("Angie", 33);
-			for (String i : people.keySet()) {
-			  System.out.println("key: " + i + " value: " + people.get(i));
-			}
-		}
-	}	
-//-------
+import java.util.HashMap;	// like dict in Python 
+public class Testing {
+  public static void main(String[] args) {
+    HashMap<String, String> capitalCities = new HashMap<String, String>();
+    capitalCities.put("England", "London");		// (key,value) can also do (string,int)
+    capitalCities.put("Germany", "Berlin");		// key is the index to the value
+    System.out.println(capitalCities);
+    System.out.println(capitalCities.get("England"));	// London
+    for (String i : capitalCities.keySet()) {
+      System.out.println(i);
+    }
+  }
 }
+//-------
+import java.util.HashMap;	// like dict in Python 
+public class Testing {
+  public static void main(String[] args) {
+    HashMap<String, String> capitalCities = new HashMap<String, String>();
+    capitalCities.put("England", "London");		// (key,value) can also do (string,int)
+    capitalCities.put("Germany", "Berlin");		// key is the index to the value
+    System.out.println(capitalCities);
+    System.out.println(capitalCities.get("England"));	// London
+    for (String i : capitalCities.keySet()) {
+      System.out.println(i);	// prints keys England Germany
+    }
+    for (String i : capitalCities.values()) {
+      System.out.println(i);	// prints values
+    }
+    for (String i : capitalCities.keySet()) {	// prints both
+      System.out.println("key: " + i + " value: " + capitalCities.get(i));
+    }
+  }
+}
+//-------
+import java.util.HashMap;	// set <key,value> as different types
+public class Testing {
+  public static void main(String[] args) {
+    HashMap<String, Integer> people = new HashMap<String, Integer>();	// <key,value>
+    people.put("John", 32);
+    people.put("Steve", 30);
+    people.put("Angie", 33);
+    for (String i : people.keySet()) {
+      System.out.println("key: " + i + " value: " + people.get(i));
+    }
+  }
+}	
+//-------
 
-{// Iterator		// used to loop through collections like ArrayList, HashSet, ...
+
+// Iterator		// used to loop through collections like ArrayList, HashSet, ...
 //-------
-	import java.util.ArrayList;	
-	import java.util.Iterator;
-	public class Testing {
-		public static void main(String[] args) {
-			ArrayList<String> cars = new ArrayList<String>();
-			cars.add("Volvo");
-			cars.add("BMW");
-			cars.add("Ford");
-			Iterator<String> it = cars.iterator();
-			System.out.println(it.next());	// prints first item
-			while(it.hasNext()) {
-				System.out.println(it.next());	// loops through whole collection
-			}
-		}
-	}
+import java.util.ArrayList;	
+import java.util.Iterator;
+public class Testing {
+  public static void main(String[] args) {
+    ArrayList<String> cars = new ArrayList<String>();
+    cars.add("Volvo");
+    cars.add("BMW");
+    cars.add("Ford");
+    Iterator<String> it = cars.iterator();
+    System.out.println(it.next());	// prints first item
+    while(it.hasNext()) {
+      System.out.println(it.next());	// loops through whole collection
+    }
+  }
+}
 //-------
-	import java.util.ArrayList;
-	import java.util.Iterator;
-	public class Testing {
-		public static void main(String[] args) {
-			ArrayList<Integer> numbers = new ArrayList<Integer>();
-			numbers.add(12);
-			numbers.add(8);
-			numbers.add(2);
-			Iterator<Integer> it = numbers.iterator();
-			while(it.hasNext()) {
-				Integer i = it.next();
-				if(i < 10) {
-					it.remove();	// would not work in for or for-each loops due to changing size 
-				}
-			}
-			System.out.println(numbers);	// prints [12]
-		}
-	}
-//-------
+import java.util.ArrayList;
+import java.util.Iterator;
+public class Testing {
+  public static void main(String[] args) {
+    ArrayList<Integer> numbers = new ArrayList<Integer>();
+    numbers.add(12);
+    numbers.add(8);
+    numbers.add(2);
+    Iterator<Integer> it = numbers.iterator();
+    while(it.hasNext()) {
+      Integer i = it.next();
+      if(i < 10) {
+        it.remove();	// would not work in for or for-each loops due to changing size 
+      }
+    }
+    System.out.println(numbers);	// prints [12]
+  }
 }
 
 
