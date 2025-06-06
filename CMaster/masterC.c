@@ -284,7 +284,7 @@ printf("number %i\n", 1);    // first arg is actually a pointer to that string c
 printf("number: %i\n",  // use next line via comma
 	2)
 printf("%i\n", 'a') // prints ASCII using %i
-%i, %d,    
+%i, %d,    // convert to decimal
 %o, %#o, %x, %#x,  // base
 %f, %e, %g, %a   // floating point, scientific
 %p  // pointer address
@@ -714,7 +714,7 @@ char letters[] = {"abcd"
 int main(void){
   char to[6];  // allocate with garbage  
   char* to_ind = (char*) to;  // cast to allow ptr arith 
-  char* from = "Harki";
+  char* from = "Harki";  // read only string
   while ((*to_ind++ = *from++) != '\0')  // should also copy \0 to to
     ;
   printf("%s\n", to);  // "Harki"
@@ -1011,9 +1011,6 @@ int main(void) {
   printf("%i\n", *sp);
   return 0;
 }
-
-STOPPED HERE ON REVIEW
-
 // ***********
 // pointers and arrays
 #include <stdio.h>
@@ -1378,7 +1375,7 @@ int main(void) {
 }
 
 TYPEDEF
-// creates custom tyoe names, provides more flexibility than using #define
+// creates custom type names, provides more flexibility than using #define
 #include <stdio.h>
 int main(void) {
   typedef int Counter;
@@ -1660,21 +1657,6 @@ int main(int argc, char** argv) {
 000001F6432CAF36:  42 65 6E 00 48 61 72 6B  Ben.Hark
 000001F6432CAF3A:  48 61 72 6B 69 00 00 00  Harki...
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
