@@ -1,6 +1,7 @@
 // avoid multiple inclusion of this file, especially if its included in another header
 #ifndef _MYHEADER_H
 #define _MYHEADER_H 1     // sets to 1, if included again is is defined, skips everything after ifndef
+// you really don't need the 1 value to define a macro
 
 // can include all commonly used definitions: struct defns, external var declarations, typedef defns, 
 //    function prototypes declarations, macros, global var defns
